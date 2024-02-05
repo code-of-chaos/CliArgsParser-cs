@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser", "src/CliArgsParser/CliArgsParser.csproj", "{6FA78ACD-C877-431E-B467-3DC84DD8D8AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Contracts", "src\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj", "{3A46FB3B-7706-42C4-A9A0-937108092AB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{91D35F57-40F6-4498-9077-758A0A3205DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{366E036C-D096-4DC0-B8CB-A378827CA345}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Testing", "tests\CliArgsParser.Testing\CliArgsParser.Testing.csproj", "{1E3F0123-5817-4E29-B028-B3E95911F28C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{043C80F7-B545-414A-AF4B-30414177C7C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Examples.RegisterAtlas", "examples\CliArgsParser.Examples.RegisterAtlas\CliArgsParser.Examples.RegisterAtlas.csproj", "{6AF7C869-41CD-4D6D-8E65-467FA3BE111B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Examples.RegisterDll", "examples\CliArgsParser.Examples.RegisterDll\CliArgsParser.Examples.RegisterDll.csproj", "{9971FB7E-85C1-4772-9E9A-8A711F4E5FE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RegisterDll", "RegisterDll", "{B4D4D621-2FF1-4047-9112-E41B39B52A7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Examples.RegisterDll.Plugin", "examples\CliArgsParser.Examples.RegisterDll.Plugin\CliArgsParser.Examples.RegisterDll.Plugin.csproj", "{613FB9EC-36A7-4D00-B7AA-002093A5F0ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RegisterAtlas", "RegisterAtlas", "{5087E834-B958-444C-A2B3-3B60CCD24535}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FA78ACD-C877-431E-B467-3DC84DD8D8AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA78ACD-C877-431E-B467-3DC84DD8D8AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA78ACD-C877-431E-B467-3DC84DD8D8AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA78ACD-C877-431E-B467-3DC84DD8D8AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A46FB3B-7706-42C4-A9A0-937108092AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A46FB3B-7706-42C4-A9A0-937108092AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A46FB3B-7706-42C4-A9A0-937108092AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A46FB3B-7706-42C4-A9A0-937108092AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E3F0123-5817-4E29-B028-B3E95911F28C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E3F0123-5817-4E29-B028-B3E95911F28C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E3F0123-5817-4E29-B028-B3E95911F28C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E3F0123-5817-4E29-B028-B3E95911F28C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AF7C869-41CD-4D6D-8E65-467FA3BE111B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AF7C869-41CD-4D6D-8E65-467FA3BE111B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AF7C869-41CD-4D6D-8E65-467FA3BE111B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AF7C869-41CD-4D6D-8E65-467FA3BE111B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9971FB7E-85C1-4772-9E9A-8A711F4E5FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9971FB7E-85C1-4772-9E9A-8A711F4E5FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9971FB7E-85C1-4772-9E9A-8A711F4E5FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9971FB7E-85C1-4772-9E9A-8A711F4E5FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{613FB9EC-36A7-4D00-B7AA-002093A5F0ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{613FB9EC-36A7-4D00-B7AA-002093A5F0ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{613FB9EC-36A7-4D00-B7AA-002093A5F0ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{613FB9EC-36A7-4D00-B7AA-002093A5F0ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3A46FB3B-7706-42C4-A9A0-937108092AB7} = {91D35F57-40F6-4498-9077-758A0A3205DD}
+		{6FA78ACD-C877-431E-B467-3DC84DD8D8AA} = {91D35F57-40F6-4498-9077-758A0A3205DD}
+		{1E3F0123-5817-4E29-B028-B3E95911F28C} = {366E036C-D096-4DC0-B8CB-A378827CA345}
+		{B4D4D621-2FF1-4047-9112-E41B39B52A7D} = {043C80F7-B545-414A-AF4B-30414177C7C9}
+		{9971FB7E-85C1-4772-9E9A-8A711F4E5FE3} = {B4D4D621-2FF1-4047-9112-E41B39B52A7D}
+		{613FB9EC-36A7-4D00-B7AA-002093A5F0ED} = {B4D4D621-2FF1-4047-9112-E41B39B52A7D}
+		{5087E834-B958-444C-A2B3-3B60CCD24535} = {043C80F7-B545-414A-AF4B-30414177C7C9}
+		{6AF7C869-41CD-4D6D-8E65-467FA3BE111B} = {5087E834-B958-444C-A2B3-3B60CCD24535}
+	EndGlobalSection
+EndGlobal
