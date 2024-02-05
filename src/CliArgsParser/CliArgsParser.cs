@@ -10,35 +10,27 @@ using CliArgsParser.Contracts.Delegates;
 namespace CliArgsParser;
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Support Code
-// ---------------------------------------------------------------------------------------------------------------------
-public readonly struct CommandStruct(Delegate del, ICliCommandAttribute cliCommandAttribute) {
-    private Delegate Delegate { get; } = del;
-    private ICliCommandAttribute CliCommandAttribute { get; } = cliCommandAttribute;
-
-    public bool Call(IEnumerable<string> args) {
-        return (bool)(Delegate.DynamicInvoke(CliCommandAttribute.GetParameters(args)) ?? false);
-    }
-    
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class CliArgsParser : ICliArgsParser {
     private readonly Dictionary<string, CommandStruct> _flagToActionMap = new();
+    
     private static readonly Dictionary<string, string?> _descriptions = new();
     public static IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
+
+    public static string Cursor = "> ";
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
     // -----------------------------------------------------------------------------------------------------------------
-    public CliArgsParser(bool addDefault = true) {
+    public CliArgsParser(string cursor = "> ", bool addDefault = true) {
         // There is two reserved commands "HELP", which lists all command, and "EXIT", which exists when in input mode
         //      Though I have now added this as an optional, this should still work fine ...
         if (addDefault) {
             RegisterFromCliAtlas(new DefaultCommands());
         }
+
+        Cursor = cursor;
     }
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -154,9 +146,15 @@ public class CliArgsParser : ICliArgsParser {
         bool breakpoint = false;
 
         while (!breakpoint) {
+            Console.Write(Cursor);
             string[] input = Console.ReadLine()?.Split(" ") ?? [];
+            bool output = _tryParse(input);
+            if (!output) {
+                Console.WriteLine($"Command '{string.Join(" ", input)}' returned '{output}'");
+                if (breakOnFalse) breakpoint = true;
+            }
             
-            if (!_tryParse(input) && breakOnFalse) breakpoint = true;
+            Console.Write(Environment.NewLine);
         }
     }
 

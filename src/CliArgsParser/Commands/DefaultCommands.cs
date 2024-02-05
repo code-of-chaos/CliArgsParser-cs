@@ -37,10 +37,10 @@ public class DefaultCommands : ICliCommandAtlas {
     
     [CliCommand<ForceArgs>("exit", "Exit the program whilst in user input parsing mode. Will not work if in 'no breaking mode' without -f or --force")]
     public bool CallbackExit(ForceArgs forceArgs) {
-        if (forceArgs.Force) {
-            Environment.Exit(-1);
-        }
+        if (forceArgs is { Force: true, Verbose: false }) Environment.Exit(-1);
+        if (forceArgs is { Force: true, Verbose: true }) throw new Exception("Forced an exit");
         
+        Environment.Exit(0);
         return false;
     }
 }

@@ -4,13 +4,14 @@
 using System.Reflection;
 using CliArgsParser.Attributes;
 using CliArgsParser.Contracts;
+using CliArgsParser.Contracts.Attributes;
 
 namespace CliArgsParser;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ParameterParser<T> : IParamaterParser where T: IParameterOptions, new() {
+public class ParameterParser<T> : IParamaterParser<T> where T: IParameterOptions, new() {
     // Dictionaries needed to optimize access to the attributes.
     //      Go over and store them once, instead of on every argument like we did before.
     //      Maybe a bit overkill, but might be a good idea in the long run.
@@ -37,13 +38,13 @@ public class ParameterParser<T> : IParamaterParser where T: IParameterOptions, n
     }
     
     public IEnumerable<string> GetDescriptionsReadable() {
-        return GetDescriptions()
+        return GetDescriptions<ArgAttribute>()
             .Select(v => $"-{v?.ShortName,-3} --{v?.LongName,-8} : {v?.Description ?? "UNKNOWN DESCRIPTION"}");
     }
-    
-    public IEnumerable<ArgAttribute?> GetDescriptions() {
+
+    public IEnumerable<TT?> GetDescriptions<TT>() where TT : Attribute, IArgAttribute {
         return _propertyInfos
-            .Select(value => value.GetCustomAttribute<ArgAttribute>());
+            .Select(value => value.GetCustomAttribute<TT>());
     }
     
     public T Parse(IEnumerable<string> args) {

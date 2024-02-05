@@ -15,5 +15,6 @@ public class CliCommandAttribute<T>(string name, string? description = null) : A
     public string? Description { get; } = description;
     public Type ParameterOptionsType { get; } = typeof(T);
     private readonly ParameterParser<T> _parameterParser = new();
+    
     public IParameterOptions GetParameters(IEnumerable<string> args) => _parameterParser.Parse(args);
 }
