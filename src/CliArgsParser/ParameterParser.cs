@@ -46,18 +46,19 @@ public class ParameterParser<T> : IParamaterParser where T: IParameterOptions, n
             .Select(value => value.GetCustomAttribute<ArgAttribute>());
     }
     
-    public T Parse(string[] args) {
+    public T Parse(IEnumerable<string> args) {
         var result = new T();
+        var enumerable = args as string[] ?? args.ToArray();
 
-        for (int i = 0; i < args.Length; i++) {
+        for (int i = 0; i < enumerable.Length; i++) {
             // Eh, this isn't great
             //      Currently if one parameter is verbose, the entire thing will be flagged as verbose
             //      TODO maybe in some way add this to the properties to see which one is verbose or not?
-            bool isVerbose = args[i].StartsWith("--");
-            string argName = args[i].ToLower();
+            bool isVerbose = enumerable[i].StartsWith("--");
+            string argName = enumerable[i].ToLower();
             
-            if (_optionProperties.TryGetValue(argName, out var optionProp) && i < args.Length - 1) {
-                var value = Convert.ChangeType(args[++i], optionProp.PropertyType);
+            if (_optionProperties.TryGetValue(argName, out var optionProp) && i < enumerable.Length - 1) {
+                var value = Convert.ChangeType(enumerable[++i], optionProp.PropertyType);
                 optionProp.SetValue(result, value);
             }
             else if (_flagProperties.TryGetValue(argName, out var flagProp)) {

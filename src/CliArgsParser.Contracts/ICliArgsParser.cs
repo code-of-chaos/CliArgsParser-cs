@@ -13,6 +13,6 @@ public interface ICliArgsParser {
 
     bool TryParse(IEnumerable<string> args, bool parseMutliple);
     bool TryParse(IEnumerable<string> args);
-    
-    void HelpCommand(string[] args);
+
+    void TryParseInput(bool breakOnFalse = false);
 }

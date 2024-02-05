@@ -1,14 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+namespace CliArgsParser.Contracts.Delegates;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliCommandAttribute {
-    string Name { get;}
-    string? Description { get; }
-    public Type ParameterOptionsType { get; }
-    IParameterOptions GetParameters(IEnumerable<string> args);
-}
+public delegate bool CommandCallback<in T>(T argsOptions) where T : IParameterOptions;

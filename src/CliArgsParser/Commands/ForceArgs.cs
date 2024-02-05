@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+using CliArgsParser.Attributes;
+using CliArgsParser.Contracts;
+
+namespace CliArgsParser.Commands;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliCommandAttribute {
-    string Name { get;}
-    string? Description { get; }
-    public Type ParameterOptionsType { get; }
-    IParameterOptions GetParameters(IEnumerable<string> args);
+public class ForceArgs : NoArgs {
+    [ArgFlag('f', "force", "Let's force some stuff")]
+    public bool Force { get; set; } = false;
 }

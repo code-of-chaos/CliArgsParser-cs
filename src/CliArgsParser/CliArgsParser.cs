@@ -2,29 +2,42 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
-using System.Text;
+using CliArgsParser.Commands;
 using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Attributes;
+using CliArgsParser.Contracts.Delegates;
 
 namespace CliArgsParser;
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Support Code
+// ---------------------------------------------------------------------------------------------------------------------
+public readonly struct CommandStruct(Delegate del, ICliCommandAttribute cliCommandAttribute) {
+    private Delegate Delegate { get; } = del;
+    private ICliCommandAttribute CliCommandAttribute { get; } = cliCommandAttribute;
+
+    public bool Call(IEnumerable<string> args) {
+        return (bool)(Delegate.DynamicInvoke(CliCommandAttribute.GetParameters(args)) ?? false);
+    }
+    
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class CliArgsParser : ICliArgsParser {
-    private readonly Dictionary<string, Action<string[]>> _flagToActionMap = new();
-    private readonly Dictionary<string, string?> _descriptions = new();
-    private IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
+    private readonly Dictionary<string, CommandStruct> _flagToActionMap = new();
+    private static readonly Dictionary<string, string?> _descriptions = new();
+    public static IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
     // -----------------------------------------------------------------------------------------------------------------
-    public CliArgsParser(bool addHelp = true) {
-        // There is one reserved command "HELP", which lists all command
+    public CliArgsParser(bool addDefault = true) {
+        // There is two reserved commands "HELP", which lists all command, and "EXIT", which exists when in input mode
         //      Though I have now added this as an optional, this should still work fine ...
-        if (addHelp) {
-            _flagToActionMap.Add("help", HelpCommand);
-            _descriptions.Add("help", "Display all Commands");
+        if (addDefault) {
+            RegisterFromCliAtlas(new DefaultCommands());
         }
     }
     
@@ -37,6 +50,7 @@ public class CliArgsParser : ICliArgsParser {
         }
         return this;
     }
+    
     public ICliArgsParser RegisterFromCliAtlas<T>(T cliCommandAtlas, bool force = false) where T:ICliCommandAtlas{
         var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
@@ -46,19 +60,19 @@ public class CliArgsParser : ICliArgsParser {
             var methodParameters = methodInfo.GetParameters();
             if (methodParameters.Length == 0) continue;
             
-            var openDelegateType = typeof(Action<>); // Why does this need to be an empty action???
-            var delegateType = openDelegateType.MakeGenericType(methodParameters[0].ParameterType); // DON'T use IParameterOptions, it doesn't work!
-            Delegate del = Delegate.CreateDelegate(delegateType, cliCommandAtlas, methodInfo);
-
             string commandName = cliCommandAttribute.Name.ToLower();
             
-            // We don't do anything with the success value,
-            //      just slap it into the if statement
-            //      Oh and add the description here, instead of the older above version (works better with the errors)
-            if (_flagToActionMap.TryAdd(
-                    commandName,
-                    args => { del.DynamicInvoke(cliCommandAttribute.GetParameters(args)); }
-            )) {
+            Delegate del;
+            
+            try {
+                Type delegateType = typeof(CommandCallback<>).MakeGenericType(cliCommandAttribute.ParameterOptionsType);
+                del = Delegate.CreateDelegate(delegateType, cliCommandAtlas, methodInfo);
+            } catch {
+                Console.WriteLine($"Attempting to bind method {methodInfo.Name} with return type {methodInfo.ReturnType.Name} and parameters {String.Join(",", methodParameters.Select(p => p.ParameterType.FullName))}");
+                throw;
+            }
+
+            if (_flagToActionMap.TryAdd(commandName, new CommandStruct(del, cliCommandAttribute))) {
                 _descriptions.Add(commandName, cliCommandAttribute.Description);
                 continue;
             }
@@ -75,44 +89,6 @@ public class CliArgsParser : ICliArgsParser {
 
         // added for easy chaining
         return this;
-    }
-
-    public bool TryParse(IEnumerable<string> args, bool parseMutliple) {
-        if (!parseMutliple) {
-            return TryParse(args);
-        }
-        
-        List<List<string>> resultLists = [];
-        int startIndex = 0;
-        var enumerable = args as List<string> ?? args.ToList();
-        var length = enumerable.Count;
-
-        for (int i = 0; i < length; i++) {
-            if (!enumerable[i].Equals("&&")) continue;
-            
-            // Add the sublist from startIndex to i to the resultLists
-            resultLists.Add(enumerable.GetRange(startIndex, i - startIndex));
-            startIndex = i + 1;
-        }
-
-        // Add the last sublist if there's any remaining elements
-        if (startIndex < length) {
-            resultLists.Add(enumerable.GetRange(startIndex, length - startIndex));
-        }
-
-        foreach (var argsSplit in resultLists) {
-            TryParse(argsSplit);
-        }
-
-        return true;
-    }
-    
-    public bool TryParse(IEnumerable<string> args) {
-        var enumerable = args as string[] ?? args.ToArray();
-        
-        if (!_flagToActionMap.TryGetValue(enumerable[0].ToLower(), out var action)) return false;
-        action(enumerable[1..]); // Strip out the command and keep the arguments
-        return true;
     }
     
     // TODO test this out
@@ -141,25 +117,47 @@ public class CliArgsParser : ICliArgsParser {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Default Command(s)
+    // Parsing input
     // -----------------------------------------------------------------------------------------------------------------
-    public void HelpCommand(string[] _) {
-        int maxCommandNameLength = Math.Max(
-            Descriptions.Keys.Select(k => k.Length).Max(), 
-            12 // always have at least 12 as padding value
-        ); 
-        string title = "Command Name".PadRight(maxCommandNameLength);
-        string pattern = new string('-', maxCommandNameLength);
+    private bool _tryParse(IEnumerable<string> args) {
+        var enumerable = args as string[] ?? args.ToArray();
+        return _flagToActionMap.TryGetValue(enumerable[0].ToLower(), out var commandStruct) 
+               && commandStruct.Call(enumerable[1..]); // Strip out the command and keep the arguments
+    }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"{title} | Description");
-        stringBuilder.AppendLine($"{pattern}-|------------");
+    private bool _tryParseMultiple(IEnumerable<string> args) {
+        List<List<string>> resultLists = [];
+        int startIndex = 0;
+        var enumerable = args as List<string> ?? args.ToList();
+        var length = enumerable.Count;
+
+        for (int i = 0; i < length; i++) {
+            if (!enumerable[i].Equals("&&")) continue;
             
-        foreach ((string name, string? desc) in Descriptions) {
-            stringBuilder.AppendLine($"{name.PadRight(maxCommandNameLength)} | {desc}");
+            // Add the sublist from startIndex to i to the resultLists
+            resultLists.Add(enumerable.GetRange(startIndex, i - startIndex));
+            startIndex = i + 1;
         }
+
+        // Add the last sublist if there's any remaining elements
+        if (startIndex < length) {
+            resultLists.Add(enumerable.GetRange(startIndex, length - startIndex));
+        }
+
+        return resultLists.All(_tryParse);
+    }
+    
+    public bool TryParse(IEnumerable<string> args, bool parseMultiple) => parseMultiple ? _tryParseMultiple(args) : _tryParse(args);
+    public bool TryParse(IEnumerable<string> args) => _tryParse(args);
+
+    public void TryParseInput(bool breakOnFalse = false) {
+        bool breakpoint = false;
+
+        while (!breakpoint) {
+            string[] input = Console.ReadLine()?.Split(" ") ?? [];
             
-        Console.WriteLine(stringBuilder);
+            if (!_tryParse(input) && breakOnFalse) breakpoint = true;
+        }
     }
 
 }

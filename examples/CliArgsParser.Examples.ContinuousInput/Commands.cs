@@ -1,14 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+using CliArgsParser.Attributes;
+using CliArgsParser.Commands;
+
+namespace CliArgsParser.Examples.ContinuousInput;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliCommandAttribute {
-    string Name { get;}
-    string? Description { get; }
-    public Type ParameterOptionsType { get; }
-    IParameterOptions GetParameters(IEnumerable<string> args);
+public class Commands : CliCommandAtlas {
+    [CliCommand<NoArgs>("test")]
+    public bool CallbackTest(NoArgs _) {
+        Console.WriteLine("Testing this");
+        
+        return true;
+    }
 }

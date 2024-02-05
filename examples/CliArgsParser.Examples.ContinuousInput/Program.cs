@@ -1,14 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
-
+namespace CliArgsParser.Examples.ContinuousInput;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliCommandAttribute {
-    string Name { get;}
-    string? Description { get; }
-    public Type ParameterOptionsType { get; }
-    IParameterOptions GetParameters(IEnumerable<string> args);
+static class Program {
+    public static void Main(string[] _) {
+        new CliArgsParser()
+            .RegisterFromCliAtlas(new Commands())
+            .TryParseInput();
+    }
 }

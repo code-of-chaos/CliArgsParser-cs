@@ -1,14 +1,13 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+using CliArgsParser.Contracts;
+
+namespace CliArgsParser.Commands;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliCommandAttribute {
-    string Name { get;}
-    string? Description { get; }
-    public Type ParameterOptionsType { get; }
-    IParameterOptions GetParameters(IEnumerable<string> args);
+public class NoArgs : IParameterOptions{
+    public bool Verbose { get; set; }
 }
