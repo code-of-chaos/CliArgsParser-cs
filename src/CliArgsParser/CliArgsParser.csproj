@@ -1,13 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+    <PropertyGroup> 
+        <TargetFramework>net8.0</TargetFramework> 
+        <Version>0.1.2</Version>                                 <!-- The version of your library --> 
+        <Authors>AndreasSasDev</Authors>
+        <PackageId>CliArgsParser</PackageId>                    <!-- This is your NuGet package ID --> 
+        <AssemblyName>CliArgsParser</AssemblyName> 
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Automatically create NuGet package on build -->
+        <Description>A library to create CLI's and Program's argument parsing.</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/code-of-chaos/CliArgsParser-cs</PackageProjectUrl>
+        
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" />
+      <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" >
+          <Private>false</Private>
+          <IncludeAssets>compile;runtime;content;build;native</IncludeAssets>
+          <ExcludeAssets>None</ExcludeAssets>
+      </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>

@@ -2,8 +2,19 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <Version>0.1.1</Version>                                  <!-- The version of your library -->
+        <Authors>AndreasSasDev</Authors>
+        <PackageId>CliArgsParser.Contracts</PackageId>                    <!-- This is your NuGet package ID -->
+        <AssemblyName>CliArgsParser.Contracts</AssemblyName>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Automatically create NuGet package on build -->
+        <Description>The Contracts to CliArgsParser</Description>
+        <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/code-of-chaos/CliArgsParser-cs</PackageProjectUrl>
+
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        
     </PropertyGroup>
 
 </Project>
