@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>CliArgsParser</id>
-    <version>0.1.6</version>
+    <version>0.1.8</version>
     <authors>AndreasSasDev</authors>
-    <owners/>
+    <owners></owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">GPL-3.0-or-later</license>
+    <readme>README.md</readme>
     <projectUrl>https://github.com/code-of-chaos/CliArgsParser-cs</projectUrl>
+    <iconUrl>https://avatars.githubusercontent.com/u/102103683?s=400&amp;u=b0dc0cb37882f73ef59b0ed9fd11ee9de5213d0f&amp;v=4</iconUrl>
     <description>A library to create CLI's and Program's argument parsing.</description>
     <repository type="git" url="https://github.com/code-of-chaos/CliArgsParser-cs" commit="029b54dbd0db0cbcc54be8d18436e748d30d2f06" />
     <dependencies>
@@ -15,8 +17,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\CliArgsParser.Contracts\bin\Release\net8.0\CliArgsParser.Contracts.dll" target="lib\net8.0\CliArgsParser.Contracts.dll" />
-    <file src="bin\Release\net8.0\CliArgsParser.dll" target="lib\net8.0\CliArgsParser.dll" />
-    <file src="..\..\README.md" target="README.md" />
+    <file src="lib\net8.0\CliArgsParser.Contracts.dll" target="lib\net8.0\CliArgsParser.Contracts.dll" />
+    <file src="lib\net8.0\CliArgsParser.dll" target="lib\net8.0\CliArgsParser.dll" />
+    <file src="README.md" target="README.md" />
   </files>
 </package>
