@@ -11,7 +11,7 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ParameterParser<T> : IParamaterParser<T> where T: IParameterOptions, new() {
+public class ParameterParser<T> : IParameterParser<T> where T: IParameterOptions, new() {
     // Dictionaries needed to optimize access to the attributes.
     //      Go over and store them once, instead of on every argument like we did before.
     //      Maybe a bit overkill, but might be a good idea in the long run.
