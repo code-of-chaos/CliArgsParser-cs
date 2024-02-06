@@ -142,13 +142,16 @@ public class CliArgsParser : ICliArgsParser {
     public bool TryParse(IEnumerable<string> args, bool parseMultiple) => parseMultiple ? _tryParseMultiple(args) : _tryParse(args);
     public bool TryParse(IEnumerable<string> args) => _tryParse(args);
 
-    public void TryParseInput(bool breakOnFalse = false) {
+    public void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false) {
         bool breakpoint = false;
 
         while (!breakpoint) {
             Console.Write(Cursor);
             string[] input = Console.ReadLine()?.Split(" ") ?? [];
-            bool output = _tryParse(input);
+            bool output = allowMultiple 
+                ? _tryParseMultiple(input) 
+                : _tryParse(input);
+                
             if (!output) {
                 Console.WriteLine($"Command '{string.Join(" ", input)}' returned '{output}'");
                 if (breakOnFalse) breakpoint = true;

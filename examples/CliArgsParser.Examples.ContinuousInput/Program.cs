@@ -9,6 +9,6 @@ static class Program {
     public static void Main(string[] _) {
         new CliArgsParser()
             .RegisterFromCliAtlas(new Commands())
-            .TryParseInput();
+            .TryParseInput(allowMultiple:true);
     }
 }
