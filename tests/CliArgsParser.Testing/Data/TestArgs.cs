@@ -1,16 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Examples.RegisterAtlas;
+namespace CliArgsParser.Testing.Data;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        
-        new CliArgsParser()
-            .RegisterFromCliAtlas(new CommandsStatic())
-            .TryParseMultiple(args);
-        
-    }
+public class TestArgs : ParameterOptions {
+    [ArgValue('v', "value")]  public string? Value { get; set; }
+    [ArgFlag('f', "flag")]  public bool Flag { get; set; }
 }

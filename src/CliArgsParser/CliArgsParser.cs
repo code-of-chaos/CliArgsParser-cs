@@ -128,7 +128,7 @@ public class CliArgsParser : ICliArgsParser {
                && commandStruct.Call(enumerable[1..]); // Strip out the command and keep the arguments
     }
 
-    private bool _tryParseMultiple(IEnumerable<string> args) {
+    private IEnumerable<bool> _tryParseMultiple(IEnumerable<string> args) {
         List<List<string>> resultLists = [];
         int startIndex = 0;
         var enumerable = args as List<string> ?? args.ToList();
@@ -147,11 +147,12 @@ public class CliArgsParser : ICliArgsParser {
             resultLists.Add(enumerable.GetRange(startIndex, length - startIndex));
         }
 
-        return resultLists.All(_tryParse);
+        return resultLists.Select(a => _tryParse(a));
     }
     
-    public bool TryParse(IEnumerable<string> args, bool parseMultiple) => parseMultiple ? _tryParseMultiple(args) : _tryParse(args);
+    public IEnumerable<bool> TryParseMultiple(IEnumerable<string> args) => _tryParseMultiple(args);
     public bool TryParse(IEnumerable<string> args) => _tryParse(args);
+    
 
     public void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false) {
         bool breakpoint = false;
@@ -160,7 +161,7 @@ public class CliArgsParser : ICliArgsParser {
             Console.Write(Cursor);
             string[] input = Console.ReadLine()?.Split(" ") ?? [];
             bool output = allowMultiple 
-                ? _tryParseMultiple(input) 
+                ? _tryParseMultiple(input).All(a => a) 
                 : _tryParse(input);
                 
             if (!output) {

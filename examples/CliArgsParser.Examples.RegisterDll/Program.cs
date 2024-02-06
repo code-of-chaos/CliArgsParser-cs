@@ -12,6 +12,6 @@ static class Program {
         
         new CliArgsParser()
             .RegisterFromDlLs(Directory.GetFiles(cliPluginsFolder, "*.dll"))
-            .TryParse(args, true);
+            .TryParseMultiple(args);
     }
 }
