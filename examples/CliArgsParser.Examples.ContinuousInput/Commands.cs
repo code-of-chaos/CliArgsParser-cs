@@ -12,9 +12,15 @@ namespace CliArgsParser.Examples.ContinuousInput;
 // ---------------------------------------------------------------------------------------------------------------------
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
 public class Commands : CliCommandAtlas {
+    
     [CliCommand<NoArgs>("test")]
     public bool CallbackTest(NoArgs _) {
         Console.WriteLine("Testing this");
-        return true;
+        return false;
+    }
+    
+    [CliCommand<NoArgs>("void")]
+    public void CallbackVoid() {
+        Console.WriteLine("Testing this");
     }
 }

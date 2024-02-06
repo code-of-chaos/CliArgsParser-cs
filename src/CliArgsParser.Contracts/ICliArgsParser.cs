@@ -15,4 +15,7 @@ public interface ICliArgsParser {
     bool TryParse(IEnumerable<string> args);
 
     void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false);
+
+    static string Cursor;
+    static string Error;
 }

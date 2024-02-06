@@ -19,6 +19,7 @@ public class CliArgsParser : ICliArgsParser {
     public static IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
 
     public static string Cursor = "> ";
+    public static string Error = "> ";
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
@@ -50,21 +51,31 @@ public class CliArgsParser : ICliArgsParser {
             // Quick exits to find the correct methods
             if (methodInfo.GetCustomAttributes().FirstOrDefault(a => a is ICliCommandAttribute) is not ICliCommandAttribute cliCommandAttribute) continue;
             var methodParameters = methodInfo.GetParameters();
-            if (methodParameters.Length == 0) continue;
+            bool hasArgs = methodParameters.Length != 0;
             
             string commandName = cliCommandAttribute.Name.ToLower();
             
+
+            // Find the correct delegate Type
+            //      This depends on the return type & if the method has any args.
+            //      Added the void & no args options for ease of use
+            Type delegateType = (methodInfo.ReturnType, hasArgs) switch {
+                ({ } returnType, true)  when returnType == typeof(bool) => typeof(CommandCallback<>).MakeGenericType(cliCommandAttribute.ParameterOptionsType),
+                ({ } returnType, false) when returnType == typeof(bool) => typeof(CommandCallback),
+                ({ } returnType, true)  when returnType == typeof(void) => typeof(CommandCallbackVoid<>).MakeGenericType(cliCommandAttribute.ParameterOptionsType),
+                ({ } returnType, false) when returnType == typeof(void) => typeof(CommandCallbackVoid),
+                _ => throw new Exception("DelegateType could not be created")
+            };
+
             Delegate del;
-            
             try {
-                Type delegateType = typeof(CommandCallback<>).MakeGenericType(cliCommandAttribute.ParameterOptionsType);
                 del = Delegate.CreateDelegate(delegateType, cliCommandAtlas, methodInfo);
             } catch {
                 Console.WriteLine($"Attempting to bind method {methodInfo.Name} with return type {methodInfo.ReturnType.Name} and parameters {String.Join(",", methodParameters.Select(p => p.ParameterType.FullName))}");
                 throw;
             }
 
-            if (_flagToActionMap.TryAdd(commandName, new CommandStruct(del, cliCommandAttribute))) {
+            if (_flagToActionMap.TryAdd(commandName, new CommandStruct(del, cliCommandAttribute, hasArgs))) {
                 _descriptions.Add(commandName, cliCommandAttribute.Description);
                 continue;
             }
@@ -153,7 +164,7 @@ public class CliArgsParser : ICliArgsParser {
                 : _tryParse(input);
                 
             if (!output) {
-                Console.WriteLine($"Command '{string.Join(" ", input)}' returned '{output}'");
+                Console.WriteLine($"{Error}Command '{string.Join(" ", input)}' returned '{output}'");
                 if (breakOnFalse) breakpoint = true;
             }
             

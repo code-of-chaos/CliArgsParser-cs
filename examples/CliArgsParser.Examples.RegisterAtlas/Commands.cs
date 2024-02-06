@@ -17,7 +17,7 @@ public class Commands : CliCommandAtlas {
     }
     
     [CliCommand<ArgOptions>("test")]
-    public void CallbackTest(ArgOptions argOptions) {
+    public bool CallbackTest(ArgOptions argOptions) {
         if (argOptions.Username == null) {
             Console.WriteLine("Hello Stranger");
         } 
@@ -27,5 +27,6 @@ public class Commands : CliCommandAtlas {
         }
 
         Console.WriteLine($"Hello, {argOptions.Username}!");
+        return true;
     }
 }
