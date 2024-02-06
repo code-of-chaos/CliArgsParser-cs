@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata>
+    <id>CliArgsParser</id>
+    <version>0.1.6</version>
+    <authors>AndreasSasDev</authors>
+    <owners/>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">GPL-3.0-or-later</license>
+    <projectUrl>https://github.com/code-of-chaos/CliArgsParser-cs</projectUrl>
+    <description>A library to create CLI's and Program's argument parsing.</description>
+    <repository type="git" url="https://github.com/code-of-chaos/CliArgsParser-cs" commit="029b54dbd0db0cbcc54be8d18436e748d30d2f06" />
+    <dependencies>
+      <group targetFramework="net8.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\CliArgsParser.Contracts\bin\Release\net8.0\CliArgsParser.Contracts.dll" target="lib\net8.0\CliArgsParser.Contracts.dll" />
+    <file src="bin\Release\net8.0\CliArgsParser.dll" target="lib\net8.0\CliArgsParser.dll" />
+    <file src="..\..\README.md" target="README.md" />
+  </files>
+</package>
