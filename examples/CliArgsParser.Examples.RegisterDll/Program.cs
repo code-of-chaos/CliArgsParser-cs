@@ -8,7 +8,7 @@ namespace CliArgsParser.Examples.RegisterDll;
 // ---------------------------------------------------------------------------------------------------------------------
 static class Program {
     public static void Main(string[] args) {
-        const  string cliPluginsFolder = @"plugins";
+        const string cliPluginsFolder = @"plugins";
         
         new CliArgsParser()
             .RegisterFromDlLs(Directory.GetFiles(cliPluginsFolder, "*.dll"))

@@ -76,7 +76,6 @@ public class CliArgsParser : ICliArgsParser {
                 
                 bool isAdded = _flagToActionMap.TryAdd(commandName, cmdStruct);
                 if (overwrite || isAdded) {
-                    
                     if (!isAdded) {
                         _flagToActionMap[commandName] = cmdStruct;
                     }
@@ -103,7 +102,6 @@ public class CliArgsParser : ICliArgsParser {
         foreach (string filePath in filePaths) {
             
             Assembly assembly = Assembly.LoadFrom(filePath);
-            Console.WriteLine(filePath);
 
             foreach (Type objectType in assembly.GetTypes()) {
                 if (!objectType.IsAssignableTo(typeof(ICliCommandAtlas))) continue;
