@@ -6,7 +6,6 @@ using System.Text;
 using CliArgsParser.Commands;
 using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Attributes;
-using CliArgsParser.Contracts.Delegates;
 
 namespace CliArgsParser;
 
@@ -58,22 +57,23 @@ public class CliArgsParser : ICliArgsParser {
             
             // Find the correct delegate Type
             //      This depends on the return type & if the method has any args.
-            //      Added the void & no args options for ease of use
-            Type delegateType = methodInfo.ReturnType switch {
-                { } returnType when returnType == typeof(bool) => hasArgs
-                    ? typeof(CmdCallback<>).MakeGenericType(cliCommandAttribute.ParameterOptionsType)
-                    : typeof(CmdCallback),
-
-                { } returnType when returnType == typeof(void) => hasArgs
-                    ? typeof(CmdCallbackVoid<>).MakeGenericType(cliCommandAttribute.ParameterOptionsType)
-                    : typeof(CmdCallbackVoid),
-    
-                _ => throw new Exception("DelegateType could not be created")
-            };
+            //      
+            Type parameterType = cliCommandAttribute.ParameterOptionsType;
+            Type returnType = methodInfo.ReturnType;
+            Type delegateType;
+            if (returnType == typeof(void)) {
+                delegateType = hasArgs
+                    ? typeof(Action<>).MakeGenericType(parameterType)
+                    : typeof(Action);
+            } else {
+                delegateType = hasArgs
+                    ? typeof(Func<,>).MakeGenericType(parameterType, returnType)
+                    : typeof(Func<bool>);
+            }
             
             try {
                 Delegate del = Delegate.CreateDelegate(delegateType, cliCommandAtlas, methodInfo);
-                CommandStruct cmdStruct = new CommandStruct(del, cliCommandAttribute, hasArgs);
+                CommandStruct cmdStruct = new (del, cliCommandAttribute, hasArgs);
                 
                 bool isAdded = _flagToActionMap.TryAdd(commandName, cmdStruct);
                 if (overwrite || isAdded) {
