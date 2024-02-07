@@ -21,9 +21,9 @@ public class DefaultCommands : ICliCommandAtlas {
             12 // always have at least 12 as padding value
         ); 
         string title = "Command Name".PadRight(maxCommandNameLength);
-        string pattern = new string('-', maxCommandNameLength);
+        var pattern = new string('-', maxCommandNameLength);
 
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"{title} | Description");
         stringBuilder.AppendLine($"{pattern}-|------------");
             

@@ -34,7 +34,7 @@ public class TestParseSingleCommand(CliArgsParserFixture fixture) : IClassFixtur
         
         // Assertion is done within the commands
         foreach (string i in input) {
-            var output = fixture.Parser.TryParse(i.Split(" "));
+            bool output = fixture.Parser.TryParse(i.Split(" "));
             // All outputs have to be true
             Assert.True(output);
         }
@@ -50,7 +50,7 @@ public class TestParseSingleCommand(CliArgsParserFixture fixture) : IClassFixtur
         
         // Assertion is done within the commands
         foreach (string i in input) {
-            var output = fixture.Parser.TryParse(i.Split(" "));
+            bool output = fixture.Parser.TryParse(i.Split(" "));
             // All outputs have to be true
             Assert.True(output);
         }

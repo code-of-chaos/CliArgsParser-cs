@@ -23,7 +23,7 @@ public class ParameterParser<T> : IParameterParser<T> where T: IParameterOptions
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public ParameterParser() {
-        foreach (var prop in _propertyInfos) {
+        foreach (PropertyInfo? prop in _propertyInfos) {
             var optionAttr = prop.GetCustomAttribute<ArgValueAttribute>();
             var flagAttr = prop.GetCustomAttribute<ArgFlagAttribute>();
 
@@ -49,20 +49,20 @@ public class ParameterParser<T> : IParameterParser<T> where T: IParameterOptions
     
     public T Parse(IEnumerable<string> args) {
         var result = new T();
-        var enumerable = args as string[] ?? args.ToArray();
+        string[]? enumerable = args as string[] ?? args.ToArray();
 
-        for (int i = 0; i < enumerable.Length; i++) {
+        for (var i = 0; i < enumerable.Length; i++) {
             // Eh, this isn't great
             //      Currently if one parameter is verbose, the entire thing will be flagged as verbose
             //      TODO maybe in some way add this to the properties to see which one is verbose or not?
             bool isVerbose = enumerable[i].StartsWith("--");
             string argName = enumerable[i].ToLower();
             
-            if (_optionProperties.TryGetValue(argName, out var optionProp) && i < enumerable.Length - 1) {
-                var value = Convert.ChangeType(enumerable[++i], optionProp.PropertyType);
+            if (_optionProperties.TryGetValue(argName, out PropertyInfo? optionProp) && i < enumerable.Length - 1) {
+                object? value = Convert.ChangeType(enumerable[++i], optionProp.PropertyType);
                 optionProp.SetValue(result, value);
             }
-            else if (_flagProperties.TryGetValue(argName, out var flagProp)) {
+            else if (_flagProperties.TryGetValue(argName, out PropertyInfo? flagProp)) {
                 flagProp.SetValue(result, true);
             }
             

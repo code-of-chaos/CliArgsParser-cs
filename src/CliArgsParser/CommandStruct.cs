@@ -18,7 +18,7 @@ public readonly struct CommandStruct(Delegate del, ICliCommandAttribute cliComma
     public bool Call(IEnumerable<string> args) {
         // If something goes wrong here, just return false. It's a bit easier
 
-        var output = HasArgs
+        object? output = HasArgs
             ? Delegate.DynamicInvoke(CliCommandAttribute.GetParameters(args))
             : Delegate.DynamicInvoke() ;
 

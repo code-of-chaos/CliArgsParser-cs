@@ -13,7 +13,7 @@ public class TestParseMultipleCommands(CliArgsParserFixture fixture) : IClassFix
     [Fact]
     public void TestAlwaysTrue() {
         const string input = "always-true && always-true";
-        var output = fixture.Parser.TryParseMultiple(input.Split(" "));
+        IEnumerable<bool>? output = fixture.Parser.TryParseMultiple(input.Split(" "));
 
         Assert.All(output, Assert.True);
     }
@@ -21,7 +21,7 @@ public class TestParseMultipleCommands(CliArgsParserFixture fixture) : IClassFix
     [Fact]
     public void TestAlwaysFalse() {
         const string input = "always-false && always-false";
-        var output = fixture.Parser.TryParseMultiple(input.Split(" "));
+        IEnumerable<bool>? output = fixture.Parser.TryParseMultiple(input.Split(" "));
         
         Assert.All(output, Assert.False);
     }
@@ -33,7 +33,7 @@ public class TestParseMultipleCommands(CliArgsParserFixture fixture) : IClassFix
         ];
         
         foreach (string i in input) {
-            var output = fixture.Parser.TryParseMultiple(i.Split(" "));
+            IEnumerable<bool>? output = fixture.Parser.TryParseMultiple(i.Split(" "));
             Assert.All(output, Assert.True);
         }
         

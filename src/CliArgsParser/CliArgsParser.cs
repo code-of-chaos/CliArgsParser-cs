@@ -15,8 +15,8 @@ namespace CliArgsParser;
 public class CliArgsParser : ICliArgsParser {
     private readonly Dictionary<string, CommandStruct> _flagToActionMap = new();
     
-    private static readonly Dictionary<string, string?> _descriptions = new();
-    public static IReadOnlyDictionary<string, string?> Descriptions => _descriptions.AsReadOnly(); // Again added for the future, don't know what to add to it.
+    private static readonly Dictionary<string, string?> Desc = new();
+    public static IReadOnlyDictionary<string, string?> Descriptions => Desc.AsReadOnly(); // Again added for the future, don't know what to add to it.
 
     public static string Cursor { get; set; } = "> ";
     public static string ErrorCursor = Cursor; // I use the same default, but you can change it
@@ -38,26 +38,24 @@ public class CliArgsParser : ICliArgsParser {
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public ICliArgsParser RegisterFromCliAtlas<T>(IEnumerable<T> cliCommandAtlas, bool force = false) where T : ICliCommandAtlas {
-        foreach (var atlas in cliCommandAtlas) {
-            RegisterFromCliAtlas(atlas);
-        }
+        foreach (T atlas in cliCommandAtlas) RegisterFromCliAtlas(atlas);
         return this;
     }
     
     public ICliArgsParser RegisterFromCliAtlas<T>(T cliCommandAtlas, bool overwrite = false) where T:ICliCommandAtlas{
-        var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
+        MethodInfo[] methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
-        foreach (var methodInfo in methods) {
+        foreach (MethodInfo methodInfo in methods) {
             // Quick exits to find the correct methods
             if (methodInfo.GetCustomAttributes().FirstOrDefault(a => a is ICliCommandAttribute) is not ICliCommandAttribute cliCommandAttribute) continue;
             
-            var methodParameters = methodInfo.GetParameters();
+            ParameterInfo[] methodParameters = methodInfo.GetParameters();
             bool hasArgs = methodParameters.Length != 0;
             string commandName = cliCommandAttribute.Name.ToLower();
             
             // Find the correct delegate Type
             //      This depends on the return type & if the method has any args.
-            //      
+            //      Todo : add async functionality?
             Type parameterType = cliCommandAttribute.ParameterOptionsType;
             Type returnType = methodInfo.ReturnType;
             Type delegateType;
@@ -72,7 +70,7 @@ public class CliArgsParser : ICliArgsParser {
             }
             
             try {
-                Delegate del = Delegate.CreateDelegate(delegateType, cliCommandAtlas, methodInfo);
+                var del = Delegate.CreateDelegate(delegateType, cliCommandAtlas, methodInfo);
                 CommandStruct cmdStruct = new (del, cliCommandAttribute, hasArgs);
                 
                 bool isAdded = _flagToActionMap.TryAdd(commandName, cmdStruct);
@@ -80,15 +78,15 @@ public class CliArgsParser : ICliArgsParser {
                     if (!isAdded) {
                         _flagToActionMap[commandName] = cmdStruct;
                     }
-                    _descriptions[commandName] = cliCommandAttribute.Description;
+                    Desc[commandName] = cliCommandAttribute.Description;
                 } 
                 else if (!isAdded) {
                     Console.WriteLine($"Ignoring: {commandName}");
                 }
             } 
             catch (Exception e) {
-                StringBuilder parameters = new StringBuilder();
-                foreach(var p in methodParameters)
+                StringBuilder parameters = new ();
+                foreach(ParameterInfo p in methodParameters)
                     parameters.Append(p.ParameterType.FullName).Append(',');
                 throw new ArgumentException($"Error attempting to bind method {methodInfo.Name}. Return Type: {methodInfo.ReturnType.Name}, Parameters: {parameters}", e);
             }
@@ -100,10 +98,10 @@ public class CliArgsParser : ICliArgsParser {
     
     // TODO test this out
     public ICliArgsParser RegisterFromDlLs(IEnumerable<string> filePaths, Action? assignedCallback = null) {
-        foreach (var filePath in filePaths) {
+        foreach (string filePath in filePaths) {
             Assembly assembly = Assembly.LoadFrom(filePath);
 
-            foreach (var objectType in assembly.GetTypes()) {
+            foreach (Type objectType in assembly.GetTypes()) {
                 if (!typeof(ICliCommandAtlas).IsAssignableFrom(objectType)) continue;
                 if (objectType is { IsInterface: true, IsAbstract: true }) continue;
                 if (Activator.CreateInstance(objectType) is not ICliCommandAtlas cliCommandAtlas) continue;
@@ -122,14 +120,14 @@ public class CliArgsParser : ICliArgsParser {
     // Parsing input
     // -----------------------------------------------------------------------------------------------------------------
     private bool _tryParse(IEnumerable<string> args) {
-        var enumerable = args as string[] ?? args.ToArray();
-        return _flagToActionMap.TryGetValue(enumerable[0].ToLower(), out var commandStruct) 
+        string[] enumerable = args as string[] ?? args.ToArray();
+        return _flagToActionMap.TryGetValue(enumerable[0].ToLower(), out CommandStruct commandStruct) 
                && commandStruct.Call(enumerable[1..]); // Strip out the command and keep the arguments
     }
 
     private IEnumerable<bool> _tryParseMultiple(IEnumerable<string> args) {
         var currentCommand = new List<string>();
-        foreach (var arg in args) {
+        foreach (string arg in args) {
             if (arg.Equals("&&")) {
                 yield return _tryParse(currentCommand);
                 currentCommand.Clear();
@@ -147,7 +145,7 @@ public class CliArgsParser : ICliArgsParser {
     
 
     public void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false) {
-        bool breakpoint = false;
+        var breakpoint = false;
 
         while (!breakpoint) {
             Console.Write(Cursor);
