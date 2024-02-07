@@ -49,7 +49,7 @@ public class ParameterParser<T> : IParameterParser<T> where T: IParameterOptions
     
     public T Parse(IEnumerable<string> args) {
         var result = new T();
-        string[]? enumerable = args as string[] ?? args.ToArray();
+        string[] enumerable = args as string[] ?? args.ToArray();
 
         for (var i = 0; i < enumerable.Length; i++) {
             // Eh, this isn't great
@@ -59,7 +59,7 @@ public class ParameterParser<T> : IParameterParser<T> where T: IParameterOptions
             string argName = enumerable[i].ToLower();
             
             if (_optionProperties.TryGetValue(argName, out PropertyInfo? optionProp) && i < enumerable.Length - 1) {
-                object? value = Convert.ChangeType(enumerable[++i], optionProp.PropertyType);
+                object value = Convert.ChangeType(enumerable[++i], optionProp.PropertyType); // cast to the correct type of the param
                 optionProp.SetValue(result, value);
             }
             else if (_flagProperties.TryGetValue(argName, out PropertyInfo? flagProp)) {

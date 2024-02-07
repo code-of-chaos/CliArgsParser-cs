@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using CliArgsParser.Attributes;
-using CliArgsParser.Contracts;
 
 namespace CliArgsParser.Commands;
 
