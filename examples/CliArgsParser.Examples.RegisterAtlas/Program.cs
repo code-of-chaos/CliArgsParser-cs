@@ -10,7 +10,6 @@ static class Program {
         
         new CliArgsParser()
             .RegisterFromCliAtlas(new Commands())
-            .TryParseInput();
-        
+            .TryParseMultiple(args);
     }
 }
