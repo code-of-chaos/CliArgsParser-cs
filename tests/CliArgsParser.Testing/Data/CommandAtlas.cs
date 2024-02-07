@@ -38,4 +38,12 @@ public class CommandAtlas : CliCommandAtlas {
         Assert.True(testArgs.Flag);
         Assert.Equal("data", testArgs.Value);
     }
+
+    [CliCommand("test-clicommand-empty-bool")]
+    public bool CallbackTestCliCommandEmptyBool() {
+        return true;
+    }
+
+    [CliCommand("test-clicommand-empty-void")]
+    public void CallbackTestCliCommandEmptyVoid() { }
 }

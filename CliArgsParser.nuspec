@@ -17,8 +17,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\CliArgsParser.Contracts\bin\release\net8.0\CliArgsParser.Contracts.dll" target="lib\net8.0\CliArgsParser.Contracts.dll" />
-    <file src="..\CliArgsParser\bin\release\net8.0\CliArgsParser.dll" target="lib\net8.0\CliArgsParser.dll" />
-    <file src="..\..\README.md" target="README.md" />
+    <file src="src\CliArgsParser.Contracts\bin\release\net8.0\CliArgsParser.Contracts.dll" target="lib\net8.0\CliArgsParser.Contracts.dll" />
+    <file src="src\CliArgsParser\bin\release\net8.0\CliArgsParser.dll" target="lib\net8.0\CliArgsParser.dll" />
+    <file src="README.md" target="README.md" />
   </files>
 </package>

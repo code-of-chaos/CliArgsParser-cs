@@ -9,7 +9,6 @@ namespace CliArgsParser.Testing;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class TestParseSingleCommand(CliArgsParserFixture fixture) : IClassFixture<CliArgsParserFixture> {
-    
     [Fact]
     public void TestAlwaysTrue() {
         Assert.True(fixture.Parser.TryParse(["always-true"]));
@@ -40,5 +39,20 @@ public class TestParseSingleCommand(CliArgsParserFixture fixture) : IClassFixtur
             Assert.True(output);
         }
         
+    }
+
+    [Fact]
+    public void TestCliCommandEmpty() {
+        string[] input = [
+            "test-clicommand-empty-bool",
+            "test-clicommand-empty-void",
+        ];
+        
+        // Assertion is done within the commands
+        foreach (string i in input) {
+            var output = fixture.Parser.TryParse(i.Split(" "));
+            // All outputs have to be true
+            Assert.True(output);
+        }
     }
 }

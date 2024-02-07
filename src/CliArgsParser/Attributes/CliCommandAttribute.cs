@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using CliArgsParser.Commands;
 using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Attributes;
 
@@ -18,3 +19,9 @@ public class CliCommandAttribute<T>(string name, string? description = null) : A
     
     public IParameterOptions GetParameters(IEnumerable<string> args) => _parameterParser.Parse(args);
 }
+
+// Default without arguments
+[AttributeUsage(AttributeTargets.Method)]
+public class CliCommandAttribute(string name, string? description = null)
+    : CliCommandAttribute<NoArgs>(name, description);
+

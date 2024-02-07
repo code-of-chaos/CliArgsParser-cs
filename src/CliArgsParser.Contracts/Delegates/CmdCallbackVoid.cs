@@ -6,5 +6,5 @@ namespace CliArgsParser.Contracts.Delegates;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public delegate void CommandCallbackVoid<in T>(T argsOptions) where T : IParameterOptions;
-public delegate void CommandCallbackVoid();
+public delegate void CmdCallbackVoid<in T>(T argsOptions) where T : IParameterOptions;
+public delegate void CmdCallbackVoid();
