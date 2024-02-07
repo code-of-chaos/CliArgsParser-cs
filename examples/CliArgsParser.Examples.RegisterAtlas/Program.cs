@@ -9,8 +9,8 @@ static class Program {
     public static void Main(string[] args) {
         
         new CliArgsParser()
-            .RegisterFromCliAtlas(new CommandsStatic())
-            .TryParseMultiple(args);
+            .RegisterFromCliAtlas(new Commands())
+            .TryParseInput();
         
     }
 }

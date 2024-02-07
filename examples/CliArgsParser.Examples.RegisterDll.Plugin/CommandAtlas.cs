@@ -1,17 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Examples.RegisterDll;
+using CliArgsParser.Attributes;
+using CliArgsParser.Commands;
+
+namespace CliArgsParser.Examples.RegisterDll.Plugin;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        const  string cliPluginsFolder = @"plugins";
-        
-        new CliArgsParser()
-            .RegisterFromDlLs(Directory.GetFiles(cliPluginsFolder, "*.dll"))
-            .TryParseInput();
+// ReSharper disable UnusedType.Global
+public class CommandAtlas : CliCommandAtlas {
+    // ReSharper restore UnusedType.Global
+    [CliCommand<NoArgs>("plugin")]
+    public void CallbackPluginCommand() {
+        Console.WriteLine("This command is imported from another dll file");
     }
 }

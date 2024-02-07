@@ -12,4 +12,12 @@
       <ProjectReference Include="..\..\src\CliArgsParser\CliArgsParser.csproj" />
     </ItemGroup>
 
+    <!-- PLUGINS   -->
+    <ItemGroup>
+        <ContentWithTargetPath Include="..\CliArgsParser.examples.RegisterDll.Plugin\bin\$(Configuration)\net8.0\CliArgsParser.examples.RegisterDll.Plugin.dll">
+            <TargetPath>plugins\%(FileName)%(Extension)</TargetPath>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </ContentWithTargetPath>
+    </ItemGroup>
+
 </Project>

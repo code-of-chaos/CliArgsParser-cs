@@ -20,6 +20,7 @@ public class CliArgsParser : ICliArgsParser {
 
     public static string Cursor { get; set; } = "> ";
     public static string ErrorCursor = Cursor; // I use the same default, but you can change it
+    private const string Delimiter = "&&";
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
@@ -43,8 +44,8 @@ public class CliArgsParser : ICliArgsParser {
     }
     
     public ICliArgsParser RegisterFromCliAtlas<T>(T cliCommandAtlas, bool overwrite = false) where T:ICliCommandAtlas{
-        MethodInfo[] methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance);
-
+        MethodInfo[] methods = cliCommandAtlas.GetType().GetMethods();
+        
         foreach (MethodInfo methodInfo in methods) {
             // Quick exits to find the correct methods
             if (methodInfo.GetCustomAttributes().FirstOrDefault(a => a is ICliCommandAttribute) is not ICliCommandAttribute cliCommandAttribute) continue;
@@ -75,6 +76,7 @@ public class CliArgsParser : ICliArgsParser {
                 
                 bool isAdded = _flagToActionMap.TryAdd(commandName, cmdStruct);
                 if (overwrite || isAdded) {
+                    
                     if (!isAdded) {
                         _flagToActionMap[commandName] = cmdStruct;
                     }
@@ -99,13 +101,14 @@ public class CliArgsParser : ICliArgsParser {
     // TODO test this out
     public ICliArgsParser RegisterFromDlLs(IEnumerable<string> filePaths, Action? assignedCallback = null) {
         foreach (string filePath in filePaths) {
+            
             Assembly assembly = Assembly.LoadFrom(filePath);
+            Console.WriteLine(filePath);
 
             foreach (Type objectType in assembly.GetTypes()) {
-                if (!typeof(ICliCommandAtlas).IsAssignableFrom(objectType)) continue;
-                if (objectType is { IsInterface: true, IsAbstract: true }) continue;
-                if (Activator.CreateInstance(objectType) is not ICliCommandAtlas cliCommandAtlas) continue;
-                // throw new Exception($"Command atlas '{objectType}' could not be imported correctly from : '{filePath}'");
+                if (!objectType.IsAssignableTo(typeof(ICliCommandAtlas))) continue;
+                if (objectType is { IsInterface: true} or {IsAbstract: true }) continue;
+                var cliCommandAtlas = (ICliCommandAtlas)Activator.CreateInstance(objectType)!;
                 
                 // Actually register the commands
                 RegisterFromCliAtlas(cliCommandAtlas);
@@ -119,48 +122,78 @@ public class CliArgsParser : ICliArgsParser {
     // -----------------------------------------------------------------------------------------------------------------
     // Parsing input
     // -----------------------------------------------------------------------------------------------------------------
-    private bool _tryParse(IEnumerable<string> args) {
+    private OutputState _tryParse(IEnumerable<string> args) {
         string[] enumerable = args as string[] ?? args.ToArray();
-        return _flagToActionMap.TryGetValue(enumerable[0].ToLower(), out CommandStruct commandStruct) 
-               && commandStruct.Call(enumerable[1..]); // Strip out the command and keep the arguments
+
+        if (_flagToActionMap.TryGetValue(enumerable[0].ToLower(), out CommandStruct commandStruct))
+            
+            return commandStruct.Call(enumerable[1..])  // Strip out the command and keep the arguments
+                ? OutputState.True
+                : OutputState.False ;
+        
+        // else command could not be found
+        Console.WriteLine($"{ErrorCursor}Command '{enumerable[0]}' not found");
+        return OutputState.Undefined;
+
     }
 
-    private IEnumerable<bool> _tryParseMultiple(IEnumerable<string> args) {
+    private IEnumerable<List<string>> _tryParseMultiple(IEnumerable<string> args) {
         var currentCommand = new List<string>();
         foreach (string arg in args) {
-            if (arg.Equals("&&")) {
-                yield return _tryParse(currentCommand);
+            if (arg.Equals(Delimiter)) {
+                yield return currentCommand;
                 currentCommand.Clear();
             } else {
                 currentCommand.Add(arg);
             }
         }
         if (currentCommand.Count != 0) {
-            yield return _tryParse(currentCommand);
+            yield return currentCommand;
         }
     }
     
-    public IEnumerable<bool> TryParseMultiple(IEnumerable<string> args) => _tryParseMultiple(args);
-    public bool TryParse(IEnumerable<string> args) => _tryParse(args);
-    
+    public IEnumerable<bool> TryParseMultiple(IEnumerable<string> args) {
+        List<bool> outputBools = [];
+        
+        foreach (List<string> currentCommand in _tryParseMultiple(args)) {
+            OutputState output = _tryParse(currentCommand);
+            if (output == OutputState.Undefined) throw new Exception($"the command '{currentCommand}' threw an unexpected error");
+            outputBools.Add(output == OutputState.True);
 
+        }
+        return outputBools ;
+    }
+    
+    public bool TryParse(IEnumerable<string> args) => _tryParse(args) == OutputState.True;
+    
+    private static void _OutputPrint(OutputState outputState, IEnumerable<string> input) {
+        Console.WriteLine(
+            outputState switch {
+                OutputState.Undefined => $"{ErrorCursor}Invalid input",
+                OutputState.False => $"{ErrorCursor}Command '{string.Join(" ", input)}' returned False",
+                OutputState.True => Environment.NewLine,
+                _ => throw new ArgumentOutOfRangeException() // this should never happen
+            }
+        );
+    }
+    
     public void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false) {
         var breakpoint = false;
 
         while (!breakpoint) {
             Console.Write(Cursor);
             string[] input = Console.ReadLine()?.Split(" ") ?? [];
-            bool output = allowMultiple 
-                ? _tryParseMultiple(input).All(a => a) 
-                : _tryParse(input);
-                
-            if (!output) {
-                Console.WriteLine($"{ErrorCursor}Command '{string.Join(" ", input)}' returned '{output}'");
-                if (breakOnFalse) breakpoint = true;
+
+            if (allowMultiple) {
+                foreach (List<string> currentCommand in _tryParseMultiple(input)) {
+                    OutputState output =_tryParse(currentCommand);
+                    _OutputPrint(output, input);
+                    if (output == (OutputState.False | OutputState.Undefined)) breakpoint = true;
+                }
             }
-            
-            Console.Write(Environment.NewLine);
+            else {
+                _OutputPrint(_tryParse(input), input);
+            }
         }
     }
-
 }

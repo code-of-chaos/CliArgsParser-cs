@@ -1,22 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Diagnostics.CodeAnalysis;
-using CliArgsParser.Attributes;
-
-namespace CliArgsParser.Examples.RegisterAtlas;
+namespace CliArgsParser;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CommandsStatic : CliCommandAtlas {
-    
-    [CliCommand<ArgOptions>("test")]
-    public void CallbackTest(ArgOptions argOptions) {
-        Console.WriteLine(argOptions.Username != null ? 
-            $"Hello, {argOptions.Username}!" : 
-            "Hello, stranger"
-        );
-    }
-    
-}
+[Flags]
+public enum OutputState {
+    False = 1,
+    True = 2,
+    Undefined = 4
+} 

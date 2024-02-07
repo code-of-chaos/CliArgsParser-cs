@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\CliArgsParser\CliArgsParser.csproj" />
+      <ProjectReference Include="..\CliArgsParser.Examples.RegisterAtlas\CliArgsParser.Examples.RegisterAtlas.csproj" />
+    </ItemGroup>
+
 </Project>
