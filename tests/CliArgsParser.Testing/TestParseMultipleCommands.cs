@@ -38,4 +38,16 @@ public class TestParseMultipleCommands(CliArgsParserFixture fixture) : IClassFix
         }
         
     }
+    
+    [Fact]
+    public void TestData2() {
+        string[] input = [
+            "test-empty && test-data -f -v data && test-data-verbose --flag --value data",
+        ];
+        
+        foreach (string i in input) {
+            Assert.All(fixture.Parser.TryParseMultiple(i.Split(" ")), Assert.True);
+        }
+        
+    }
 }

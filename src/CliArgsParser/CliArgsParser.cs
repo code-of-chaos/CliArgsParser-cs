@@ -15,12 +15,12 @@ namespace CliArgsParser;
 public class CliArgsParser : ICliArgsParser {
     private readonly Dictionary<string, CommandStruct> _flagToActionMap = new();
     
-    private static readonly Dictionary<string, string?> Desc = new();
-    public static IReadOnlyDictionary<string, string?> Descriptions => Desc.AsReadOnly(); // Again added for the future, don't know what to add to it.
+    private static readonly Dictionary<string, string?> _desc = new();
+    public static IReadOnlyDictionary<string, string?> Descriptions => _desc.AsReadOnly(); // Again added for the future, don't know what to add to it.
 
     public static string Cursor { get; set; } = "> ";
     public static string ErrorCursor = Cursor; // I use the same default, but you can change it
-    private const string Delimiter = "&&";
+    private const string _delimiter = "&&";
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
@@ -76,10 +76,9 @@ public class CliArgsParser : ICliArgsParser {
                 
                 bool isAdded = _flagToActionMap.TryAdd(commandName, cmdStruct);
                 if (overwrite || isAdded) {
-                    if (!isAdded) {
-                        _flagToActionMap[commandName] = cmdStruct;
-                    }
-                    Desc[commandName] = cliCommandAttribute.Description;
+                    if (!isAdded) _flagToActionMap[commandName] = cmdStruct;
+                    
+                    _desc[commandName] = cliCommandAttribute.Description;
                 } 
                 else if (!isAdded) {
                     Console.WriteLine($"Ignoring: {commandName}");
@@ -132,34 +131,35 @@ public class CliArgsParser : ICliArgsParser {
         // else command could not be found
         Console.WriteLine($"{ErrorCursor}Command '{enumerable[0]}' not found");
         return OutputState.Undefined;
-
     }
 
-    private IEnumerable<List<string>> _tryParseMultiple(IEnumerable<string> args) {
+    private static IEnumerable<string[]> _FindCommandInMultipleInput(IEnumerable<string> args) {
         var currentCommand = new List<string>();
         foreach (string arg in args) {
-            if (arg.Equals(Delimiter)) {
-                yield return currentCommand;
+            if (arg.Equals(_delimiter)) {
+                yield return currentCommand.ToArray();
                 currentCommand.Clear();
-            } else {
+            } 
+            else {
                 currentCommand.Add(arg);
             }
         }
         if (currentCommand.Count != 0) {
-            yield return currentCommand;
+            yield return currentCommand.ToArray();
         }
     }
     
-    public IEnumerable<bool> TryParseMultiple(IEnumerable<string> args) {
-        List<bool> outputBools = [];
+    public bool[] TryParseMultiple(IEnumerable<string> args) {
+        List<bool> outputBool = [];
+        var foundCommands = _FindCommandInMultipleInput(args).ToArray();
         
-        foreach (List<string> currentCommand in _tryParseMultiple(args)) {
+        foreach (var currentCommand in foundCommands) {
             OutputState output = _tryParse(currentCommand);
             if (output == OutputState.Undefined) throw new Exception($"the command '{currentCommand}' threw an unexpected error");
-            outputBools.Add(output == OutputState.True);
+            outputBool.Add(output == OutputState.True);
 
         }
-        return outputBools ;
+        return outputBool.ToArray() ;
     }
     
     public bool TryParse(IEnumerable<string> args) => _tryParse(args) == OutputState.True;
@@ -183,7 +183,7 @@ public class CliArgsParser : ICliArgsParser {
             string[] input = Console.ReadLine()?.Split(" ") ?? [];
 
             if (allowMultiple) {
-                foreach (List<string> currentCommand in _tryParseMultiple(input)) {
+                foreach (var currentCommand in _FindCommandInMultipleInput(input)) {
                     OutputState output =_tryParse(currentCommand);
                     _OutputPrint(output, input);
                     if (output == (OutputState.False | OutputState.Undefined)) breakpoint = true;
