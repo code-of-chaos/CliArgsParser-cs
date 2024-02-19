@@ -701,4 +701,7 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains,rider,obsidian,dotnetcore,aspnetcore,csharp
 
 build/
+
+# docfx.json
 _site/
+api/
