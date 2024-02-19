@@ -32,7 +32,10 @@ jobs:
         dotnet-version: 8.x
 
     - run: dotnet tool update -g docfx
-    - run: docfx docfx.json --serve
+    - run: docfx docfx.json
+
+    - name: Create .nojekyll file
+      run: touch _site/.nojekyll
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
