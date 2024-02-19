@@ -12,19 +12,37 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// The CliArgsParser class is responsible for parsing command-line arguments and executing the corresponding commands.
+/// It provides methods for registering commands, parsing arguments, and handling input.
+/// </summary>
 public class CliArgsParser : ICliArgsParser {
     private readonly Dictionary<string, CommandStruct> _flagToActionMap = new();
-    
     private static readonly Dictionary<string, string?> _desc = new();
+    
     public static IReadOnlyDictionary<string, string?> Descriptions => _desc.AsReadOnly(); // Again added for the future, don't know what to add to it.
 
+    /// <summary>
+    /// Represents the cursor used in the command line interface.
+    /// </summary>
     public static string Cursor { get; set; } = "> ";
+
+    /// <summary>
+    /// Represents the cursor used to indicate an error in the CLI args parser.
+    /// </summary>
     public static string ErrorCursor = Cursor; // I use the same default, but you can change it
+
+    /// <summary>
+    /// Represents the delimiter used in the CliArgsParser class to separate multiple commands in a single input string.
+    /// </summary>
     private const string _delimiter = "&&";
     
     // -----------------------------------------------------------------------------------------------------------------
     // Constructor
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// A command-line arguments parser that supports registering commands and parsing input.
+    /// </summary>
     public CliArgsParser(string cursor = "> ", bool addDefault = true) {
         // There is two default commands "HELP", which lists all command, and "EXIT", which exists when in input mode
         //      Though I have now added this as an optional
@@ -38,11 +56,25 @@ public class CliArgsParser : ICliArgsParser {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Registers the commands from the CliAtlas into the CliArgsParser.
+    /// </summary>
+    /// <typeparam name="T">The type of the CliCommandAtlas.</typeparam>
+    /// <param name="cliCommandAtlas">The CliCommandAtlas containing the commands to register.</param>
+    /// <param name="force">A flag indicating whether to overwrite existing commands with the same name.</param>
+    /// <returns>The instance of the CliArgsParser.</returns>
     public ICliArgsParser RegisterFromCliAtlas<T>(IEnumerable<T> cliCommandAtlas, bool force = false) where T : ICliCommandAtlas {
         foreach (T atlas in cliCommandAtlas) RegisterFromCliAtlas(atlas);
         return this;
     }
-    
+
+    /// <summary>
+    /// Registers commands from a CLI command atlas.
+    /// </summary>
+    /// <typeparam name="T">The type of CLI command atlas.</typeparam>
+    /// <param name="cliCommandAtlas">The CLI command atlas.</param>
+    /// <param name="overwrite">Flag indicating whether to overwrite existing commands with the same name.</param>
+    /// <returns>The instance of the ICliArgsParser interface.</returns>
     public ICliArgsParser RegisterFromCliAtlas<T>(T cliCommandAtlas, bool overwrite = false) where T:ICliCommandAtlas{
         MethodInfo[] methods = cliCommandAtlas.GetType().GetMethods();
         
@@ -96,7 +128,12 @@ public class CliArgsParser : ICliArgsParser {
         return this;
     }
     
-    // TODO test this out
+    /// <summary>
+    /// Registers CLI commands from DLL files.
+    /// </summary>
+    /// <param name="filePaths">An IEnumerable of file paths of the DLL files.</param>
+    /// <param name="assignedCallback">An optional callback action to be invoked after each command is registered.</param>
+    /// <returns>The instance of the <see cref="CliArgsParser"/> class to allow method chaining.</returns>
     public ICliArgsParser RegisterFromDlLs(IEnumerable<string> filePaths, Action? assignedCallback = null) {
         foreach (string filePath in filePaths) {
             
@@ -119,6 +156,11 @@ public class CliArgsParser : ICliArgsParser {
     // -----------------------------------------------------------------------------------------------------------------
     // Parsing input
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Tries to parse the input arguments and execute the corresponding command.
+    /// </summary>
+    /// <param name="args">The input arguments.</param>
+    /// <returns>The output state of the command execution.</returns>
     private OutputState _tryParse(IEnumerable<string> args) {
         string[] enumerable = args as string[] ?? args.ToArray();
 
@@ -133,6 +175,11 @@ public class CliArgsParser : ICliArgsParser {
         return OutputState.Undefined;
     }
 
+    /// <summary>
+    /// Splits the input arguments into separate command arrays based on the delimiter ("&&"). Each command array represents a set of arguments for a single command.
+    /// </summary>
+    /// <param name="args">The input arguments.</param>
+    /// <returns>An enumerable of string arrays, where each array represents a command.</returns>
     private static IEnumerable<string[]> _FindCommandInMultipleInput(IEnumerable<string> args) {
         var currentCommand = new List<string>();
         foreach (string arg in args) {
@@ -148,7 +195,12 @@ public class CliArgsParser : ICliArgsParser {
             yield return currentCommand.ToArray();
         }
     }
-    
+
+    /// <summary>
+    /// Parses multiple command line arguments and returns a list of boolean values indicating the success of each command.
+    /// </summary>
+    /// <param name="args">The command line arguments to parse.</param>
+    /// <returns>A list of boolean values indicating the success of each command.</returns>
     public bool[] TryParseMultiple(IEnumerable<string> args) {
         List<bool> outputBool = [];
         var foundCommands = _FindCommandInMultipleInput(args).ToArray();
@@ -161,9 +213,19 @@ public class CliArgsParser : ICliArgsParser {
         }
         return outputBool.ToArray() ;
     }
-    
+
+    /// <summary>
+    /// Tries to parse the command line arguments.
+    /// </summary>
+    /// <param name="args">The command line arguments to parse.</param>
+    /// <returns>True if the parsing was successful, otherwise false.</returns>
     public bool TryParse(IEnumerable<string> args) => _tryParse(args) == OutputState.True;
-    
+
+    /// <summary>
+    /// Prints the output message based on the output state and input command.
+    /// </summary>
+    /// <param name="outputState">The output state.</param>
+    /// <param name="input">The input command.</param>
     private static void _OutputPrint(OutputState outputState, IEnumerable<string> input) {
         Console.WriteLine(
             outputState switch {
@@ -174,7 +236,19 @@ public class CliArgsParser : ICliArgsParser {
             }
         );
     }
-    
+
+    /// <summary>
+    /// Parses user input from the console and attempts to parse the input as command line arguments.
+    /// </summary>
+    /// <param name="breakOnFalse">A flag indicating whether to break out of the loop if parsing returns a False result.</param>
+    /// <param name="allowMultiple">A flag indicating whether to allow parsing multiple commands in a single input.</param>
+    /// <remarks>
+    /// This method continuously prompts the user for input using the specified cursor.
+    /// Each input is split into individual arguments and passed to the TryParse method.
+    /// If allowMultiple is true, the method will attempt to parse each individual command and output the result.
+    /// If allowMultiple is false, the method will attempt to parse the entire input as a single command.
+    /// The loop continues until a breakpoint is reached or the program is terminated.
+    /// </remarks>
     public void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false) {
         var breakpoint = false;
 

@@ -8,6 +8,9 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Represents the options for command line parameters.
+/// </summary>
 public class ParameterOptions : IParameterOptions{
     public bool Verbose { get; set; } = false; 
 }
