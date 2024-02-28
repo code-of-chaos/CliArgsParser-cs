@@ -37,9 +37,6 @@ jobs:
     - name: Create .nojekyll file
       run: touch _site/.nojekyll
 
-    - name: Post-process documentation
-      run: mv _site/docs/index.html _site/
-
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:

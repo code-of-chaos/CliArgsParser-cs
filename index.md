@@ -16,7 +16,7 @@ Craft your command-line interfaces and parse program arguments with ease. Whethe
 
 ## API Documentation
 
-Navigate to our [API Documentation](./api) for in-depth understanding of our libraries.
+Navigate to our [API Documentation](api) for in-depth understanding of our libraries.
 
 ## Getting Started
 
