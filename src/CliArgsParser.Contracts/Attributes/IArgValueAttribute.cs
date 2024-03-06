@@ -6,4 +6,7 @@ namespace CliArgsParser.Contracts.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Represents an argument attribute for string values.
+/// </summary>
 public interface IArgValueAttribute : IArgAttribute ;

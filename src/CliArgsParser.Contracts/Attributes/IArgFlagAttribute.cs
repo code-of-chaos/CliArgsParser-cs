@@ -6,4 +6,7 @@ namespace CliArgsParser.Contracts.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Represents an argument attribute for boolean flags.
+/// </summary>
 public interface IArgFlagAttribute : IArgAttribute;

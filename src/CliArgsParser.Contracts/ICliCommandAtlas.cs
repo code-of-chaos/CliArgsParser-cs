@@ -6,4 +6,7 @@ namespace CliArgsParser.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Represents a command atlas for the CLI (Command Line Interface) parser.
+/// </summary>
 public interface ICliCommandAtlas;

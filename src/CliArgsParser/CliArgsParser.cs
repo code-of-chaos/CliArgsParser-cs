@@ -19,7 +19,11 @@ namespace CliArgsParser;
 public class CliArgsParser : ICliArgsParser {
     private readonly Dictionary<string, CommandStruct> _flagToActionMap = new();
     private static readonly Dictionary<string, string?> _desc = new();
-    
+
+    /// <summary>
+    /// The CliArgsParser class is responsible for parsing command-line arguments and executing the corresponding commands.
+    /// It provides methods for registering commands, parsing arguments, and handling input.
+    /// </summary>
     public static IReadOnlyDictionary<string, string?> Descriptions => _desc.AsReadOnly(); // Again added for the future, don't know what to add to it.
 
     /// <summary>
@@ -176,7 +180,7 @@ public class CliArgsParser : ICliArgsParser {
     }
 
     /// <summary>
-    /// Splits the input arguments into separate command arrays based on the delimiter ("&&"). Each command array represents a set of arguments for a single command.
+    /// Splits the input arguments into separate command arrays based on the delimiter (&quot;&amp;&amp;&quot;). Each command array represents a set of arguments for a single command.
     /// </summary>
     /// <param name="args">The input arguments.</param>
     /// <returns>An enumerable of string arrays, where each array represents a command.</returns>

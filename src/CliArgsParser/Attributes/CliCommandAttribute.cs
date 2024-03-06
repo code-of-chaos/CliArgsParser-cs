@@ -21,12 +21,13 @@ namespace CliArgsParser.Attributes;
 /// </remarks>
 [AttributeUsage(AttributeTargets.Method)]
 public class CliCommandAttribute<T>(string name, string? description = null) : Attribute, ICliCommandAttribute where T: IParameterOptions , new() {
+    /// <inheritdoc />
     public string Name { get; } = name;
-    public string? Description { get; } = description;
 
-    /// <summary>
-    /// Represents the type of the parameter options for a CLI command.
-    /// </summary>
+    /// <inheritdoc />
+    public string? Description { get; } = description;
+    
+    /// <inheritdoc />
     public Type ParameterOptionsType { get; } = typeof(T);
     
     private readonly ParameterParser<T> _parameterParser = new();
@@ -34,7 +35,6 @@ public class CliCommandAttribute<T>(string name, string? description = null) : A
     /// <summary>
     /// Retrieves the parameter options for a CLI command.
     /// </summary>
-    /// <typeparam name="T">The type of parameter options.</typeparam>
     /// <param name="args">The command line arguments.</param>
     /// <returns>The parameter options parsed from the command line arguments.</returns>
     public IParameterOptions GetParameters(IEnumerable<string> args) => _parameterParser.Parse(args);

@@ -32,6 +32,9 @@ public class ParameterParser<T> : IParameterParser<T> where T: IParameterOptions
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Represents a parameter parser for a specific type that implements <see cref="IParameterOptions"/>.
+    /// </summary>
     public ParameterParser() {
         foreach (PropertyInfo? prop in _propertyInfos) {
             var optionAttr = prop.GetCustomAttribute<ArgValueAttribute>();
@@ -74,7 +77,6 @@ public class ParameterParser<T> : IParameterParser<T> where T: IParameterOptions
     /// <summary>
     /// Parses the command-line arguments and returns an instance of the specified parameter options type.
     /// </summary>
-    /// <typeparam name="T">The type of the parameter options.</typeparam>
     /// <param name="args">The command-line arguments.</param>
     /// <returns>An instance of the specified parameter options type.</returns>
     public T Parse(IEnumerable<string> args) {
