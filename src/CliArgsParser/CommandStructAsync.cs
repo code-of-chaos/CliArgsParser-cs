@@ -47,11 +47,20 @@ public readonly struct CommandStructAsync(Delegate del, ICliCommandAttribute cli
     /// The task result is false if the command execution failed.
     /// </returns>
     public async Task<bool> CallAsync(object? args = null) {
-        return Delegate switch {
-            Func<Task<bool>> func => await func(),
-            Func<object, Task<bool>> funcWithParam when args != null => await funcWithParam(args),
-            _ => false
-        };
+        switch (Delegate) {
+            case Func<Task<bool>> func:
+                return await func();
+            case Func<object, Task<bool>> funcWithParam when args != null:
+                return await funcWithParam(args);
+            case Func<Task> voidFunc:
+                await voidFunc();
+                return true;
+            case Func<object, Task> voidFuncWithParam when args != null:
+                await voidFuncWithParam(args);
+                return true;
+            default:
+                return false;
+        }
     }
 
     /// <summary>

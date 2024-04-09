@@ -148,7 +148,7 @@ public class CliArgsParser : ICliArgsParser {
         else {
             delegateType = hasArgs
                 ? typeof(Func<,>).MakeGenericType(parameterType, returnType)
-                : typeof(Func<bool>);
+                : typeof(Func<>).MakeGenericType(returnType);
         }
         
         try {
@@ -186,8 +186,8 @@ public class CliArgsParser : ICliArgsParser {
         Type delegateType;
         
         delegateType = hasArgs
-            ? typeof(Func<,>).MakeGenericType(parameterType, typeof(Task))
-            : typeof(Func<Task>);
+            ? typeof(Func<,>).MakeGenericType(parameterType, typeof(Func<>).MakeGenericType(methodInfo.ReturnType))
+            : typeof(Func<>).MakeGenericType(methodInfo.ReturnType);
         
         try {
             var del = Delegate.CreateDelegate(delegateType, cliCommandAtlas, methodInfo);
