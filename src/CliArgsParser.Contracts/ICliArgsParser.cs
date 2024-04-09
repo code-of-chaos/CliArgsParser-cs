@@ -42,6 +42,15 @@ public interface ICliArgsParser {
     /// <param name="args">The command line arguments to parse.</param>
     /// <returns>A list of boolean values indicating the success of each command.</returns>
     bool[] TryParseMultiple(IEnumerable<string> args);
+
+    /// <summary>
+    /// Attempts to parse multiple command-line arguments asynchronously.
+    /// </summary>
+    /// <param name="args">An enumerable collection of command-line arguments.</param>
+    /// <returns>
+    /// A task representing the asynchronous operation that returns an array of boolean values,
+    /// indicating the success or failure of parsing each argument.
+    /// </returns>
     Task<bool[]> TryParseMultipleAsync(IEnumerable<string> args);
 
     /// <summary>
@@ -50,11 +59,24 @@ public interface ICliArgsParser {
     /// <param name="args">The command line arguments to parse.</param>
     /// <returns>True if the parsing was successful, otherwise false.</returns>
     bool TryParse(IEnumerable<string> args);
+
+    /// <summary>
+    /// Tries to parse the given command-line arguments asynchronously.
+    /// </summary>
+    /// <param name="args">The command-line arguments.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a boolean value indicating if the parsing was successful or not.</returns>
     Task<bool> TryParseAsync(IEnumerable<string> args);
 
     /// Tries to parse the input arguments.
     /// @param breakOnFalse Specifies whether to break the parsing loop if a false result is encountered. Default is false.
     /// @param allowMultiple Specifies whether to allow multiple sets of input arguments. Default is false.
     void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false);
+
+    /// <summary>
+    /// Tries to parse the input asynchronously.
+    /// </summary>
+    /// <param name="breakOnFalse">Specifies whether to break the parsing loop when an input returns false.</param>
+    /// <param name="allowMultiple">Specifies whether multiple inputs are allowed during parsing.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     Task TryParseInputAsync(bool breakOnFalse = false, bool allowMultiple = false);
 }
