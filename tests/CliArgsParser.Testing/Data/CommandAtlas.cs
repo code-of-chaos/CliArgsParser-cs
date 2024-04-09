@@ -46,4 +46,13 @@ public class CommandAtlas : CliCommandAtlas {
 
     [CliCommand("test-clicommand-empty-void")]
     public void CallbackTestCliCommandEmptyVoid() { }
+
+    [CliCommand("test-clicommand-async-bool")]
+    public bool CallbackTestCliCommandAsyncVoid() {
+        return true;
+    }
+    [CliCommand("test-clicommand-async-bool-neg")]
+    public bool CallbackTestCliCommandAsyncVoidNeg() {
+        return false;
+    }
 }

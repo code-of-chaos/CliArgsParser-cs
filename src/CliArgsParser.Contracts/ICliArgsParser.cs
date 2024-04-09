@@ -42,6 +42,7 @@ public interface ICliArgsParser {
     /// <param name="args">The command line arguments to parse.</param>
     /// <returns>A list of boolean values indicating the success of each command.</returns>
     bool[] TryParseMultiple(IEnumerable<string> args);
+    Task<bool[]> TryParseMultipleAsync(IEnumerable<string> args);
 
     /// <summary>
     /// Tries to parse the command line arguments.
@@ -49,9 +50,11 @@ public interface ICliArgsParser {
     /// <param name="args">The command line arguments to parse.</param>
     /// <returns>True if the parsing was successful, otherwise false.</returns>
     bool TryParse(IEnumerable<string> args);
+    Task<bool> TryParseAsync(IEnumerable<string> args);
 
     /// Tries to parse the input arguments.
     /// @param breakOnFalse Specifies whether to break the parsing loop if a false result is encountered. Default is false.
     /// @param allowMultiple Specifies whether to allow multiple sets of input arguments. Default is false.
     void TryParseInput(bool breakOnFalse = false, bool allowMultiple = false);
+    Task TryParseInputAsync(bool breakOnFalse = false, bool allowMultiple = false);
 }

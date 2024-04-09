@@ -55,4 +55,18 @@ public class TestParseSingleCommand(CliArgsParserFixture fixture) : IClassFixtur
             Assert.True(output);
         }
     }
+
+    [Fact]
+    public async Task TestCliCommandAsync() {
+        string[] input = [
+            "test-clicommand-async-bool"
+        ];
+        
+        // Assertion is done within the commands
+        foreach (string i in input) {
+            bool output = await fixture.Parser.TryParseAsync(i.Split(" "));
+            // All outputs have to be true
+            Assert.True(output);
+        }
+    }
 }
