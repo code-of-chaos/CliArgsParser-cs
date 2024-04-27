@@ -11,11 +11,11 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public struct CommandMethodInfo(MethodInfo info) {
+public struct CommandMethodInfo(MethodInfo info, object atlas) {
     public MethodInfo Info = info;
     public ICommandAttribute? CommandAttribute { get; } = GetCommandAttribute(info);
     public bool IsAsync { get; } = GetIsAsync(info);
-    public Delegate Delegate = GetDelegate(info);
+    public Delegate Delegate = GetDelegate(info, atlas);
     public IParameterParser ParameterParser = CreateParameterParser(info);
     
     // -----------------------------------------------------------------------------------------------------------------
@@ -29,35 +29,50 @@ public struct CommandMethodInfo(MethodInfo info) {
                                                        || (info.ReturnType.IsGenericType
                                                            && info.ReturnType.GetGenericTypeDefinition() == typeof(Task<>));
     
-    public static Delegate GetDelegate(MethodInfo info) {
+    public static Delegate GetDelegate(MethodInfo info, object atlas) {
         Delegate commandDelegate;
         Type parameterType = GetCommandAttribute(info)?.ArgsType ?? typeof(NoArgs); // Warn quick and dirty fix
         bool isAsync = GetIsAsync(info);
         
+        Console.WriteLine(info.Name);
+        Console.WriteLine(info.GetParameters().Length);
+        
         switch (info.GetParameters().Length) {
             // Method is async and has parameters
-            case > 0 when isAsync: {
+            case > 1 when isAsync: {
                 Type delegateType = typeof(Func<,>).MakeGenericType(parameterType, typeof(Task));
-                commandDelegate = Delegate.CreateDelegate(delegateType, null, info);
+                commandDelegate = Delegate.CreateDelegate(delegateType, atlas, info);
                 break;
             }
             
             // If method is non-async action and has parameters
-            case > 0 when !isAsync: {
+            case > 1 when !isAsync: {
                 Type delegateType = typeof(Action<>).MakeGenericType(parameterType);
-                commandDelegate = Delegate.CreateDelegate(delegateType, null, info);
+                commandDelegate = Delegate.CreateDelegate(delegateType, atlas, info);
+                break;
+            }
+
+            // If method is async action and has no parameters
+            case 1 when isAsync: {
+                commandDelegate = (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), atlas, info);
+                break;
+            }
+
+            case 1 when !isAsync: {
+                commandDelegate = (Action)Delegate.CreateDelegate(typeof(Action), atlas, info);
                 break;
             }
 
             // If method is async action and has no parameters
             case 0 when isAsync: {
-                commandDelegate = (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), null, info);
+                commandDelegate = (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), atlas, info);
                 break;
             }
-            
+
             // Method is non-async action and has no parameters
+            case 0 when !isAsync:
             default: {
-                commandDelegate = (Action)Delegate.CreateDelegate(typeof(Action), null, info);
+                commandDelegate = (Action)Delegate.CreateDelegate(typeof(Action), atlas, info);
                 break;
             }
         }

@@ -89,10 +89,11 @@ public class ParserConfiguration : IParserConfiguration {
         var commandDictionary = new Dictionary<string, CommandRecord>();
 
         _linkedAtlases
-            .Select(atlas => atlas.GetType())
-            .SelectMany(tAtlas => tAtlas
+            .Select(atlas => new {Object = atlas, Type =  atlas.GetType()})
+            .SelectMany(o => o.Type
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
-                .Select(info => new CommandMethodInfo(info))
+                .Where(m => m.DeclaringType != typeof(object))
+                .Select(info => new CommandMethodInfo(info, o.Object))
                 .Where(cm => cm.CommandAttribute != null)
                 .Select(cm => new CommandRecord(
                     Name: cm.CommandAttribute!.Name,
