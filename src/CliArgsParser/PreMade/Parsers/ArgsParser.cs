@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using CliArgsParser.Contracts.Common;
+using CliArgsParser.PreMade.Args;
 
 namespace CliArgsParser.PreMade.Parsers;
 
@@ -23,12 +24,19 @@ public class ArgsParser : AbstractParser {
             }
 
             try {
-                var parameters = commandRecord.ParameterParser.Parse(args);
-                
+                object? parameters = commandRecord.ParameterParser.Parse(args);
+                if(parameters?.GetType() == typeof(NoArgs)) {
+                    output = (T)commandRecord.Delegate.DynamicInvoke()!;
+                    return true;
+                }
                 output = (T)commandRecord.Delegate.DynamicInvoke(parameters)!;
                 return true;
             }
-            catch {
+            catch (Exception e){
+                
+                Log.Error(e, "error");
+                Console.WriteLine(e);
+                
                 return false;
             }
         }
@@ -36,7 +44,58 @@ public class ArgsParser : AbstractParser {
         return true;
     }
 
-    public override Task<bool> TryParseAsync<T>(string input, out T? output) where T : default {
-        throw new NotImplementedException();
+    public override async Task<bool> TryParseAsync(string input) {
+        Log.Debug("Starting async command parsing.");
+
+        var commands = GetCommands(input);
+        
+        IEnumerable<string> commandStrings = commands.ToList();
+        Log.Debug("Found {i} in {string}", commandStrings.Count(), input);
+
+        foreach (string commandString in commandStrings) {
+            Log.Debug($"Processing command: {commandString}");
+            
+            if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string>? args)) {
+                Log.Warning($"Failed to get command for string: {commandString}");
+                continue;
+            }
+
+            if (!CommandStructs.TryGetValue(commandName, out CommandRecord? commandRecord)) {
+                Log.Warning($"No command record found for command name: {commandName}");
+                continue;
+            }
+
+            try {
+                Log.Debug($"Parsing parameters for command: {commandName}");
+                object? parameters = commandRecord?.ParameterParser.Parse(args);
+                if (parameters?.GetType() == typeof(NoArgs)) {
+                    Log.Debug($"Command: {commandName} has no parameters.");
+                    if (commandRecord?.Delegate is Func<Task> func) {
+                        Log.Debug("Invoking async delegate without parameters.");
+                        await func(); // For Async methods without parameters
+                        continue;
+                    }
+                    if (commandRecord?.Delegate is Action action) {
+                        Log.Debug("Invoking synchronous delegate without parameters.");
+                        action(); // For non-async methods without parameters
+                        continue;
+                    }
+                }
+                if (commandRecord.Delegate is Func<object?, Task> funcWithParam) {
+                    Log.Debug("Invoking async delegate with parameters.");
+                    await funcWithParam(parameters); // For Async methods with parameters
+                    continue;
+                }
+
+                Log.Debug("Invoking synchronous delegate with parameters.");
+                commandRecord.Delegate.DynamicInvoke(parameters); // For non-async methods with parameters
+            }
+            catch (Exception e) {
+                Log.Error(e, "Error occurred during command execution.");
+            }
+        }
+        
+        Log.Debug("Finished async command parsing.");
+        return true;
     }
 }

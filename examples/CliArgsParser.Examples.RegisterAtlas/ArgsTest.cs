@@ -2,16 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace CliArgsParser.Contracts;
+using CliArgsParser.Attributes;
+
+namespace CliArgsParser.Examples.RegisterAtlas;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
-public interface IParser {
-    
-    public bool TryParse(string input);
-    public Task<bool> TryParseAsync(string input);
-
-    public bool TryParse<T>(string input, out T? output);
+[Parameters]
+public class ArgsTest {
+    [AutoArgFlag("username")] public string Username { get; set; } = "undefined";
 }

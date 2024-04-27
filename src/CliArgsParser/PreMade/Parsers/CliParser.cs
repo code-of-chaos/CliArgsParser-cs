@@ -14,7 +14,7 @@ public class CliParser: AbstractParser {
         throw new NotImplementedException();
     }
 
-    public override Task<bool> TryParseAsync<T>(string input, out T? output) where T : default {
+    public override Task<bool> TryParseAsync(string input) {
         throw new NotImplementedException();
     }
 }

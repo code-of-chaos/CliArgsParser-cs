@@ -93,7 +93,7 @@ public class ParserConfiguration : IParserConfiguration {
             .SelectMany(o => o.Type
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
                 .Where(m => m.DeclaringType != typeof(object))
-                .Select(info => new CommandMethodInfo(info, o.Object))
+                .Select(info => new CommandMethodInfo(info, o.Object, Log))
                 .Where(cm => cm.CommandAttribute != null)
                 .Select(cm => new CommandRecord(
                     Name: cm.CommandAttribute!.Name,

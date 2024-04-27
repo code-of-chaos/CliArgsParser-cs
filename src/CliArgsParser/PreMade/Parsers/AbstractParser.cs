@@ -79,9 +79,8 @@ public abstract partial class AbstractParser : IParser{
     // Abstract Methods
     // -----------------------------------------------------------------------------------------------------------------
     public bool TryParse(string input) => TryParse(input, out object? _);
-    public async Task<bool> TryParseAsync(string input) => await TryParseAsync(input, out object? _);
 
     public abstract bool TryParse<T>(string input, out T? output) ;
-    public abstract Task<bool> TryParseAsync<T>(string input, out T? output) ;
+    public abstract Task<bool> TryParseAsync(string input);
 
 }
