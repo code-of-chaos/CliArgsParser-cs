@@ -3,17 +3,20 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using CliArgsParser.Contracts.Attributes;
+using CliArgsParser.PreMade.Args;
 
 namespace CliArgsParser.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <summary>
-/// Represents an attribute that can be applied to properties in a class to define command line argument values.
-/// These attributes always return string, or from string castable values
-/// </summary>
-[AttributeUsage(AttributeTargets.Property, Inherited = true)]
-public class ArgValueAttribute(string shortName, string longName, string? description = null)
-    : ArgValue(shortName,longName, description);
-    
+
+[AttributeUsage(AttributeTargets.Method)]
+public class CommandAttribute<T>(string name, string? description = null) : Attribute, ICommandAttribute where T : notnull, new() {
+    public string Name { get; } = name;
+    public string? Description { get; } = description;
+    public Type ArgsType { get; } = typeof(T);
+}
+
+[AttributeUsage(AttributeTargets.Method)]
+public class CommandAttribute(string name, string? description = null) : CommandAttribute<NoArgs>(name, description);

@@ -2,21 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using CliArgsParser.Contracts;
-using Serilog;
+namespace CliArgsParser.Contracts.Common;
 
-namespace CliArgsParser.Examples.RegisterAtlas;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        ILogger logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .CreateLogger();
 
-        IParser parser = new ParserConfiguration().RegisterAtlas(new HelloAtlas()).CreateArgsParser();
-        parser.TryParse("hello");
-    }
-}
+public record CommandRecord(
+    string Name,
+    string? Description,
+    Delegate Delegate,
+    Type ReturnType,
+    bool IsAsync,
+    IParameterParser ParameterParser
+);

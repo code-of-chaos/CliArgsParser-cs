@@ -2,21 +2,25 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using CliArgsParser.Attributes;
 using CliArgsParser.Contracts;
-using Serilog;
+using CliArgsParser.PreMade.Args;
 
-namespace CliArgsParser.Examples.RegisterAtlas;
+namespace CliArgsParser.PreMade.Commands;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        ILogger logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .CreateLogger();
+[CommandAtlas]
+public class HelpCommand() {
 
-        IParser parser = new ParserConfiguration().RegisterAtlas(new HelloAtlas()).CreateArgsParser();
-        parser.TryParse("hello");
+    [Command("help")]
+    public void CommmandHelp() {
+        Console.WriteLine("IT WORKS!");
+    }
+    
+    [Command<ForceArgs>("help")]
+    public void CommmandHelp(ForceArgs args) {
+        Console.WriteLine($"IT WORKS! and is forced: {args.IsForced}");
     }
 }

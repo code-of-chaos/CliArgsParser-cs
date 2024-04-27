@@ -3,20 +3,18 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using CliArgsParser.Contracts;
-using Serilog;
 
-namespace CliArgsParser.Examples.RegisterAtlas;
+namespace CliArgsParser.PreMade.Parsers;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static void Main(string[] args) {
-        ILogger logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .CreateLogger();
+public class CliParser: AbstractParser {
+    public override bool TryParse<T>(string input, out T? output) where T : default {
+        throw new NotImplementedException();
+    }
 
-        IParser parser = new ParserConfiguration().RegisterAtlas(new HelloAtlas()).CreateArgsParser();
-        parser.TryParse("hello");
+    public override Task<bool> TryParseAsync<T>(string input, out T? output) where T : default {
+        throw new NotImplementedException();
     }
 }

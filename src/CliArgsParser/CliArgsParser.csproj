@@ -1,26 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup> 
-        <TargetFramework>net8.0</TargetFramework> 
-        <PackageId>CliArgsParser</PackageId>
-        <AssemblyName>CliArgsParser</AssemblyName>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <DebugType>embedded</DebugType>
-        <Deterministic>true</Deterministic>
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" >
-          <Pack>true</Pack>
-          <PackagePath>net8.0</PackagePath> <!-- Package path where the referenced project will be placed inside the NuGet package -->
-          <Private>false</Private>
-      </ProjectReference>
+      <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+      <PackageReference Include="Serilog" Version="4.0.0-dev-02160" />
     </ItemGroup>
 
 </Project>

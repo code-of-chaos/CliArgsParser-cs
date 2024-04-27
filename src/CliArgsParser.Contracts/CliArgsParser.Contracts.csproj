@@ -2,13 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <PackageId>CliArgsParser.Contracts</PackageId>                    <!-- This is your NuGet package ID -->
-        <AssemblyName>CliArgsParser.Contracts</AssemblyName>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <DebugType>embedded</DebugType>
-        <Deterministic>true</Deterministic>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="4.0.0-dev-02160" />
+    </ItemGroup>
+
 </Project>
