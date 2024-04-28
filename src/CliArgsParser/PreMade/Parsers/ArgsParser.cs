@@ -13,7 +13,7 @@ public class ArgsParser(bool breakOnError = true) : AbstractParser(breakOnError)
 
         GetCommands(input).ToList().ForEach(ProcessCommandString);
         
-        Log.Debug("Finished command parsing."); ;
+        Log.Debug("Finished command parsing.");
     }
 
     public override async Task TryParseAsync(string input) {
@@ -21,6 +21,6 @@ public class ArgsParser(bool breakOnError = true) : AbstractParser(breakOnError)
 
         await Task.WhenAll(GetCommands(input).Select(ProcessCommandStringAsync));
 
-        Log.Debug("Finished async command parsing."); ;
+        Log.Debug("Finished async command parsing."); 
     }
 }

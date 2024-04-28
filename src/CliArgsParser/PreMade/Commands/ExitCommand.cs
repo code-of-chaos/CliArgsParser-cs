@@ -1,21 +1,16 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 using CliArgsParser.Attributes;
-using CliArgsParser.Contracts;
-using CliArgsParser.PreMade.Args;
 
 namespace CliArgsParser.PreMade.Commands;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [CommandAtlas]
-public class HelpCommand() {
-
-    [Command("help")]
+public class ExitCommand() {
+    [Command("exit")]
     public void CommmandHelp() {
-        Console.WriteLine("IT WORKS!");
+        Environment.Exit(-1);
     }
 }
