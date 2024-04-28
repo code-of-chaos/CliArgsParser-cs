@@ -40,7 +40,7 @@ public struct CommandMethodInfo(MethodInfo info, object atlas, ILogger logger) {
         try {
             switch (info.GetParameters().Length) {
                 // Method is async and has parameters
-                case > 1 when isAsync && parameterType != typeof(NoArgs): {
+                case >= 1 when isAsync && parameterType != typeof(NoArgs): {
                     Type delegateType = typeof(Func<,>).MakeGenericType(parameterType, typeof(Task));
                     commandDelegate = Delegate.CreateDelegate(delegateType, atlas, info);
                     logger.Debug("Created a delegate of type: {delegateType}", delegateType.Name);
@@ -48,7 +48,7 @@ public struct CommandMethodInfo(MethodInfo info, object atlas, ILogger logger) {
                 }
                 
                 // If method is non-async action and has parameters
-                case > 1 when !isAsync && parameterType != typeof(NoArgs): {
+                case >= 1 when !isAsync && parameterType != typeof(NoArgs): {
                     Type delegateType = typeof(Action<>).MakeGenericType(parameterType);
                     commandDelegate = Delegate.CreateDelegate(delegateType, atlas, info);
                     logger.Debug("Created a delegate of type: {delegateType}", delegateType.Name);
@@ -78,7 +78,7 @@ public struct CommandMethodInfo(MethodInfo info, object atlas, ILogger logger) {
         
         return commandDelegate;
     }
-   
+    
     private static IParameterParser CreateParameterParser(MethodInfo info) {
         return new ParameterParser(GetCommandAttribute(info)?.ArgsType ?? typeof(NoArgs));
     }

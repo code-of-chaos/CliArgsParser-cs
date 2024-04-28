@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace CliArgsParser.Attributes;
+namespace CliArgsParser.Contracts;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[AttributeUsage(AttributeTargets.Class)]
-public class ParametersAttribute : Attribute {
+
+public interface IParameters {
     
 }

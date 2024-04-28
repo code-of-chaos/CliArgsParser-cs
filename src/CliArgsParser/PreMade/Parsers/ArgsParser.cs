@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Common;
 using CliArgsParser.PreMade.Args;
 
@@ -24,7 +25,8 @@ public class ArgsParser : AbstractParser {
             }
 
             try {
-                object? parameters = commandRecord.ParameterParser.Parse(args);
+                var parameters = commandRecord.ParameterParser.Parse(args);
+                
                 if(parameters?.GetType() == typeof(NoArgs)) {
                     output = (T)commandRecord.Delegate.DynamicInvoke()!;
                     return true;
@@ -66,11 +68,16 @@ public class ArgsParser : AbstractParser {
             }
 
             try {
-                Log.Debug($"Parsing parameters for command: {commandName}");
-                object? parameters = commandRecord?.ParameterParser.Parse(args);
+                
+                Log.Debug("Parsing parameters for command: {name}",commandName);
+                
+                IParameters? parameters = commandRecord.ParameterParser.Parse(args);
+                
+                Log.Debug("Found params : {@params}", parameters);
+                
                 if (parameters?.GetType() == typeof(NoArgs)) {
                     Log.Debug($"Command: {commandName} has no parameters.");
-                    if (commandRecord?.Delegate is Func<Task> func) {
+                    if (commandRecord.Delegate is Func<Task> func) {
                         Log.Debug("Invoking async delegate without parameters.");
                         await func(); // For Async methods without parameters
                         continue;
@@ -81,14 +88,17 @@ public class ArgsParser : AbstractParser {
                         continue;
                     }
                 }
-                if (commandRecord.Delegate is Func<object?, Task> funcWithParam) {
+                
+                Log.Debug("{@a}", commandRecord?.Delegate?.Method);
+                if (commandRecord is { IsAsync: true }) {
                     Log.Debug("Invoking async delegate with parameters.");
-                    await funcWithParam(parameters); // For Async methods with parameters
+                    var task = (Task)commandRecord.Delegate?.DynamicInvoke(parameters)!;
+                    await task;
                     continue;
                 }
 
                 Log.Debug("Invoking synchronous delegate with parameters.");
-                commandRecord.Delegate.DynamicInvoke(parameters); // For non-async methods with parameters
+                commandRecord?.Delegate?.DynamicInvoke(parameters); // For non-async methods with parameters
             }
             catch (Exception e) {
                 Log.Error(e, "Error occurred during command execution.");

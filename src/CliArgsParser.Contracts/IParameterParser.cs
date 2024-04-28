@@ -8,5 +8,6 @@ namespace CliArgsParser.Contracts;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public interface IParameterParser {
-    public object? Parse(Dictionary<string, string>? args);
+    public Type ParamsType { get; }
+    public IParameters? Parse(Dictionary<string, string>? args);
 }

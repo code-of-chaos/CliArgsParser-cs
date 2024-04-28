@@ -3,13 +3,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using CliArgsParser.Attributes;
+using CliArgsParser.Contracts;
 
 namespace CliArgsParser.Examples.RegisterAtlas;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Parameters]
-public class ArgsTest {
-    [AutoArgFlag("username")] public string Username { get; set; } = "undefined";
+public class ArgsTest : IParameters {
+    [AutoArgValue("username")]public string Username { get; set; } = "undefined";
 }

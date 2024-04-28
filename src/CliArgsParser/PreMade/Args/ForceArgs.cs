@@ -3,13 +3,13 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 using CliArgsParser.Attributes;
+using CliArgsParser.Contracts;
 
 namespace CliArgsParser.PreMade.Args;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-[Parameters]
-public class ForceArgs {
+public class ForceArgs : IParameters {
     [ArgFlag("force", "Forces stuff")] public bool IsForced { get; set; } = false;
 }

@@ -3,7 +3,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using System.Reflection;
-using CliArgsParser.Attributes;
 using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Attributes;
 
@@ -16,13 +15,13 @@ public class ParameterParser : IParameterParser {
     private readonly Dictionary<string, PropertyInfo> _valueProperties = new();
     private readonly Dictionary<string, PropertyInfo> _flagProperties = new();
 
-    private Type _type; 
+    public Type ParamsType { get; private set; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     public ParameterParser(Type type) {
-        _type = type;
+        ParamsType = type;
         PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance );
         
         foreach (PropertyInfo? prop in propertyInfos) {
@@ -44,10 +43,9 @@ public class ParameterParser : IParameterParser {
     /// </summary>
     /// <param name="args">The command-line arguments.</param>
     /// <returns>An instance of the specified parameter options type.</returns>
-    public object? Parse(Dictionary<string, string>? args) {
-        object? result = Activator.CreateInstance(_type);
-        
-        if (args == null) {
+    public IParameters? Parse(Dictionary<string, string>? args) {
+        IParameters? result = (IParameters?)Activator.CreateInstance(ParamsType);
+        if (result == null) {
             return result;
         }
 

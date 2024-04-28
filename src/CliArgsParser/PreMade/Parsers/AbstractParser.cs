@@ -38,9 +38,9 @@ public abstract partial class AbstractParser : IParser{
             .Matches(argsInput)
             .Where(match => match.Success)
             .ToDictionary(
-                match => match.Groups[1].Value,
-                match => match.Groups[2].Success 
-                    ? match.Groups[2].Value.Trim('"') 
+                match => match.Groups[2].Value,
+                match => match.Groups[3].Success 
+                    ? match.Groups[3].Value.Trim('"') 
                     : "True"
             );
     }
@@ -69,7 +69,7 @@ public abstract partial class AbstractParser : IParser{
             .Select(s => s.Trim());
     }
     
-    [GeneratedRegex("""(--|-)(\w+)(=\"[^\"]*\"|\w*)?""")]
+    [GeneratedRegex("""(--|-)(\w+)(?:=(\"[^\"]*\"|\w*))?""")]
     public static partial Regex ArgsRegex();
 
     [GeneratedRegex("""&&(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)""")]
