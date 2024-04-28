@@ -44,9 +44,9 @@ public class ParameterParser : IParameterParser {
     /// <param name="args">The command-line arguments.</param>
     /// <returns>An instance of the specified parameter options type.</returns>
     public IParameters? Parse(Dictionary<string, string>? args) {
-        IParameters? result = (IParameters?)Activator.CreateInstance(ParamsType);
-        if (result == null) {
-            return result;
+        var result = (IParameters?)Activator.CreateInstance(ParamsType);
+        if (result == null || args == null) {
+            return null;
         }
 
         foreach ((string key, string value) in args) {
