@@ -2,10 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Common;
+using CliArgsParser.PreMade.Args;
 using Serilog;
 using Serilog.Core;
 
@@ -15,7 +17,7 @@ namespace CliArgsParser.PreMade.Parsers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public abstract partial class AbstractParser : IParser{
+public abstract partial class AbstractParser(bool breakOnError) : IParser{
     protected ILogger Log { get; set; } = Logger.None;
     protected Dictionary<string, CommandRecord> CommandStructs = null!;
     
@@ -75,12 +77,88 @@ public abstract partial class AbstractParser : IParser{
     [GeneratedRegex("""&&(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)""")]
     public static partial Regex SplitCommands();
     
+    protected void ProcessCommandString(string commandString) {
+        if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string>? args))
+            return;
+
+        if (!CommandStructs.TryGetValue(commandName, out CommandRecord? commandRecord))
+            return;
+
+        try {
+            IParameters? parameters = commandRecord.ParameterParser.Parse(args);
+
+            if (parameters != null && parameters.GetType() != typeof(NoArgs)) {
+                commandRecord.Delegate.DynamicInvoke(parameters);
+            } else {
+                commandRecord.Delegate.DynamicInvoke();
+            }
+        }
+        
+        catch (Exception e){
+            Log.Error(e, "Error occurred during command execution.");
+            if (breakOnError) throw;
+        }
+    }
+    
+    protected async Task ProcessCommandStringAsync(string commandString) {
+        Log.Debug($"Processing command: {commandString}");
+
+        if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string>? args)) {
+            Log.Warning($"Failed to get command for string: {commandString}");
+            return;
+        }
+
+        if (!CommandStructs.TryGetValue(commandName, out CommandRecord? commandRecord)) {
+            Log.Warning($"No command record found for command name: {commandName}");
+            return;
+        }
+
+        try {
+            Log.Debug("Parsing parameters for command: {name}", commandName);
+
+            IParameters? parameters = commandRecord.ParameterParser.Parse(args);
+
+            Log.Debug("Found params : {@params}", parameters);
+            Log.Debug("Params Type : {T}", parameters?.GetType());
+            
+            switch (commandRecord.Delegate) {
+                case Func<Task> func when parameters is null :
+                    Log.Debug("Invoking async delegate without parameters.");
+                    await func(); // For Async methods without parameters
+                    return;
+                
+                case Action action when parameters is null:
+                    Log.Debug("Invoking synchronous delegate without parameters.");
+                    action(); // For non-async methods without parameters
+                    return;
+                
+                case not null when commandRecord is { IsAsync: true }:
+                    Log.Debug("Invoking async delegate with parameters.");
+                    var task = (Task)commandRecord.Delegate.DynamicInvoke(parameters)!;
+                    await task;
+                    return;
+                
+                case not null :
+                    Log.Debug("Invoking synchronous delegate with parameters.");
+                    commandRecord.Delegate.DynamicInvoke(parameters); // For non-async methods with parameters
+                    return;
+                
+                
+                default:
+                    throw new ConstraintException("Delegate could not be invoked");
+            }
+        }
+        
+        catch (Exception e) {
+            Log.Error(e, "Error occurred during command execution.");
+            if (breakOnError) throw;
+        }
+    }
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Abstract Methods
     // -----------------------------------------------------------------------------------------------------------------
-    public bool TryParse(string input) => TryParse(input, out object? _);
-
-    public abstract bool TryParse<T>(string input, out T? output) ;
-    public abstract Task<bool> TryParseAsync(string input);
+    public abstract void TryParse(string input) ;
+    public abstract Task TryParseAsync(string input);
 
 }

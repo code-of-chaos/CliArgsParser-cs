@@ -9,9 +9,6 @@ namespace CliArgsParser.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 
 public interface IParser {
-    
-    public bool TryParse(string input);
-    public Task<bool> TryParseAsync(string input);
-
-    public bool TryParse<T>(string input, out T? output);
+    public void TryParse(string input);
+    public Task TryParseAsync(string input);
 }

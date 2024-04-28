@@ -9,12 +9,12 @@ namespace CliArgsParser.PreMade.Parsers;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class CliParser: AbstractParser {
-    public override bool TryParse<T>(string input, out T? output) where T : default {
+public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) {
+    public override void TryParse(string input) {
         throw new NotImplementedException();
     }
 
-    public override Task<bool> TryParseAsync(string input) {
+    public override Task TryParseAsync(string input) {
         throw new NotImplementedException();
     }
 }
