@@ -2,12 +2,17 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace CliArgsParser.Contracts;
+using CliArgsParser.Tests.Data.Commands;
+
+namespace CliArgsParser.Tests.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    public Type ParamsType { get; }
-    public IParameters? Parse(Dictionary<string, string> args);
+public class ArgsParserFixture : IDisposable {
+    public readonly IParser Parser = new ParserConfiguration()
+        .RegisterAtlas(new CommandAtlas())
+        .CreateArgsParser();
+    
+    public void Dispose() { }
 }

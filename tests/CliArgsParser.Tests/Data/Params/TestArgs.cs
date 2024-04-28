@@ -1,13 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-namespace CliArgsParser.Contracts;
+namespace CliArgsParser.Tests.Data.Params;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    public Type ParamsType { get; }
-    public IParameters? Parse(Dictionary<string, string> args);
+public class TestArgs : IParameters {
+    [AutoArgValue("value")] public string? Value { get; set; } = null;
+    [AutoArgFlag("flag")] public bool Flag { get; set; } = false;
 }

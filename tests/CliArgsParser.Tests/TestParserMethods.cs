@@ -2,12 +2,14 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace CliArgsParser.Contracts;
+using CliArgsParser.Tests.Data;
+
+namespace CliArgsParser.Tests;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    public Type ParamsType { get; }
-    public IParameters? Parse(Dictionary<string, string> args);
+
+public class TestParserMethods(ArgsParserFixture fixture) : IClassFixture<ArgsParserFixture> {
+    
 }

@@ -2,12 +2,12 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace CliArgsParser.Contracts;
+namespace CliArgsParser.Tests.Data;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    public Type ParamsType { get; }
-    public IParameters? Parse(Dictionary<string, string> args);
+
+public class SuccessException : Exception {
+    
 }

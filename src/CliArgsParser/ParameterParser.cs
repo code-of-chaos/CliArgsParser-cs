@@ -43,12 +43,12 @@ public class ParameterParser : IParameterParser {
     /// </summary>
     /// <param name="args">The command-line arguments.</param>
     /// <returns>An instance of the specified parameter options type.</returns>
-    public IParameters? Parse(Dictionary<string, string>? args) {
+    public IParameters? Parse(Dictionary<string, string> args) {
         var result = (IParameters?)Activator.CreateInstance(ParamsType);
-        if (result == null || args == null) {
+        if (result == null) {
             return null;
         }
-
+    
         foreach ((string key, string value) in args) {
             if (_valueProperties.TryGetValue(key, out PropertyInfo? optionProp)) {
                 object v = Convert.ChangeType(value, optionProp.PropertyType); // cast to the correct type of the param

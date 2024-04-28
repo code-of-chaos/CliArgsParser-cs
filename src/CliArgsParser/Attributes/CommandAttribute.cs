@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Attributes;
 using CliArgsParser.PreMade.Args;
 
@@ -12,7 +13,7 @@ namespace CliArgsParser.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 
 [AttributeUsage(AttributeTargets.Method)]
-public class CommandAttribute<T>(string name, string? description = null) : Attribute, ICommandAttribute where T : notnull, new() {
+public class CommandAttribute<T>(string name, string? description = null) : Attribute, ICommandAttribute where T : IParameters, new() {
     public string Name { get; } = name;
     public string? Description { get; } = description;
     public Type ArgsType { get; } = typeof(T);

@@ -116,7 +116,7 @@ public class ParserConfiguration : IParserConfiguration {
         return commandDictionary;
     }
 
-    private ParserDto GetParserSetup(bool allowOverwrites = false) {
+    public ParserDto GetParserSetup(bool allowOverwrites = false) {
         Dictionary<string, CommandRecord> dictionary = AssembleDictionary(allowOverwrites);
         
         return new ParserDto(

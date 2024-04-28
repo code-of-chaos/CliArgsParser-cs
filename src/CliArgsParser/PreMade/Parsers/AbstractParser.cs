@@ -24,7 +24,7 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    internal IParser IngestFromSetup(ParserDto setup) {
+    public IParser IngestFromSetup(ParserDto setup) {
         Log = setup.Logger;
         CommandStructs = setup.CommandStructs;
 
@@ -35,7 +35,7 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
         return this;
     }
 
-    public Dictionary<string, string> GetArgs(string argsInput) {
+    protected Dictionary<string, string> GetArgs(string argsInput) {
         return ArgsRegex()
             .Matches(argsInput)
             .Where(match => match.Success)
@@ -47,9 +47,9 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
             );
     }
 
-    public bool TryGetCommand(string input, [NotNullWhen(true)] out string? commandName, out Dictionary<string, string>? args) {
+    protected bool TryGetCommand(string input, [NotNullWhen(true)] out string? commandName, out Dictionary<string, string> args) {
         commandName = null;
-        args = default;
+        args = new Dictionary<string, string>();
         
         string[] strings = input.Split(" ", 2);
         
@@ -58,27 +58,25 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
         }
         
         commandName = strings[0];
-        args = strings.Length == 2 
-            ? GetArgs(strings[1]) 
-            : null;
+        if (strings.Length == 2) args = GetArgs(strings[1]);
         
         return true;
     }
 
-    public IEnumerable<string> GetCommands(string input) {
+    protected IEnumerable<string> GetCommands(string input) {
         return SplitCommands()
             .Split(input)
             .Select(s => s.Trim());
     }
     
     [GeneratedRegex("""(--|-)(\w+)(?:=(\"[^\"]*\"|\w*))?""")]
-    public static partial Regex ArgsRegex();
+    protected static partial Regex ArgsRegex();
 
     [GeneratedRegex("""&&(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)""")]
-    public static partial Regex SplitCommands();
+    protected static partial Regex SplitCommands();
     
     protected void ProcessCommandString(string commandString) {
-        if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string>? args))
+        if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string> args))
             return;
 
         if (!CommandStructs.TryGetValue(commandName, out CommandRecord? commandRecord))
