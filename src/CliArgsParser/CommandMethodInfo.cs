@@ -56,13 +56,13 @@ public struct CommandMethodInfo(MethodInfo info, object atlas, ILogger logger) {
                 }
 
                 // If method is async action and has no parameters
-                case < 1 when isAsync: {
+                case < 1 when isAsync && parameterType == typeof(NoArgs): {
                     commandDelegate = (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), atlas, info);
                     logger.Debug("Created a delegate of type: Func<Task>");
                     break;
                 }
 
-                case < 1 when !isAsync:
+                case < 1 when !isAsync && parameterType == typeof(NoArgs) :
                 default: {
                     commandDelegate = (Action)Delegate.CreateDelegate(typeof(Action), atlas, info);
                     logger.Debug("Created a delegate of type: Action");

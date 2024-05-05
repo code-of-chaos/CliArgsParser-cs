@@ -84,6 +84,8 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
 
         try {
             IParameters? parameters = commandRecord.ParameterParser.Parse(args);
+            Log.Warning("{p}", parameters);
+            Log.Warning("{@p}", parameters);
 
             if (parameters != null && parameters.GetType() != typeof(NoArgs)) {
                 commandRecord.Delegate.DynamicInvoke(parameters);
@@ -120,28 +122,35 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
             Log.Debug("Params Type : {T}", parameters?.GetType());
             
             switch (commandRecord.Delegate) {
-                case Func<Task> func when parameters is null :
+                case Func<Task> func when parameters is null or NoArgs:
                     Log.Debug("Invoking async delegate without parameters.");
                     await func(); // For Async methods without parameters
                     return;
-                
-                case Action action when parameters is null:
+
+                case Action action when parameters is null or NoArgs:
                     Log.Debug("Invoking synchronous delegate without parameters.");
                     action(); // For non-async methods without parameters
                     return;
-                
-                case not null when commandRecord is { IsAsync: true }:
+
+                case { } del when commandRecord.IsAsync:
+                    if (parameters == null) {
+                        throw new ArgumentNullException(nameof(parameters),"No parameters provided for async method that needs parameters");
+                    }
+
                     Log.Debug("Invoking async delegate with parameters.");
-                    var task = (Task)commandRecord.Delegate.DynamicInvoke(parameters)!;
+                    var task = (Task)del.DynamicInvoke(parameters)!;
                     await task;
                     return;
-                
-                case not null :
+
+                case { } del:
+                    if (parameters == null) {
+                        throw new ArgumentNullException(nameof(parameters),"No parameters provided for method that needs parameters");
+                    }
+
                     Log.Debug("Invoking synchronous delegate with parameters.");
-                    commandRecord.Delegate.DynamicInvoke(parameters); // For non-async methods with parameters
+                    del.DynamicInvoke(parameters); // For non-async methods with parameters
                     return;
-                
-                
+
                 default:
                     throw new ConstraintException("Delegate could not be invoked");
             }

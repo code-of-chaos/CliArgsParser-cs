@@ -2,12 +2,15 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-namespace CliArgsParser.Tests.Data;
+namespace CliArgsParser.Tests.Data.Fixture;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
-public class SuccessException : Exception {
-    
+public class DataOutput {
+    public string? SomeData { get; set; } = null;
+
+    public string? ArgsValue { get; set; } = null;
+    public bool? ArgsFlag { get; set; } = null;
 }
