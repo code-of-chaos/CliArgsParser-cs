@@ -1,19 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using CliArgsParser.Contracts;
 
-using CliArgsParser.Contracts.Attributes;
-
-namespace CliArgsParser.Attributes;
+namespace CliArgsParser.PreMade.Args;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents an attribute that can be applied to properties in a class to define command line argument values.
-/// These attributes always return string, or from string castable values
+/// Internally used by CliArgsParser to assign to methods which do not take in any special arguments.
 /// </summary>
-[AttributeUsage(AttributeTargets.Property)]
-public class ArgValueAttribute(string shortName, string longName, string? description = null)
-    : ArgValue(shortName,longName, description);
-    
+public class NoArgs : IParameters;

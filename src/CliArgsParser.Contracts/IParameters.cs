@@ -1,27 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+
+namespace CliArgsParser.Contracts;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents an argument attribute.
+/// A helper interface to assign your Parameter class to
 /// </summary>
-public interface IArgAttribute {
-    /// <summary>
-    /// Gets the short name of the command line argument.
-    /// </summary>
-    public string ShortName { get; }
-
-    /// <summary>
-    /// Gets the long name of the argument attribute.
-    /// </summary>
-    public string LongName { get; }
-
-    /// <summary>
-    /// Interface for argument attributes used in command line argument parsing.
-    /// </summary>
-    public string? Description { get; }
+public interface IParameters {
+    
 }

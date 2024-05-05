@@ -1,27 +1,31 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
 namespace CliArgsParser.Contracts.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents an argument attribute.
+/// Represents an attribute that defines a command.
 /// </summary>
-public interface IArgAttribute {
+public interface ICommandAttribute {
     /// <summary>
-    /// Gets the short name of the command line argument.
+    /// Gets the name of the command.
     /// </summary>
-    public string ShortName { get; }
+    /// <remarks>
+    /// This property is used to specify the name of the command represented by the <see cref="CommandAttribute"/>.
+    /// </remarks>
+    string Name { get; }
 
     /// <summary>
-    /// Gets the long name of the argument attribute.
+    /// Represents an attribute for a command.
     /// </summary>
-    public string LongName { get; }
+    string? Description { get; }
 
     /// <summary>
-    /// Interface for argument attributes used in command line argument parsing.
+    /// Represents the type of command line arguments that the command accepts.
     /// </summary>
-    public string? Description { get; }
+    Type ArgsType { get; }
 }

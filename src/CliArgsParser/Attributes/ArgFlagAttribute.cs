@@ -1,6 +1,9 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+
+using CliArgsParser.Contracts.Attributes;
+
 namespace CliArgsParser.Attributes;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -11,5 +14,5 @@ namespace CliArgsParser.Attributes;
 /// These types of attributes always return a bool.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class ArgFlagAttribute(char shortName, string longName, string? description = null)
-    : ArgAttribute(shortName, longName, description);
+public class ArgFlagAttribute(string shortName, string longName, string? description = null)
+    : ArgFlag(shortName, longName, description);

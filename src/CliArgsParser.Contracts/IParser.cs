@@ -7,19 +7,24 @@ namespace CliArgsParser.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+
 /// <summary>
-/// Represents an interface for parsing command-line parameters.
+/// Represents a parser that can parse input strings.
 /// </summary>
-public interface IParameterParser {
+public interface IParser {
     /// <summary>
-    /// Represents a parameter parser.
+    /// Tries to parse the input string.
     /// </summary>
-    public Type ParamsType { get; }
+    /// <param name="input">The input string to parse.</param>
+    /// <remarks>
+    /// This method attempts to parse the input string and perform any necessary operations based on the parsed data.
+    /// </remarks>
+    public void TryParse(string input);
 
     /// <summary>
-    /// Parses the command line arguments and returns the parsed parameters.
+    /// Asynchronously attempts to parse the given input.
     /// </summary>
-    /// <param name="args">The command line arguments as key-value pairs.</param>
-    /// <returns>The parsed parameters as an instance of <see cref="IParameters"/> or null if parsing fails.</returns>
-    public IParameters? Parse(Dictionary<string, string> args);
+    /// <param name="input">The input string to parse.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public Task TryParseAsync(string input);
 }

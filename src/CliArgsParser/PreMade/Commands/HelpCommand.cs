@@ -1,27 +1,26 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+using CliArgsParser.Attributes;
+
+namespace CliArgsParser.PreMade.Commands;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents an argument attribute.
+/// A standard atlas with commands that will show some help information.
 /// </summary>
-public interface IArgAttribute {
+[CommandAtlas]
+public class HelpCommand() {
     /// <summary>
-    /// Gets the short name of the command line argument.
+    /// Represents a help command.
     /// </summary>
-    public string ShortName { get; }
-
-    /// <summary>
-    /// Gets the long name of the argument attribute.
-    /// </summary>
-    public string LongName { get; }
-
-    /// <summary>
-    /// Interface for argument attributes used in command line argument parsing.
-    /// </summary>
-    public string? Description { get; }
+    /// <remarks>
+    /// The help command provides information about available commands and their descriptions.
+    /// </remarks>
+    [Command("help")]
+    public void CommmandHelp() {
+        Console.WriteLine("There is no help");
+    }
 }
