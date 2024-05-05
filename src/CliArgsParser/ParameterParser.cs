@@ -11,6 +11,7 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <inheritdoc />
 public class ParameterParser : IParameterParser {
     private readonly Dictionary<string, PropertyInfo> _valueProperties = new();
     private readonly Dictionary<string, PropertyInfo> _flagProperties = new();
@@ -38,11 +39,6 @@ public class ParameterParser : IParameterParser {
         }
     }
     
-    /// <summary>
-    /// Parses the command-line arguments and returns an instance of the specified parameter options type.
-    /// </summary>
-    /// <param name="args">The command-line arguments.</param>
-    /// <returns>An instance of the specified parameter options type.</returns>
     public IParameters? Parse(Dictionary<string, string> args) {
         var result = (IParameters?)Activator.CreateInstance(ParamsType);
         if (result == null) {

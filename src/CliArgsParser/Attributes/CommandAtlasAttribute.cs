@@ -7,7 +7,8 @@ namespace CliArgsParser.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Attribute used to mark a class as a command atlas.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class CommandAtlasAttribute : Attribute {
-    
-}
+public class CommandAtlasAttribute : Attribute;

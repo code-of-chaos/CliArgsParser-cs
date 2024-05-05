@@ -7,7 +7,9 @@ namespace CliArgsParser.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
+/// <summary>
+/// A helper interface to assign your Parameter class to
+/// </summary>
 public interface IParameters {
     
 }

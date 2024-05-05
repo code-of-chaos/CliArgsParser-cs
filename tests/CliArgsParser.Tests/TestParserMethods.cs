@@ -2,7 +2,6 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
-using CliArgsParser.Tests.Data;
 using CliArgsParser.Tests.Data.Fixture;
 
 namespace CliArgsParser.Tests;

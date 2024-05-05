@@ -10,7 +10,7 @@ namespace CliArgsParser.Contracts.Attributes;
 /// <summary>
 /// Base class for attribute classes used in command line argument parsing.
 /// </summary>
-[AttributeUsage(AttributeTargets.Property, Inherited = true)]
+[AttributeUsage(AttributeTargets.Property)]
 public abstract class ArgAttribute(string shortName, string longName, string? description) : Attribute, IArgAttribute {
     /// <summary>
     /// Represents a short name attribute used in command-line argument parsing.

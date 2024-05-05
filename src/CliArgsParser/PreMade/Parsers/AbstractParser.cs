@@ -17,13 +17,28 @@ namespace CliArgsParser.PreMade.Parsers;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
+/// <summary>
+/// Abstract base class for parsers that parse command-line arguments.
+/// </summary>
 public abstract partial class AbstractParser(bool breakOnError) : IParser{
+    /// <summary>
+    /// Represents a logger used by the CliArgsParser library.
+    /// </summary>
     protected ILogger Log { get; set; } = Logger.None;
+
+    /// <summary>
+    /// Dictionary that stores command records.
+    /// </summary>
     protected Dictionary<string, CommandRecord> CommandStructs = null!;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Ingests the setup information into the parser.
+    /// </summary>
+    /// <param name="setup">The setup information for the parser.</param>
+    /// <returns>The instance of the parser.</returns>
     public IParser IngestFromSetup(ParserDto setup) {
         Log = setup.Logger;
         CommandStructs = setup.CommandStructs;
@@ -35,6 +50,11 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
         return this;
     }
 
+    /// <summary>
+    /// Retrieves the command line arguments from the specified input string.
+    /// </summary>
+    /// <param name="argsInput">The input string containing the command line arguments.</param>
+    /// <returns>A dictionary representing the command line arguments, where the keys are the argument names and the values are the argument values.</returns>
     protected Dictionary<string, string> GetArgs(string argsInput) {
         return ArgsRegex()
             .Matches(argsInput)
@@ -47,6 +67,13 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
             );
     }
 
+    /// <summary>
+    /// Tries to get the command and its arguments from the input string.
+    /// </summary>
+    /// <param name="input">The input string.</param>
+    /// <param name="commandName">When this method returns, contains the command name if it was successfully extracted; otherwise, contains null.</param>
+    /// <param name="args">When this method returns, contains the command arguments if they were successfully extracted; otherwise, an empty dictionary.</param>
+    /// <returns>true if the command and its arguments were successfully extracted from the input string; otherwise, false.</returns>
     protected bool TryGetCommand(string input, [NotNullWhen(true)] out string? commandName, out Dictionary<string, string> args) {
         commandName = null;
         args = new Dictionary<string, string>();
@@ -63,18 +90,36 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
         return true;
     }
 
+    /// <summary>
+    /// Splits the input into individual commands and trims them.
+    /// </summary>
+    /// <param name="input">The input string containing multiple commands.</param>
+    /// <returns>An enumerable of individual commands.</returns>
     protected IEnumerable<string> GetCommands(string input) {
         return SplitCommands()
             .Split(input)
             .Select(s => s.Trim());
     }
-    
+
+    /// <summary>
+    /// Generates a regular expression for parsing command-line arguments.
+    /// </summary>
+    /// <returns>A regular expression for parsing command-line arguments.</returns>
     [GeneratedRegex("""(--|-)(\w+)(?:=(\"[^\"]*\"|\w*))?""")]
     protected static partial Regex ArgsRegex();
 
+    /// <summary>
+    /// Splits the input into individual commands and trims any leading or trailing whitespace.
+    /// </summary>
+    /// <param name="input">The input string containing multiple commands.</param>
+    /// <returns>An IEnumerable of strings representing the individual commands.</returns>
     [GeneratedRegex("""&&(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)""")]
     protected static partial Regex SplitCommands();
-    
+
+    /// <summary>
+    /// Processes a command string by parsing the command, its arguments, and executing the corresponding delegate.
+    /// </summary>
+    /// <param name="commandString">The command string to process.</param>
     protected void ProcessCommandString(string commandString) {
         if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string> args))
             return;
@@ -99,7 +144,12 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
             if (breakOnError) throw;
         }
     }
-    
+
+    /// <summary>
+    /// Processes a command string asynchronously.
+    /// </summary>
+    /// <param name="commandString">The command string to be processed.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     protected async Task ProcessCommandStringAsync(string commandString) {
         Log.Debug($"Processing command: {commandString}");
 
@@ -165,7 +215,17 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     // -----------------------------------------------------------------------------------------------------------------
     // Abstract Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Tries to parse the input string.
+    /// </summary>
+    /// <param name="input">The input string to be parsed.</param>
     public abstract void TryParse(string input) ;
+
+    /// <summary>
+    /// Tries to parse the given input asynchronously.
+    /// </summary>
+    /// <param name="input">The input string to parse.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public abstract Task TryParseAsync(string input);
 
 }

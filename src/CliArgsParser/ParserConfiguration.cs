@@ -15,6 +15,8 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+
+/// <inheritdoc />
 public class ParserConfiguration : IParserConfiguration {
     private readonly LinkedList<object> _linkedAtlases = [];
     public ILogger Log { get; private set; } = Logger.None;
