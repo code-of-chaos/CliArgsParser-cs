@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>CliArgsParser</id>
-    <version>0.6.0-preview-202404091708</version>
+    <version>1.0.0</version>
     <authors>AndreasSasDev</authors>
     <owners></owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,8 +17,10 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="src\CliArgsParser.Contracts\bin\release\net8.0\CliArgsParser.Contracts.dll" target="lib\net8.0\CliArgsParser.Contracts.dll" />
+    <file src="src\CliArgsParser\bin\release\net8.0\CliArgsParser.Contracts.dll" target="lib\net8.0\CliArgsParser.Contracts.dll" />
     <file src="src\CliArgsParser\bin\release\net8.0\CliArgsParser.dll" target="lib\net8.0\CliArgsParser.dll" />
+    <file src="src\CliArgsParser\bin\release\net8.0\CliArgsParser.xml" target="lib\net8.0\CliArgsParser.xml" />
+    <file src="src\CliArgsParser\bin\release\net8.0\CliArgsParser.Contracts.xml" target="lib\net8.0\CliArgsParser.Contracts.xml" />
     <file src="README.md" target="README.md" />
   </files>
 </package>

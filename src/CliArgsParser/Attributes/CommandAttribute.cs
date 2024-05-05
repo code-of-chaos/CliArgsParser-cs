@@ -22,16 +22,11 @@ public class CommandAttribute<T>(string name, string? description = null) : Attr
     /// <summary>
     /// Represents a command attribute that can be applied to a method.
     /// </summary>
-    /// <typeparam name="T">The type of the command's parameters.</typeparam>
-    /// <remarks>
-    /// This attribute is used to mark a method as a command that can be invoked by the command-line parser.
-    /// </remarks>
     public string Name { get; } = name;
 
     /// <summary>
     /// Represents an attribute indicating a command.
     /// </summary>
-    /// <typeparam name="T">The type of parameters for the command.</typeparam>
     public string? Description { get; } = description;
 
     /// <summary>
@@ -43,6 +38,5 @@ public class CommandAttribute<T>(string name, string? description = null) : Attr
 /// <summary>
 /// Represents an attribute that marks a method as a command.
 /// </summary>
-/// <typeparam name="T">The type of the parameters for the command.</typeparam>
 [AttributeUsage(AttributeTargets.Method)]
 public class CommandAttribute(string name, string? description = null) : CommandAttribute<NoArgs>(name, description);

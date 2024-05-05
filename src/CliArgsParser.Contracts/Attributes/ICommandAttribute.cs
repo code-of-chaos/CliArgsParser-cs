@@ -14,9 +14,6 @@ public interface ICommandAttribute {
     /// <summary>
     /// Gets the name of the command.
     /// </summary>
-    /// <remarks>
-    /// This property is used to specify the name of the command represented by the <see cref="CommandAttribute"/>.
-    /// </remarks>
     string Name { get; }
 
     /// <summary>

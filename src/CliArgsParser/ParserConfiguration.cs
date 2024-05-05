@@ -19,12 +19,18 @@ namespace CliArgsParser;
 /// <inheritdoc />
 public class ParserConfiguration : IParserConfiguration {
     private readonly LinkedList<object> _linkedAtlases = [];
+    
+    /// <inheritdoc />
     public ILogger Log { get; private set; } = Logger.None;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods - Registering
     // -----------------------------------------------------------------------------------------------------------------
+    
+    /// <inheritdoc />
     public IParserConfiguration RegisterAtlas<T>() where T : notnull => RegisterAtlas(typeof(T));
+    
+    /// <inheritdoc />
     public IParserConfiguration RegisterAtlas(Type t) {
         ConstructorInfo? loggerConstructor = t.GetConstructor([typeof(ILogger)]);
         ConstructorInfo? parameterlessConstructor = t.GetConstructor(Type.EmptyTypes);
@@ -45,6 +51,7 @@ public class ParserConfiguration : IParserConfiguration {
         return this;
     } 
     
+    /// <inheritdoc />
     public IParserConfiguration RegisterAtlas(Assembly assembly) {
         assembly.ExportedTypes
             .Where(t => 
@@ -56,6 +63,7 @@ public class ParserConfiguration : IParserConfiguration {
         return this;
     }
     
+    /// <inheritdoc />
     public IParserConfiguration RegisterAtlas<T>(T atlas) where T : notnull {
         CommandAtlasAttribute? attribute = atlas.GetType()
             .GetCustomAttributes(typeof(CommandAtlasAttribute), false)
@@ -77,6 +85,8 @@ public class ParserConfiguration : IParserConfiguration {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods - extra
     // -----------------------------------------------------------------------------------------------------------------
+    
+    /// <inheritdoc />
     public IParserConfiguration SetLogger(ILogger logger) {
         Log = logger;
         Log.Information("CliArgsParser : Set new Logger");
@@ -118,6 +128,7 @@ public class ParserConfiguration : IParserConfiguration {
         return commandDictionary;
     }
 
+    /// <inheritdoc />
     public ParserDto GetParserSetup(bool allowOverwrites = false) {
         Dictionary<string, CommandRecord> dictionary = AssembleDictionary(allowOverwrites);
         
@@ -128,6 +139,9 @@ public class ParserConfiguration : IParserConfiguration {
         );
     } 
     
+    /// <inheritdoc />
     public IParser CreateArgsParser(bool allowOverwrites = false) => new ArgsParser().IngestFromSetup(GetParserSetup());
+    
+    /// <inheritdoc />
     public IParser CreateCliParser(bool allowOverwrites = false) => new CliParser().IngestFromSetup(GetParserSetup());
 }

@@ -16,11 +16,15 @@ public class ParameterParser : IParameterParser {
     private readonly Dictionary<string, PropertyInfo> _valueProperties = new();
     private readonly Dictionary<string, PropertyInfo> _flagProperties = new();
 
+    /// <inheritdoc />
     public Type ParamsType { get; private set; }
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <summary>
+    /// Represents a parameter parser that is responsible for parsing command-line arguments into parameters.
+    /// </summary>
     public ParameterParser(Type type) {
         ParamsType = type;
         PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance );
@@ -38,7 +42,8 @@ public class ParameterParser : IParameterParser {
             }
         }
     }
-    
+
+    /// <inheritdoc />
     public IParameters? Parse(Dictionary<string, string> args) {
         var result = (IParameters?)Activator.CreateInstance(ParamsType);
         if (result == null) {

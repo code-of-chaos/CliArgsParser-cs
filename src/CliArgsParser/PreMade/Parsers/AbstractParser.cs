@@ -104,15 +104,12 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// <summary>
     /// Generates a regular expression for parsing command-line arguments.
     /// </summary>
-    /// <returns>A regular expression for parsing command-line arguments.</returns>
     [GeneratedRegex("""(--|-)(\w+)(?:=(\"[^\"]*\"|\w*))?""")]
     protected static partial Regex ArgsRegex();
 
     /// <summary>
     /// Splits the input into individual commands and trims any leading or trailing whitespace.
     /// </summary>
-    /// <param name="input">The input string containing multiple commands.</param>
-    /// <returns>An IEnumerable of strings representing the individual commands.</returns>
     [GeneratedRegex("""&&(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)""")]
     protected static partial Regex SplitCommands();
 

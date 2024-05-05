@@ -35,7 +35,7 @@ public interface IParserConfiguration {
     /// <summary>
     /// Registers an atlas type for parsing.
     /// </summary>
-    /// <typeparam name="T">The atlas type to register.</typeparam>
+    /// <param name="t">The atlas type to register.</param>
     /// <returns>The updated parser configuration.</returns>
     public IParserConfiguration RegisterAtlas(Type t);
 
@@ -54,9 +54,8 @@ public interface IParserConfiguration {
     public IParserConfiguration RegisterAtlas<T>(T atlas) where T : notnull;
 
     /// <summary>
-    /// Registers an atlas type <typeparamref name="T"/> with the parser configuration.
+    /// Registers an atlas from an assembly with the parser configuration.
     /// </summary>
-    /// <typeparam name="T">The type of the atlas to register.</typeparam>
     /// <returns>The updated parser configuration instance.</returns>
     public IParserConfiguration RegisterAtlas(Assembly assembly);
 
