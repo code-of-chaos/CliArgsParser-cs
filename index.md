@@ -3,7 +3,10 @@ _layout: landing
 title: CliArgsParser
 ---
 
-# Welcome to CliArgsParser
+# CliArgsParser
+![NuGet Version](https://img.shields.io/nuget/vpre/CliArgsParser) 
+![NuGet Downloads](https://img.shields.io/nuget/dt/CliArgsParser)
+
 
 CliArgsParser brings the power of simplicity to your command-line tool development.
 Craft your command-line interfaces and parse program arguments with ease. Whether you're quickly prototyping a new tool or developing an enterprise-level application, embrace the flexibility and power of CliArgsParser.
