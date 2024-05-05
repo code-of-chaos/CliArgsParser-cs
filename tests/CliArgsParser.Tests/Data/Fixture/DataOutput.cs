@@ -10,6 +10,7 @@ namespace CliArgsParser.Tests.Data.Fixture;
 
 public class DataOutput {
     public string? SomeData { get; set; } = null;
+    public string? SomeOtherData { get; set; } = null;
 
     public string? ArgsValue { get; set; } = null;
     public bool? ArgsFlag { get; set; } = null;

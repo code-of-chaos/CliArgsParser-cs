@@ -28,4 +28,8 @@ public class ArgsParserFixture : IDisposable {
         DataOutput = new DataOutput();
         SuppressFinalize(this);
     }
+
+    public void ResetData() {
+        DataOutput = new DataOutput();
+    }
 }
