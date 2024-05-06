@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>CliArgsParser</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <authors>AndreasSasDev</authors>
     <owners></owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,7 +14,7 @@
     <repository type="git" url="https://github.com/code-of-chaos/CliArgsParser-cs" commit="029b54dbd0db0cbcc54be8d18436e748d30d2f06" />
     <dependencies>
       <group targetFramework="net8.0">
-        <dependency id="Serilog" version="3.11.0" />
+        <dependency id="Serilog" version="3.1.1" />
         <dependency id="Serilog.Sinks.Console" version="5.0.1" />
         <dependency id="JetBrains.Annotations" version="2023.3.0"/>
       </group>
