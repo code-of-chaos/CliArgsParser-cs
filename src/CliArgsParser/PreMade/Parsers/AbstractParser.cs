@@ -60,9 +60,9 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
             .Matches(argsInput)
             .Where(match => match.Success)
             .ToDictionary(
-                match => match.Groups[2].Value,
-                match => match.Groups[3].Success 
-                    ? match.Groups[3].Value.Trim('"') 
+                match => match.Groups[1].Value,
+                match => match.Groups[2].Success 
+                    ? match.Groups[2].Value.Trim('"') 
                     : "True"
             );
     }
@@ -104,7 +104,7 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// <summary>
     /// Generates a regular expression for parsing command-line arguments.
     /// </summary>
-    [GeneratedRegex("""(--|-)(\w+)(?:=(\"[^\"]*\"|\w*))?""")]
+    [GeneratedRegex("""(?:--|-)(\w+)(?:=(".*?"|\S+))?""")]
     protected static partial Regex ArgsRegex();
 
     /// <summary>

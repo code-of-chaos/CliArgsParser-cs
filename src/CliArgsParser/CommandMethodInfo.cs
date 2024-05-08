@@ -16,16 +16,16 @@ namespace CliArgsParser;
 /// <summary>
 /// Represents information about a command method.
 /// </summary>
-public struct CommandMethodInfo(MethodInfo info, object atlas, ILogger logger) {
+public readonly struct CommandMethodInfo(MethodInfo info, object atlas, ILogger logger) {
     /// <summary>
     /// Represents information about a command method.
     /// </summary>
-    public MethodInfo Info = info;
+    public readonly MethodInfo Info = info;
 
     /// <summary>
     /// Represents an attribute that defines a command.
     /// </summary>
-    public ICommandAttribute? CommandAttribute { get; } = GetCommandAttribute(info);
+    public readonly ICommandAttribute? CommandAttribute = GetCommandAttribute(info);
 
     /// <summary>
     /// Gets a value indicating whether the method is asynchronous.
@@ -35,17 +35,17 @@ public struct CommandMethodInfo(MethodInfo info, object atlas, ILogger logger) {
     /// a generic type of <see cref="System.Threading.Tasks.Task{T}"/>.
     /// </remarks>
     /// <value><c>true</c> if the method is asynchronous; otherwise, <c>false</c>.</value>
-    public bool IsAsync { get; } = GetIsAsync(info);
+    public readonly bool IsAsync = GetIsAsync(info);
 
     /// <summary>
     /// Represents a command method and its associated information.
     /// </summary>
-    public Delegate Delegate = GetDelegate(info, atlas, logger);
+    public readonly Delegate Delegate = GetDelegate(info, atlas, logger);
 
     /// <summary>
     /// Represents a parser for command-line parameters.
     /// </summary>
-    public IParameterParser ParameterParser = CreateParameterParser(info);
+    public readonly IParameterParser ParameterParser = CreateParameterParser(info);
     
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
