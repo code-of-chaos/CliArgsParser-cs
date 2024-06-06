@@ -85,5 +85,5 @@ public interface IParserConfiguration {
     /// </summary>
     /// <param name="allowOverwrites">Indicates whether overwriting existing parser configuration is allowed.</param>
     /// <returns>An instance of the CLI parser.</returns>
-    public IParser CreateCliParser(bool allowOverwrites = false);
+    public ICliParser CreateCliParser(bool allowOverwrites = false);
 }

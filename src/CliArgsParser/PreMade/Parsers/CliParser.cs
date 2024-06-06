@@ -2,6 +2,8 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 
+using CliArgsParser.Contracts;
+
 namespace CliArgsParser.PreMade.Parsers;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -10,7 +12,7 @@ namespace CliArgsParser.PreMade.Parsers;
 /// <summary>
 /// CliParser is a class that implements the IParser interface and provides methods for parsing command-line input.
 /// </summary>
-public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) {
+public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) , ICliParser {
     /// <summary>
     /// Parses continuous input from the command line and tries to parse each command string.
     /// </summary>
@@ -18,13 +20,31 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) 
     /// This method reads input continuously from the command line, prompts the user for input, and tries to parse each command string.
     /// If the input is null or empty, the method continues to prompt for input.
     /// </remarks>
-    public void TryParseContinous() {
-        var c = true; // this should be fixed
+    public void TryParseContinuous() {
+        bool c = true; // this should be fixed
         while (c) {
             Console.WriteLine("> ");
             string? input = Console.ReadLine();
             if (string.IsNullOrEmpty(input)) continue;
             TryParse(input);
+            c = true;
+        }
+    }
+    
+    /// <summary>
+    /// Parses continuous input from the command line and tries to parse each command string.
+    /// </summary>
+    /// <remarks>
+    /// This method reads input continuously from the command line, prompts the user for input, and tries to parse each command string.
+    /// If the input is null or empty, the method continues to prompt for input.
+    /// </remarks>
+    public async Task TryParseContinuousAsync() {
+        bool c = true; // this should be fixed
+        while (c) {
+            Console.WriteLine("> ");
+            string? input = Console.ReadLine();
+            if (string.IsNullOrEmpty(input)) continue;
+            await TryParseAsync(input);
             c = true;
         }
     }

@@ -140,8 +140,14 @@ public class ParserConfiguration : IParserConfiguration {
     } 
     
     /// <inheritdoc />
-    public IParser CreateArgsParser(bool allowOverwrites = false) => new ArgsParser().IngestFromSetup(GetParserSetup());
-    
+    public IParser CreateArgsParser(bool allowOverwrites = false) {
+        return new ArgsParser().IngestFromSetup(GetParserSetup());
+    }
+
     /// <inheritdoc />
-    public IParser CreateCliParser(bool allowOverwrites = false) => new CliParser().IngestFromSetup(GetParserSetup());
+    public ICliParser CreateCliParser(bool allowOverwrites = false) {
+        var parser = new CliParser();
+        parser.IngestFromSetup(GetParserSetup());
+        return parser;
+    }
 }
