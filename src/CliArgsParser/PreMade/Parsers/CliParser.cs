@@ -23,7 +23,7 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) 
     public void TryParseContinuous() {
         bool c = true; // this should be fixed
         while (c) {
-            Console.WriteLine("> ");
+            Console.Write("> ");
             string? input = Console.ReadLine();
             if (string.IsNullOrEmpty(input)) continue;
             TryParse(input);
@@ -41,7 +41,7 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) 
     public async Task TryParseContinuousAsync() {
         bool c = true; // this should be fixed
         while (c) {
-            Console.WriteLine("> ");
+            Console.Write("> ");
             string? input = Console.ReadLine();
             if (string.IsNullOrEmpty(input)) continue;
             await TryParseAsync(input);
