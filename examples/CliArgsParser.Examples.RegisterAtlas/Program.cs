@@ -9,8 +9,8 @@ namespace CliArgsParser.Examples.RegisterAtlas;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-static class Program {
-    public static async Task MainAsync(IParser parser, string[] args) {
+internal static class Program {
+    private async static Task MainAsync(IParser parser, string[] args) {
         await parser.TryParseAsync("hello");
         await parser.TryParseAsync("hello-async");
         await parser.TryParseAsync("""hello-test --username="andreas" """);
