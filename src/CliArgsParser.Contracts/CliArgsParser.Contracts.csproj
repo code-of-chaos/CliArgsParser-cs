@@ -12,12 +12,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DebugSymbols>true</DebugSymbols>
-      <DocumentationFile>bin\Release\CliArgsParser.Contracts.xml</DocumentationFile>
+        <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\Release\CliArgsParser.Contracts.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Serilog" Version="4.0.1" />
+        <PackageReference Include="Serilog" Version="4.0.1"/>
     </ItemGroup>
 
 </Project>

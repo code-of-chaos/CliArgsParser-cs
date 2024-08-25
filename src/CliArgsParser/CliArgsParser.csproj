@@ -12,16 +12,17 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DebugSymbols>true</DebugSymbols>
-      <DocumentationFile>bin\Release\CliArgsParser.xml</DocumentationFile>
+        <DebugSymbols>true</DebugSymbols>
+        <DocumentationFile>bin\Release\CliArgsParser.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" />
+        <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Serilog" Version="4.0.1" />
+        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+        <PackageReference Include="Serilog" Version="4.0.1"/>
     </ItemGroup>
 
 </Project>

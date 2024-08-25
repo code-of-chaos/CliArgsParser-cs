@@ -7,7 +7,6 @@ using CliArgsParser.Tests.Data.Fixture;
 using CliArgsParser.Tests.Data.Params;
 
 namespace CliArgsParser.Tests.Data.Commands;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -44,16 +43,15 @@ public class CommandAtlas(DataOutput data) {
         data.ArgsValue = args.Value;
         data.ArgsFlag = args.Flag;
     }
-    
+
     [Command("test-sync-other")]
     public void CallbackTestOtherSync() {
-        data.SomeOtherData = "something"; 
+        data.SomeOtherData = "something";
     }
-    
+
     [Command("test-async-other")]
     public async Task CallbackTestOtherAsync() {
         await Task.Delay(1);
-        data.SomeOtherData = "something-async"; 
+        data.SomeOtherData = "something-async";
     }
-    
 }

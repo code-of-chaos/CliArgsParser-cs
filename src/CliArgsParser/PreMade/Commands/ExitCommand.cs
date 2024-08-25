@@ -2,6 +2,7 @@
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
 using CliArgsParser.Attributes;
+using JetBrains.Annotations;
 
 namespace CliArgsParser.PreMade.Commands;
 // ---------------------------------------------------------------------------------------------------------------------
@@ -11,7 +12,8 @@ namespace CliArgsParser.PreMade.Commands;
 /// A standard atlas with commands that will exit your application.
 /// </summary>
 [CommandAtlas]
-public class ExitCommand() {
+[UsedImplicitly]
+public class ExitCommand {
     /// <summary>
     /// Represents a command that provides help information.
     /// </summary>
@@ -20,6 +22,7 @@ public class ExitCommand() {
     /// It prints out the available commands and their descriptions.
     /// </remarks>
     [Command("exit")]
+    [UsedImplicitly]
     public void CommmandHelp() {
         Environment.Exit(-1);
     }

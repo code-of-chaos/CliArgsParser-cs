@@ -12,15 +12,13 @@ using Serilog;
 using Serilog.Core;
 
 namespace CliArgsParser.PreMade.Parsers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 /// <summary>
 /// Abstract base class for parsers that parse command-line arguments.
 /// </summary>
-public abstract partial class AbstractParser(bool breakOnError) : IParser{
+public abstract partial class AbstractParser(bool breakOnError) : IParser {
     /// <summary>
     /// Represents a logger used by the CliArgsParser library.
     /// </summary>
@@ -29,8 +27,8 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// <summary>
     /// Dictionary that stores command records.
     /// </summary>
-    protected Dictionary<string, CommandRecord> CommandStructs = null!;
-    
+    private Dictionary<string, CommandRecord> CommandStructs { get; set; } = null!;
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -46,7 +44,7 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
         if (setup.HasAsyncCommands) {
             Log.Information("{type} created & populated with Async Commands. Use `TryParseAsync` methods.", GetType().Name);
         }
-        
+
         return this;
     }
 
@@ -55,14 +53,14 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// </summary>
     /// <param name="argsInput">The input string containing the command line arguments.</param>
     /// <returns>A dictionary representing the command line arguments, where the keys are the argument names and the values are the argument values.</returns>
-    protected Dictionary<string, string> GetArgs(string argsInput) {
+    protected static Dictionary<string, string> GetArgs(string argsInput) {
         return ArgsRegex()
             .Matches(argsInput)
             .Where(match => match.Success)
             .ToDictionary(
-                match => match.Groups[1].Value,
-                match => match.Groups[2].Success 
-                    ? match.Groups[2].Value.Trim('"') 
+                keySelector: match => match.Groups[1].Value,
+                elementSelector: match => match.Groups[2].Success
+                    ? match.Groups[2].Value.Trim('"')
                     : "True"
             );
     }
@@ -74,19 +72,19 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// <param name="commandName">When this method returns, contains the command name if it was successfully extracted; otherwise, contains null.</param>
     /// <param name="args">When this method returns, contains the command arguments if they were successfully extracted; otherwise, an empty dictionary.</param>
     /// <returns>true if the command and its arguments were successfully extracted from the input string; otherwise, false.</returns>
-    protected bool TryGetCommand(string input, [NotNullWhen(true)] out string? commandName, out Dictionary<string, string> args) {
+    protected static bool TryGetCommand(string input, [NotNullWhen(true)] out string? commandName, out Dictionary<string, string> args) {
         commandName = null;
         args = new Dictionary<string, string>();
-        
+
         string[] strings = input.Split(" ", 2);
-        
+
         if (strings.Length < 1) {
             return false;
         }
-        
+
         commandName = strings[0];
         if (strings.Length == 2) args = GetArgs(strings[1]);
-        
+
         return true;
     }
 
@@ -95,7 +93,7 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// </summary>
     /// <param name="input">The input string containing multiple commands.</param>
     /// <returns>An enumerable of individual commands.</returns>
-    protected IEnumerable<string> GetCommands(string input) {
+    protected static IEnumerable<string> GetCommands(string input) {
         return SplitCommands()
             .Split(input)
             .Select(s => s.Trim());
@@ -104,14 +102,14 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// <summary>
     /// Generates a regular expression for parsing command-line arguments.
     /// </summary>
-    [GeneratedRegex("""(?:--|-)(\w+)(?:=(".*?"|\S+))?""")]
-    protected static partial Regex ArgsRegex();
+    [GeneratedRegex("""(?:--|-)(\w+)(?:=(".*?"|\S+))?""")] 
+    private static partial Regex ArgsRegex();
 
     /// <summary>
     /// Splits the input into individual commands and trims any leading or trailing whitespace.
     /// </summary>
     [GeneratedRegex("""&&(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)""")]
-    protected static partial Regex SplitCommands();
+    private static partial Regex SplitCommands();
 
     /// <summary>
     /// Processes a command string by parsing the command, its arguments, and executing the corresponding delegate.
@@ -131,12 +129,13 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
 
             if (parameters != null && parameters.GetType() != typeof(NoArgs)) {
                 commandRecord.Delegate.DynamicInvoke(parameters);
-            } else {
+            }
+            else {
                 commandRecord.Delegate.DynamicInvoke();
             }
         }
-        
-        catch (Exception e){
+
+        catch (Exception e) {
             Log.Error(e, "Error occurred during command execution.");
             if (breakOnError) throw;
         }
@@ -167,21 +166,21 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
 
             Log.Debug("Found params : {@params}", parameters);
             Log.Debug("Params Type : {T}", parameters?.GetType());
-            
+
             switch (commandRecord.Delegate) {
                 case Func<Task> func when parameters is null or NoArgs:
                     Log.Debug("Invoking async delegate without parameters.");
-                    await func(); // For Async methods without parameters
+                    await func();// For Async methods without parameters
                     return;
 
                 case Action action when parameters is null or NoArgs:
                     Log.Debug("Invoking synchronous delegate without parameters.");
-                    action(); // For non-async methods without parameters
+                    action();// For non-async methods without parameters
                     return;
 
-                case { } del when commandRecord.IsAsync:
+                case {} del when commandRecord.IsAsync:
                     if (parameters == null) {
-                        throw new ArgumentNullException(nameof(parameters),"No parameters provided for async method that needs parameters");
+                        throw new ArgumentException("No parameters provided for async method that needs parameters");
                     }
 
                     Log.Debug("Invoking async delegate with parameters.");
@@ -189,26 +188,26 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
                     await task;
                     return;
 
-                case { } del:
+                case {} del:
                     if (parameters == null) {
-                        throw new ArgumentNullException(nameof(parameters),"No parameters provided for method that needs parameters");
+                        throw new ArgumentException("No parameters provided for method that needs parameters");
                     }
 
                     Log.Debug("Invoking synchronous delegate with parameters.");
-                    del.DynamicInvoke(parameters); // For non-async methods with parameters
+                    del.DynamicInvoke(parameters);// For non-async methods with parameters
                     return;
 
                 default:
                     throw new ConstraintException("Delegate could not be invoked");
             }
         }
-        
+
         catch (Exception e) {
             Log.Error(e, "Error occurred during command execution.");
             if (breakOnError) throw;
         }
     }
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Abstract Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -216,7 +215,7 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// Tries to parse the input string.
     /// </summary>
     /// <param name="input">The input string to be parsed.</param>
-    public abstract void TryParse(string input) ;
+    public abstract void TryParse(string input);
 
     /// <summary>
     /// Tries to parse the given input asynchronously.
@@ -224,5 +223,4 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser{
     /// <param name="input">The input string to parse.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public abstract Task TryParseAsync(string input);
-
 }

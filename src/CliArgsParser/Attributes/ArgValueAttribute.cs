@@ -5,7 +5,6 @@
 using CliArgsParser.Contracts.Attributes;
 
 namespace CliArgsParser.Attributes;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,5 +14,4 @@ namespace CliArgsParser.Attributes;
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 public class ArgValueAttribute(string shortName, string longName, string? description = null)
-    : ArgValue(shortName,longName, description);
-    
+    : ArgValue(shortName, longName, description);

@@ -5,7 +5,6 @@
 using CliArgsParser.Contracts.Attributes;
 
 namespace CliArgsParser.Attributes;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -18,4 +17,3 @@ namespace CliArgsParser.Attributes;
 [AttributeUsage(AttributeTargets.Property)]
 public class AutoArgValueAttribute(string longName, string? description = null)
     : ArgValue(string.Join("", longName.Split('-').Select(t => t.First())), longName, description);
-    

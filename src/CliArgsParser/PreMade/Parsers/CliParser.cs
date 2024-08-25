@@ -5,14 +5,13 @@
 using CliArgsParser.Contracts;
 
 namespace CliArgsParser.PreMade.Parsers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
 /// CliParser is a class that implements the IParser interface and provides methods for parsing command-line input.
 /// </summary>
-public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) , ICliParser {
+public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError), ICliParser {
     /// <summary>
     /// Parses continuous input from the command line and tries to parse each command string.
     /// </summary>
@@ -21,7 +20,7 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) 
     /// If the input is null or empty, the method continues to prompt for input.
     /// </remarks>
     public void TryParseContinuous() {
-        bool c = true; // this should be fixed
+        bool c = true;// this should be fixed
         while (c) {
             Console.Write("> ");
             string? input = Console.ReadLine();
@@ -30,7 +29,7 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) 
             c = true;
         }
     }
-    
+
     /// <summary>
     /// Parses continuous input from the command line and tries to parse each command string.
     /// </summary>
@@ -39,7 +38,7 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError) 
     /// If the input is null or empty, the method continues to prompt for input.
     /// </remarks>
     public async Task TryParseContinuousAsync() {
-        bool c = true; // this should be fixed
+        bool c = true;// this should be fixed
         while (c) {
             Console.Write("> ");
             string? input = Console.ReadLine();

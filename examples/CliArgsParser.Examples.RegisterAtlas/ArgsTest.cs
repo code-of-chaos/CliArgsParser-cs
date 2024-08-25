@@ -6,10 +6,9 @@ using CliArgsParser.Attributes;
 using CliArgsParser.Contracts;
 
 namespace CliArgsParser.Examples.RegisterAtlas;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class ArgsTest : IParameters {
-    [AutoArgValue("username")]public string Username { get; set; } = "undefined";
+    [AutoArgValue("username")] public string Username { get; set; } = "undefined";
 }

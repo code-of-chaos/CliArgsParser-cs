@@ -11,25 +11,24 @@ using Serilog;
 using Serilog.Core;
 
 namespace CliArgsParser;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 
 /// <inheritdoc />
 public class ParserConfiguration : IParserConfiguration {
-    private readonly LinkedList<object> _linkedAtlases = [];
-    
+    private readonly LinkedList<object> _atlasList = [];
+
     /// <inheritdoc />
     public ILogger Log { get; private set; } = Logger.None;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods - Registering
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /// <inheritdoc />
     public IParserConfiguration RegisterAtlas<T>() where T : notnull => RegisterAtlas(typeof(T));
-    
+
     /// <inheritdoc />
     public IParserConfiguration RegisterAtlas(Type t) {
         ConstructorInfo? loggerConstructor = t.GetConstructor([typeof(ILogger)]);
@@ -49,34 +48,32 @@ public class ParserConfiguration : IParserConfiguration {
         }
 
         return this;
-    } 
-    
+    }
+
     /// <inheritdoc />
     public IParserConfiguration RegisterAtlas(Assembly assembly) {
-        assembly.ExportedTypes
-            .Where(t => 
-                Attribute.IsDefined(t, typeof(CommandAtlasAttribute)) 
-            )
-            .ToList()
-            .ForEach(t => RegisterAtlas(t));
-   
+        foreach (Type type in assembly.ExportedTypes) {
+            if (Attribute.IsDefined(type, typeof(CommandAtlasAttribute)))
+                RegisterAtlas(type);
+        }
+
         return this;
     }
-    
+
     /// <inheritdoc />
     public IParserConfiguration RegisterAtlas<T>(T atlas) where T : notnull {
         CommandAtlasAttribute? attribute = atlas.GetType()
             .GetCustomAttributes(typeof(CommandAtlasAttribute), false)
             .OfType<CommandAtlasAttribute>()
             .FirstOrDefault();
-        
+
         if (attribute == null) {
             Type attributeType = typeof(CommandAtlasAttribute);
-            Log.Error("CliArgsParser : The object {atlas} did not have an attribute {attributeName}", atlas,attributeType);
+            Log.Error("CliArgsParser : The object {atlas} did not have an attribute {attributeName}", atlas, attributeType);
             throw new Exception($"The object {atlas} did not have an attribute {attributeType}");
         }
 
-        _linkedAtlases.AddLast(atlas);
+        _atlasList.AddLast(atlas);
         Log.Information("CliArgsParser : Registered CLI atlas {atlas}", atlas.GetType().Name);
 
         return this;
@@ -85,12 +82,12 @@ public class ParserConfiguration : IParserConfiguration {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods - extra
     // -----------------------------------------------------------------------------------------------------------------
-    
+
     /// <inheritdoc />
     public IParserConfiguration SetLogger(ILogger logger) {
         Log = logger;
         Log.Information("CliArgsParser : Set new Logger");
-        
+
         return this;
     }
 
@@ -100,30 +97,31 @@ public class ParserConfiguration : IParserConfiguration {
     private Dictionary<string, CommandRecord> AssembleDictionary(bool allowOverwrites = false) {
         var commandDictionary = new Dictionary<string, CommandRecord>();
 
-        _linkedAtlases
-            .Select(atlas => new {Object = atlas, Type =  atlas.GetType()})
+        IEnumerable<CommandRecord> atlasChain = _atlasList
+            .Select(atlas => new { Object = atlas, Type = atlas.GetType() })
             .SelectMany(o => o.Type
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
                 .Where(m => m.DeclaringType != typeof(object))
                 .Select(info => new CommandMethodInfo(info, o.Object, Log))
                 .Where(cm => cm.CommandAttribute != null)
                 .Select(cm => new CommandRecord(
-                    Name: cm.CommandAttribute!.Name,
-                    Description: cm.CommandAttribute!.Description,
-                    Delegate: cm.Delegate,
-                    ReturnType: cm.Info.ReturnType,
-                    IsAsync: cm.IsAsync,
-                    ParameterParser:cm.ParameterParser
-                )
-            ))
-            .ToList()
-            .ForEach(record => {
-                if (!commandDictionary.TryAdd(record.Name, record) && !allowOverwrites) {
-                    Log.Error("CliArgsParser : Command with name '{name}' already exists and overwriting is not allowed.", record.Name);
-                } else {
-                    Log.Information("CliArgsParser : Registered command {name} to atlas", record.Name);
-                }
-            });
+                        cm.CommandAttribute!.Name,
+                        cm.CommandAttribute!.Description,
+                        cm.Delegate,
+                        cm.Info.ReturnType,
+                        cm.IsAsync,
+                        cm.ParameterParser
+                    )
+                ));
+
+        foreach (CommandRecord record in atlasChain) {
+            if (!commandDictionary.TryAdd(record.Name, record) && !allowOverwrites) {
+                Log.Error("CliArgsParser : Command with name '{name}' already exists and overwriting is not allowed.", record.Name);
+            }
+            else {
+                Log.Information("CliArgsParser : Registered command {name} to atlas", record.Name);
+            }
+        }
 
         return commandDictionary;
     }
@@ -131,18 +129,16 @@ public class ParserConfiguration : IParserConfiguration {
     /// <inheritdoc />
     public ParserDto GetParserSetup(bool allowOverwrites = false) {
         Dictionary<string, CommandRecord> dictionary = AssembleDictionary(allowOverwrites);
-        
+
         return new ParserDto(
             Log,
             dictionary.Any(pair => pair.Value.IsAsync),
             dictionary
         );
-    } 
-    
-    /// <inheritdoc />
-    public IParser CreateArgsParser(bool allowOverwrites = false) {
-        return new ArgsParser().IngestFromSetup(GetParserSetup());
     }
+
+    /// <inheritdoc />
+    public IParser CreateArgsParser(bool allowOverwrites = false) => new ArgsParser().IngestFromSetup(GetParserSetup());
 
     /// <inheritdoc />
     public ICliParser CreateCliParser(bool allowOverwrites = false) {

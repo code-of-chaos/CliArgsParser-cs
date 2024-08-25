@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------------------------------------------------
 
 namespace CliArgsParser.PreMade.Parsers;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -22,7 +21,7 @@ public class ArgsParser(bool breakOnError = true) : AbstractParser(breakOnError)
         Log.Debug("Starting command parsing.");
 
         GetCommands(input).ToList().ForEach(ProcessCommandString);
-        
+
         Log.Debug("Finished command parsing.");
     }
 
@@ -36,6 +35,6 @@ public class ArgsParser(bool breakOnError = true) : AbstractParser(breakOnError)
 
         await Task.WhenAll(GetCommands(input).Select(ProcessCommandStringAsync));
 
-        Log.Debug("Finished async command parsing."); 
+        Log.Debug("Finished async command parsing.");
     }
 }
