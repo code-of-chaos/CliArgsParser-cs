@@ -105,12 +105,12 @@ public class ParserConfiguration : IParserConfiguration {
                 .Select(info => new CommandMethodInfo(info, o.atlas, Log))
                 .Where(cm => cm.CommandAttribute != null)
                 .Select(cm => new CommandRecord(
-                        cm.CommandAttribute!.Name,
-                        cm.CommandAttribute!.Description,
-                        cm.Delegate,
-                        cm.Info.ReturnType,
-                        cm.IsAsync,
-                        cm.ParameterParser
+                    cm.CommandAttribute!.Name,
+                    cm.CommandAttribute!.Description,
+                    cm.Delegate,
+                    cm.Info.ReturnType,
+                    cm.IsAsync,
+                    cm.ParameterParser 
                     )
                 ));
 
