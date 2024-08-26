@@ -98,11 +98,11 @@ public class ParserConfiguration : IParserConfiguration {
         var commandDictionary = new Dictionary<string, CommandRecord>();
 
         IEnumerable<CommandRecord> atlasChain = _atlasList
-            .Select(atlas => new { Object = atlas, Type = atlas.GetType() })
+            .Select(atlas => (atlas, Type: atlas.GetType()))
             .SelectMany(o => o.Type
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
                 .Where(m => m.DeclaringType != typeof(object))
-                .Select(info => new CommandMethodInfo(info, o.Object, Log))
+                .Select(info => new CommandMethodInfo(info, o.atlas, Log))
                 .Where(cm => cm.CommandAttribute != null)
                 .Select(cm => new CommandRecord(
                         cm.CommandAttribute!.Name,
@@ -117,8 +117,7 @@ public class ParserConfiguration : IParserConfiguration {
         foreach (CommandRecord record in atlasChain) {
             if (!commandDictionary.TryAdd(record.Name, record) && !allowOverwrites) {
                 Log.Error("CliArgsParser : Command with name '{name}' already exists and overwriting is not allowed.", record.Name);
-            }
-            else {
+            } else {
                 Log.Information("CliArgsParser : Registered command {name} to atlas", record.Name);
             }
         }

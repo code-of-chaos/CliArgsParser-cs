@@ -20,7 +20,7 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError),
     /// If the input is null or empty, the method continues to prompt for input.
     /// </remarks>
     public void TryParseContinuous() {
-        bool c = true;// this should be fixed
+        bool c = true;// this should be fixed // This is now permanent until the next refactor. Silly ducky!
         while (c) {
             Console.Write("> ");
             string? input = Console.ReadLine();
@@ -52,16 +52,14 @@ public class CliParser(bool breakOnError = true) : AbstractParser(breakOnError),
     /// Tries to parse the input string.
     /// </summary>
     /// <param name="input">The input string to parse.</param>
-    public override void TryParse(string input) {
+    public override void TryParse(string input) => 
         GetCommands(input).ToList().ForEach(ProcessCommandString);
-    }
 
     /// <summary>
     /// Tries to parse the input asynchronously.
     /// </summary>
     /// <param name="input">The input string to parse.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public override async Task TryParseAsync(string input) {
+    public override async Task TryParseAsync(string input) => 
         await Task.WhenAll(GetCommands(input).Select(ProcessCommandStringAsync));
-    }
 }

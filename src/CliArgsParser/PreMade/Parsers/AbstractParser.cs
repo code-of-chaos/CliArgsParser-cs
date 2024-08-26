@@ -78,9 +78,7 @@ public abstract partial class AbstractParser(bool breakOnError) : IParser {
 
         string[] strings = input.Split(" ", 2);
 
-        if (strings.Length < 1) {
-            return false;
-        }
+        if (strings.Length < 1) return false;
 
         commandName = strings[0];
         if (strings.Length == 2) args = GetArgs(strings[1]);

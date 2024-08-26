@@ -44,10 +44,7 @@ public class ParameterParser : IParameterParser {
 
     /// <inheritdoc />
     public IParameters? Parse(Dictionary<string, string> args) {
-        var result = (IParameters?)Activator.CreateInstance(ParamsType);
-        if (result == null) {
-            return null;
-        }
+        if (Activator.CreateInstance(ParamsType) is not IParameters result) return null;
 
         foreach ((string key, string value) in args) {
             if (_valueProperties.TryGetValue(key, out PropertyInfo? optionProp)) {
