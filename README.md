@@ -17,7 +17,8 @@ Argument mapping is further simplified through the use of the `ArgValue` and `Ar
 Yet you are not required to have a `IServiceCollection`, by using the `CliParser.CreateStandalone()` or `ArgsParser.CreateStandalone()` methods.
 
 ## Quick Start
-The following is a basic example on how to get started with CLIArgsParser:
+The following section is a basic example on how to get started with CLIArgsParser.
+For in-code examples, they can be found in the repo under examples : https://github.com/code-of-chaos/CliArgsParser-cs/tree/core/examples
 
 ### Dependency Injected approach
 ```csharp

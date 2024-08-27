@@ -1,7 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Example.ArgsStandalone;
+using CliArgsParser.ExampleData;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CliArgsParser.ExampleCli;
