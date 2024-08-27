@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0"/>
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
         <PackageReference Include="xunit" Version="2.9.0"/>
@@ -25,7 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\CliArgsParser\CliArgsParser.csproj"/>
+      <ProjectReference Include="..\..\src\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" />
+      <ProjectReference Include="..\..\src\CliArgsParser\CliArgsParser.csproj" />
     </ItemGroup>
 
 </Project>

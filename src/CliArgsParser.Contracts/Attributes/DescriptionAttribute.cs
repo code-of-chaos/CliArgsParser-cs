@@ -1,14 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics.CodeAnalysis;
-
-namespace CliArgsParser.Contracts;
+namespace CliArgsParser.Contracts.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Property)]
+public class DescriptionAttribute(string description) : Attribute {
+    public string Description { get; } = description;
 }

@@ -11,8 +11,7 @@ namespace CliArgsParser.Tests.Data.Commands;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 [SuppressMessage("ReSharper", "UnusedMember.Global")]
-[CommandAtlas]
-public class CommandAtlas(DataOutput data) {
+public class CommandAtlas(DataOutput data) : ICommandAtlas {
     [Command("test-sync")]
     public void CallbackTestSync() {
         data.SomeData = "defined";

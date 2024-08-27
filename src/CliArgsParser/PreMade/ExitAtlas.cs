@@ -1,14 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using CliArgsParser.Contracts;
+using CliArgsParser.Contracts.Attributes;
 
-using System.Diagnostics.CodeAnalysis;
+namespace CliArgsParser.PreMade;
 
-namespace CliArgsParser.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
+public class ExitAtlas(ICliParser parser) : ICommandAtlas {
+    [Command("exit")]
+    [Description("Exits the CLI application.")]
+    public void CommandExit() {
+        parser.IsAlive = false;
+    }
 }

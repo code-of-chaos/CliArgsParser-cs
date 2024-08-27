@@ -1,46 +1,36 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Tests.Data.Commands;
+using CliArgsParser.Contracts;
+using CliArgsParser.Contracts.Types;
 using Microsoft.Extensions.DependencyInjection;
-using static System.GC;
 
-namespace CliArgsParser.Tests.Data.Fixture;
+namespace CliArgsParser.ExampleCli;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ArgsParserFixture : IDisposable {
-    public DataOutput DataOutput { get; private set; }
-    public IArgsParser Parser { get; }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    public ArgsParserFixture() {
-        DataOutput = new DataOutput();
+internal static class Program {
+    public async static Task Main(string[] args) {
         IServiceCollection serviceCollection = new ServiceCollection();
-        
-        serviceCollection.AddSingleton(DataOutput);
-        
+
         serviceCollection.AddCliArgsParser(configuration =>
             configuration
                 .SetConfig(new CliArgsParserConfig(
                     overridable: true,
                     generateShortNames: true
                 ))
-                .AddFromType<CommandAtlas>()
+                .AddFromType<HelloAtlas>()
         );
         
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
-        Parser =  provider.GetRequiredService<IArgsParser>();
-    }
+        // var parser =  provider.GetRequiredService<IArgsParser>();
 
-    public void Dispose() {
-        DataOutput = new DataOutput();
-        SuppressFinalize(this);
-    }
-
-    public void ResetData() {
-        DataOutput = new DataOutput();
+        // await parser.ParseAsync("hello-args --username=Andreas");
+        // await parser.ParseAsync("help");
+        // await parser.ParseAsync("""help --name="hello-args" """);
+        // await parser.ParseAsync("help --expand");
+        
+        var cliParser =  provider.GetRequiredService<ICliParser>();
+        await cliParser.StartParsingAsync();
     }
 }

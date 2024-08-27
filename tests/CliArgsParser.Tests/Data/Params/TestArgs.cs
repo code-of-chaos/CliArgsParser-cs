@@ -6,6 +6,6 @@ namespace CliArgsParser.Tests.Data.Params;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 public class TestArgs : IParameters {
-    [AutoArgValue("value")] public string? Value { get; set; } = null;
-    [AutoArgFlag("flag")] public bool Flag { get; set; } = false;
+    [ArgValue("value")] public string? Value { get; set; } = null;
+    [ArgFlag("flag")] public bool Flag { get; set; } = false;
 }

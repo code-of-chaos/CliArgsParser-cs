@@ -1,14 +1,19 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics.CodeAnalysis;
+using CliArgsParser.Contracts.Types;
+using System.Collections.Immutable;
 
 namespace CliArgsParser.Contracts;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
+public interface ICliArgsParser {
+    ImmutableDictionary<Type, IParameterParser> parameterParsers { get; }
+    CliArgsParserConfig Config { get; }
+    ImmutableDictionary<string, CommandMethodInfo> Commands { get; }
+    
+    void Execute(string commandString);
+    Task ExecuteAsync(string commandString);
 }

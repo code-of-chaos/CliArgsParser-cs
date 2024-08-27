@@ -1,14 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics.CodeAnalysis;
+using CliArgsParser.Contracts.Types;
+using System.Reflection;
 
 namespace CliArgsParser.Contracts;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
+public interface ICliArgsParserConfiguration {
+    ICliArgsParserConfiguration SetConfig(CliArgsParserConfig config);
+    
+    ICliArgsParserConfiguration AddFromAssembly(Assembly assembly);
+    ICliArgsParserConfiguration AddFromType<T>() where T : ICommandAtlas;
 }

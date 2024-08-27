@@ -17,12 +17,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj"/>
+      <ProjectReference Include="..\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
-        <PackageReference Include="Serilog" Version="4.0.1"/>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     </ItemGroup>
 
 </Project>

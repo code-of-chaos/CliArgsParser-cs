@@ -1,14 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using CliArgsParser.Contracts;
+using CliArgsParser.Contracts.Attributes;
 
-using System.Diagnostics.CodeAnalysis;
+namespace CliArgsParser.PreMade;
 
-namespace CliArgsParser.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
+public class HelpArgs : IParameters {
+    [ArgValue("name"), Description("The specific command to get help for")] public string Name { get; set; } = string.Empty;
+    [ArgFlag("expand"), Description("Returns a full list of all commands and their arguments")] public bool Expand { get; set; } = false;
 }

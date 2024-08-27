@@ -1,14 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics.CodeAnalysis;
-
-namespace CliArgsParser.Contracts;
+namespace CliArgsParser.Contracts.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
-}
+/// <summary>
+/// Attribute used to mark a class as a command atlas.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public class CommandAtlasAttribute : Attribute;

@@ -1,14 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics.CodeAnalysis;
-
-namespace CliArgsParser.Contracts;
+namespace CliArgsParser.Contracts.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
-}
+/// <summary>
+/// Internally used by CliArgsParser to assign to methods which do not take in any special arguments.
+/// </summary>
+public class NoArgs : IParameters;

@@ -1,61 +1,54 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using System.Reflection;
 using CliArgsParser.Contracts;
 using CliArgsParser.Contracts.Attributes;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <inheritdoc />
-public class ParameterParser : IParameterParser {
-    private readonly Dictionary<string, PropertyInfo> _valueProperties = new();
-    private readonly Dictionary<string, PropertyInfo> _flagProperties = new();
-
-    /// <inheritdoc />
-    public Type ParamsType { get; }
+public class ParameterParser(Type type, IServiceProvider provider) : IParameterParser {
+    private readonly ImmutableDictionary<string, PropertyInfo> _valueProperties = AssembleDict<ArgValueAttribute>(type);
+    private readonly ImmutableDictionary<string, PropertyInfo> _flagProperties = AssembleDict<ArgFlagAttribute>(type);
+    public Type ParamsType { get; } = type;
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
-    /// <summary>
-    /// Represents a parameter parser that is responsible for parsing command-line arguments into parameters.
-    /// </summary>
-    public ParameterParser(Type type) {
-        ParamsType = type;
-        PropertyInfo[] propertyInfos = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        foreach (PropertyInfo? prop in propertyInfos) {
-            var valueAttr = prop.GetCustomAttribute<ArgValue>();
-            var flagAttr = prop.GetCustomAttribute<ArgFlag>();
-
-            if (valueAttr != null) {
-                _valueProperties[valueAttr.ShortName] = prop;
-                _valueProperties[valueAttr.LongName] = prop;
-            }
-            else if (flagAttr != null) {
-                _flagProperties[flagAttr.ShortName] = prop;
-                _flagProperties[flagAttr.LongName] = prop;
-            }
-        }
+    private static ImmutableDictionary<string, PropertyInfo> AssembleDict<TAttribute>(Type type) where TAttribute : Attribute, IAttributeWithName {
+        return new Dictionary<string, PropertyInfo>(
+            type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .SelectMany(info => info.GetCustomAttributes<TAttribute>().Select(attribute => (info, Attribute:attribute )))
+                .SelectMany<(PropertyInfo info, TAttribute Attribute), KeyValuePair<string, PropertyInfo>>(tuple =>  [
+                    new KeyValuePair<string, PropertyInfo>(tuple.Attribute.Name, tuple.info),
+                    new KeyValuePair<string, PropertyInfo>(tuple.Attribute.ShortName ?? tuple.Attribute!.Name[0].ToString(), tuple.info)
+                ])
+        ).ToImmutableDictionary();
     }
-
-    /// <inheritdoc />
-    public IParameters? Parse(Dictionary<string, string> args) {
-        if (Activator.CreateInstance(ParamsType) is not IParameters result) return null;
-
+    
+    public bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters) {
+        parameters = null;
+        if (provider.GetService(ParamsType) is not IParameters result) return false;
+        
         foreach ((string key, string value) in args) {
             if (_valueProperties.TryGetValue(key, out PropertyInfo? optionProp)) {
                 object v = Convert.ChangeType(value, optionProp.PropertyType);// cast to the correct type of the param
                 optionProp.SetValue(result, v);
             }
             else if (_flagProperties.TryGetValue(key, out PropertyInfo? flagProp)) {
-                flagProp.SetValue(result, true);
+                // Tries and parses the value, defaults to "true" value
+                if (string.IsNullOrEmpty(value)) flagProp.SetValue(result, true); // Default is that no flag value is set, so is presumed 
+                else if (bool.TryParse(value, out bool v)) flagProp.SetValue(result, v);
+                else flagProp.SetValue(result, true);
             }
         }
 
-        return result;
+        parameters = result;
+        return true;
     }
 }

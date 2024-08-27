@@ -1,14 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
-using System.Diagnostics.CodeAnalysis;
-
 namespace CliArgsParser.Contracts;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface IParameterParser {
-    Type ParamsType { get; }
-    bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters);
+public interface IArgsParser {
+    void Parse(string input);
+    void Parse(string[] input);
+    Task ParseAsync(string input);
+    Task ParseAsync(string[] input);
 }
