@@ -4,7 +4,7 @@
 using CliArgsParser.ExampleData;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CliArgsParser.ExampleArgs;
+namespace CliArgsParser.Example.Args;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------

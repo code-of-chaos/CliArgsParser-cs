@@ -1,7 +1,14 @@
 # CLIArgsParser
+![NuGet Downloads](https://img.shields.io/nuget/dt/CliArgsParser)
+![NuGet Version](https://img.shields.io/nuget/v/CliArgsParser?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FCliArgsParser)
+
 CLIArgsParser is a library built around Dependency Injection to allow you to create CLI tools with ease.
 This is particularly useful in scenarios where your application requires a large amount of commands,
 with specific arguments.
+
+```shell
+dotnet add package CliArgsParser --version 2.1.1
+```
 
 ## Features
 Here are the key features of CLI Args Parser:
@@ -15,6 +22,13 @@ Properties of a class implementing the ICommandParameters interface can be used 
 Argument mapping is further simplified through the use of the `ArgValue` and `ArgFlag` attributes which takes the argument name as a parameter.
 - **Dependency Injection approach**: The library is built around using DI in your workflow. `ICommandAtlas` classes allow constructors to fully utilize dependency injection.
 Yet you are not required to have a `IServiceCollection`, by using the `CliParser.CreateStandalone()` or `ArgsParser.CreateStandalone()` methods.
+
+## F.A.Q:
+
+> **"I tried to create a atlas with async commands, but they did not execute when called"**
+> 
+> This is due to the parser trying to execute the commands as non-async, because the parser was most likely called without using the async methods.
+> To resolve this, always run the parsers through their async methods.
 
 ## Quick Start
 The following section is a basic example on how to get started with CLIArgsParser.

@@ -14,11 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser", "src\CliArg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Contracts", "src\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj", "{0AD6E125-4B15-477E-B65F-0470122CB980}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.ExampleCli", "examples\CliArgsParser.ExampleCli\CliArgsParser.ExampleCli.csproj", "{B4E82BDD-8DC3-4395-995E-F4752693A098}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Example.Cli", "examples\CliArgsParser.Example.Cli\CliArgsParser.Example.Cli.csproj", "{B4E82BDD-8DC3-4395-995E-F4752693A098}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.ExampleCliStandalone", "examples\CliArgsParser.ExampleCliStandalone\CliArgsParser.ExampleCliStandalone.csproj", "{5E89B075-0DAC-4BBC-9F59-069D17804824}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Example.CliStandalone", "examples\CliArgsParser.Example.CliStandalone\CliArgsParser.Example.CliStandalone.csproj", "{5E89B075-0DAC-4BBC-9F59-069D17804824}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.ExampleArgs", "examples\CliArgsParser.ExampleArgs\CliArgsParser.ExampleArgs.csproj", "{F288A90D-5C5D-4415-BF89-9B85D111E510}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Example.Args", "examples\CliArgsParser.Example.Args\CliArgsParser.Example.Args.csproj", "{F288A90D-5C5D-4415-BF89-9B85D111E510}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Example.ArgsStandalone", "examples\CliArgsParser.Example.ArgsStandalone\CliArgsParser.Example.ArgsStandalone.csproj", "{A89D22B4-2CD1-487C-8834-FC2457CEF94E}"
 EndProject
