@@ -1,9 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Contracts;
-using CliArgsParser.Contracts.Attributes;
-using CliArgsParser.Contracts.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Immutable;
 using System.Data;

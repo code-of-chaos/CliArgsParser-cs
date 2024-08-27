@@ -1,13 +1,12 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Contracts;
-using CliArgsParser.Contracts.Attributes;
-using CliArgsParser.Contracts.Types;
 using System.Reflection;
 using System.Text;
 
-namespace CliArgsParser.PreMade;
+// ReSharper disable CheckNamespace
+namespace CliArgsParser;
+// ReSharper restore CheckNamespace
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code

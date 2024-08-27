@@ -1,10 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CliArgsParser.Parsers;
+// ReSharper disable CheckNamespace
+namespace CliArgsParser;
+// ReSharper restore CheckNamespace
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -25,7 +26,12 @@ public class CliParser(ICliArgsParser cliArgsParser) : ICliParser {
             if (string.IsNullOrEmpty(input)) continue;
 
             foreach (string commandString in RegexLib.SplitCommands.Split(input).Select(c => c.Trim())) {
-                cliArgsParser.Execute(commandString);
+                try {
+                    cliArgsParser.Execute(commandString);
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
     }
@@ -38,7 +44,12 @@ public class CliParser(ICliArgsParser cliArgsParser) : ICliParser {
             if (string.IsNullOrEmpty(input)) continue;
             
             foreach (string commandString in RegexLib.SplitCommands.Split(input).Select(c => c.Trim())) {
-                await cliArgsParser.ExecuteAsync(commandString);
+                try {
+                    await cliArgsParser.ExecuteAsync(commandString);
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
     }
@@ -50,12 +61,12 @@ public class CliParser(ICliArgsParser cliArgsParser) : ICliParser {
     /// </summary>
     /// <param name="action">An <see cref="Action{ICliArgsParserConfiguration}"/> that configures the <see cref="ICliArgsParser"/>.</param>
     /// <returns>An instance of the standalone CLI parser</returns>
-    public static IArgsParser CreateStandalone(Action<ICliArgsParserConfiguration> action) {
+    public static ICliParser CreateStandalone(Action<ICliArgsParserConfiguration> action) {
         ServiceProvider provider = new ServiceCollection()
             .AddCliParser(action)
             .BuildServiceProvider();
 
-        return provider.GetRequiredService<IArgsParser>();
+        return provider.GetRequiredService<ICliParser>();
     }
     #endregion
 }

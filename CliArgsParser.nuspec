@@ -2,21 +2,19 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>CliArgsParser</id>
-    <version>1.1.3</version>
-    <authors>AndreasSasDev</authors>
+    <version>2.0.0</version>
+    <authors>AndreasSasDev</authors> 
     <owners></owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">GPL-3.0-or-later</license>
     <readme>README.md</readme>
     <projectUrl>https://github.com/code-of-chaos/CliArgsParser-cs</projectUrl>
     <iconUrl>https://avatars.githubusercontent.com/u/102103683?s=400&amp;u=b0dc0cb37882f73ef59b0ed9fd11ee9de5213d0f&amp;v=4</iconUrl>
-    <description>Effortlessly craft CLI tools or streamline the parsing of program arguments</description>
+    <description>CLIArgsParser is a library built around Dependency Injection to allow you to create CLI tools with ease</description>
     <repository type="git" url="https://github.com/code-of-chaos/CliArgsParser-cs" commit="029b54dbd0db0cbcc54be8d18436e748d30d2f06" />
     <dependencies>
       <group targetFramework="net8.0">
-        <dependency id="Serilog" version="4.0.0" />
-        <dependency id="Serilog.Sinks.Console" version="5.0.1" />
-        <dependency id="JetBrains.Annotations" version="2023.3.0"/>
+        <dependency id="Microsoft.Extensions.DependencyInjection" version="8.0.0"/>
       </group>
     </dependencies>
   </metadata>

@@ -1,10 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Contracts.Attributes;
 using System.Reflection;
 
-namespace CliArgsParser.Contracts.Types;
+// ReSharper disable CheckNamespace
+namespace CliArgsParser;
+// ReSharper restore CheckNamespace
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ------------------------------------------------------------------------------------------------------------------
@@ -51,7 +52,7 @@ public readonly record struct CommandMethodInfo(
     /// Creates the delegate associated with the given method.
     /// </summary>
     /// <param name="info">The <see cref="MethodInfo"/> of the method.</param>
-    /// <param name="attribute">The <see cref="Attributes.CommandAttribute"/> of the method.</param>
+    /// <param name="attribute">The <see cref="CommandAttribute"/> of the method.</param>
     /// <param name="atlas">The object that contains the method.</param>
     /// <returns>The <see cref="System.Delegate"/> associated with the method.</returns>
     private static Delegate GetDelegate(MethodInfo info, CommandAttribute attribute, object atlas) {

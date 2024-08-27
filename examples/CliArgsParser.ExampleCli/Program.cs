@@ -1,8 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParser.Contracts;
-using CliArgsParser.Contracts.Types;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CliArgsParser.ExampleCli;
@@ -11,6 +9,15 @@ namespace CliArgsParser.ExampleCli;
 // ---------------------------------------------------------------------------------------------------------------------
 internal static class Program {
     public async static Task Main(string[] args) {
+        ICliParser parser = CliParser.CreateStandalone(
+            configuration =>
+                configuration
+                    .SetConfig(new CliArgsParserConfig(
+                        overridable: true,
+                        generateShortNames: true
+                    ))
+                    .AddFromType<HelloAtlas>()
+        );
         IServiceCollection serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCliArgsParser(configuration =>
