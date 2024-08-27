@@ -15,8 +15,6 @@ public static class ServiceCollectionExtension {
         
         action(configuration);
         
-        services.AddSingleton<CliArgsParserFactory>();
-        
         // ReSharper disable once RedundantTypeArgumentsOfMethod
         services.AddSingleton<CliArgsParser>(ImplementationFactory);
         services.AddSingleton<ICliArgsParser>(ImplementationFactory);
@@ -31,8 +29,7 @@ public static class ServiceCollectionExtension {
             services.AddTransient(configCommandParameterType);
 
         return services;
-        
-        CliArgsParser ImplementationFactory(IServiceProvider provider) =>
-            CliArgsParserFactory.BuildCliArgsParser(provider, configuration.Config);
+
+        CliArgsParser ImplementationFactory(IServiceProvider provider) => new(provider, configuration.Config);
     }
 }

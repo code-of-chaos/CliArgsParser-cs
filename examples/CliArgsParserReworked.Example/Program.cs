@@ -9,7 +9,7 @@ namespace CliArgsParserReworked.Example;
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 internal static class Program {
-    public static void Main(string[] args) {
+    public async static Task Main(string[] args) {
         IServiceCollection serviceCollection = new ServiceCollection();
 
         serviceCollection.AddCliArgsParser(configuration =>
@@ -18,13 +18,17 @@ internal static class Program {
                     overridable: true,
                     generateShortNames: true
                 ))
+                .AddFromType<HelpAtlas>()
                 .AddFromType<HelloAtlas>()
         );
         
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
         var parser =  provider.GetRequiredService<CliArgsParser>();
 
-        parser.Execute(["hello"]);
-        parser.Execute(["test-args"]);
+        await parser.ExecuteAsync(string.Join(" ", ["hello-args", "--username=Andreas"]));
+        await parser.ExecuteAsync(string.Join(" ", ["help"]));
+        await parser.ExecuteAsync(string.Join(" ", ["help", """--name="hello-args" """]));
+        await parser.ExecuteAsync(string.Join(" ", ["help", "--expand"]));
+        // parser.Execute(["hello-args", "--username=Andreas"]);
     }
 }

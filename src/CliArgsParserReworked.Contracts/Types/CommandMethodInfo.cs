@@ -8,12 +8,17 @@ namespace CliArgsParserReworked.Contracts.Types;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ------------------------------------------------------------------------------------------------------------------
-public readonly record struct CommandMethodInfo(MethodInfo info, CommandAttribute attribute, ICommandAtlas atlas) {
-    public readonly MethodInfo Info = info;
-    public readonly CommandAttribute CommandAttribute = attribute;
+public record CommandMethodInfo(
+    MethodInfo Info, 
+    CommandAttribute CommandAttribute, 
+    ICommandAtlas CommandAtlas, 
+    DescriptionAttribute? DescriptionAttribute = null
+) {
+    public readonly DescriptionAttribute? DescriptionAttribute = DescriptionAttribute;
+    public readonly Type ParameterType = CommandAttribute.ArgsType;
 
-    public readonly bool IsAsync = GetIsAsync(info);
-    public readonly Delegate Delegate = GetDelegate(info, attribute, atlas);
+    public readonly bool IsAsync = GetIsAsync(Info);
+    public readonly Delegate Delegate = GetDelegate(Info, CommandAttribute, CommandAtlas);
 
     // -----------------------------------------------------------------------------------------------------------------
     // Methods

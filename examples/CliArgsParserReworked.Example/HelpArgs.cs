@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+using CliArgsParserReworked.Contracts;
+using CliArgsParserReworked.Contracts.Attributes;
+
+namespace CliArgsParserReworked.Example;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <summary>
-/// Represents an argument attribute.
-/// </summary>
-public interface IArgAttribute {
-    /// <summary>
-    /// Gets the short name of the command line argument.
-    /// </summary>
-    public string ShortName { get; } /// <summary>
-    /// Gets the long name of the argument attribute.
-    /// </summary>
-    public string LongName { get; }
+public class HelpArgs : IParameters {
+    [ArgValue("name"), Description("The specific command to get help for")] public string Name { get; set; } = string.Empty;
+    [ArgFlag("expand"), Description("Returns a full list of all commands and their arguments")] public bool Expand { get; set; } = false;
 }

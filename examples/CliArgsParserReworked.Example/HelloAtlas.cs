@@ -20,12 +20,12 @@ public class HelloAtlas : ICommandAtlas {
         Console.WriteLine("IT WORKS! in ASYNC");
     }
 
-    [Command<ArgsTest>("hello-test")]
+    [Command<ArgsTest>("hello-args")]
     public void CommandTestArgs(ArgsTest argsTest) {
         Console.WriteLine($"IT WORKS! & with args : {argsTest.Username}");
     }
 
-    [Command<ArgsTest>("hello-test-async")]
+    [Command<ArgsTest>("hello-args-async")]
     public async Task CommandTestArgsAsync(ArgsTest argsTest) {
         await Task.Delay(100);
         Console.WriteLine($"IT WORKS! in ASYNC & with args : {argsTest.Username}");

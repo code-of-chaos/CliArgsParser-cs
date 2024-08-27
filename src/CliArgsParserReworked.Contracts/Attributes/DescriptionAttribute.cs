@@ -1,19 +1,11 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts.Attributes;
+namespace CliArgsParserReworked.Contracts.Attributes;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-/// <summary>
-/// Represents an argument attribute.
-/// </summary>
-public interface IArgAttribute {
-    /// <summary>
-    /// Gets the short name of the command line argument.
-    /// </summary>
-    public string ShortName { get; } /// <summary>
-    /// Gets the long name of the argument attribute.
-    /// </summary>
-    public string LongName { get; }
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Property)]
+public class DescriptionAttribute(string description) : Attribute {
+    public string Description { get; } = description;
 }
