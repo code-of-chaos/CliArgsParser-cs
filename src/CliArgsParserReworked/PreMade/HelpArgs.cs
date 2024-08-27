@@ -1,19 +1,15 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParserReworked.Contracts.Types;
-using System.Collections.Immutable;
+using CliArgsParserReworked.Contracts;
+using CliArgsParserReworked.Contracts.Attributes;
 
-namespace CliArgsParserReworked.Contracts;
+namespace CliArgsParserReworked.PreMade;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliArgsParser {
-    ImmutableDictionary<Type, IParameterParser> parameterParsers { get; }
-    CliArgsParserConfig Config { get; }
-    ImmutableDictionary<string, CommandMethodInfo> Commands { get; }
-    
-    void Execute(string commandString);
-    Task ExecuteAsync(string commandString);
+public class HelpArgs : IParameters {
+    [ArgValue("name"), Description("The specific command to get help for")] public string Name { get; set; } = string.Empty;
+    [ArgFlag("expand"), Description("Returns a full list of all commands and their arguments")] public bool Expand { get; set; } = false;
 }

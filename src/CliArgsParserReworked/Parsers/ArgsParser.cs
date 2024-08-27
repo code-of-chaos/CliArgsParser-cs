@@ -1,19 +1,17 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParserReworked.Contracts.Types;
-using System.Collections.Immutable;
+using CliArgsParserReworked.Contracts;
 
-namespace CliArgsParserReworked.Contracts;
+namespace CliArgsParserReworked.Parsers;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliArgsParser {
-    ImmutableDictionary<Type, IParameterParser> parameterParsers { get; }
-    CliArgsParserConfig Config { get; }
-    ImmutableDictionary<string, CommandMethodInfo> Commands { get; }
+public class ArgsParser(ICliArgsParser cliArgsParser) : IArgsParser {
+    public void Parse(string[] input) => Parse(string.Join(" ", input));
+    public void Parse(string input) => cliArgsParser.Execute(input);
     
-    void Execute(string commandString);
-    Task ExecuteAsync(string commandString);
+    public Task ParseAsync(string[] input) => ParseAsync(string.Join(" ", input));
+    public Task ParseAsync(string input) => cliArgsParser.ExecuteAsync(input);
 }

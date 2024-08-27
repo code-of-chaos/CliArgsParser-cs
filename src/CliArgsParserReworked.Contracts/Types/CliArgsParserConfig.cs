@@ -13,5 +13,6 @@ public readonly struct CliArgsParserConfig(bool overridable = false, bool genera
     public HashSet<Type> CommandParameterTypes { get; } = [];
     public bool Overridable { get; } = overridable;
     public bool GenerateShortNames { get; } = generateShortNames;
-    public ServiceLifetime AtlasesServiceLifetimes { get; } = ServiceLifetime.Transient;
+    public ServiceLifetime AtlasesServiceLifetime { get; } = ServiceLifetime.Transient;
+    public string CliCursor { get; } = "> : ";
 }

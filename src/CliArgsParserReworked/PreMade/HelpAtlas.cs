@@ -7,7 +7,7 @@ using CliArgsParserReworked.Contracts.Types;
 using System.Reflection;
 using System.Text;
 
-namespace CliArgsParserReworked.Example;
+namespace CliArgsParserReworked.PreMade;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
@@ -23,7 +23,6 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
     
     private void PrintCommandArguments(string commandName) {
         var sb = new StringBuilder();
-        
         
         foreach ((string namedArg, string description) in GetCommandArguments(commandName)) {
             sb.AppendLine($"- {namedArg} : {description}");

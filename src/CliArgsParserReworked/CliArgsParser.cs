@@ -25,10 +25,10 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
 
     private ImmutableDictionary<string, CommandMethodInfo>? _commands;
     public ImmutableDictionary<string, CommandMethodInfo> Commands => _commands ??= GetCommandsMap(provider, Config);
+    
     // -----------------------------------------------------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------------------------------------------------
-    
     #region Constructor Logic
     private static ImmutableDictionary<Type, IParameterParser> GetParameterParsersMap(IServiceProvider provider, CliArgsParserConfig configuration) {
         return  new Dictionary<Type,IParameterParser>(
@@ -38,7 +38,7 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
         ).ToImmutableDictionary();
     }
 
-    public static ImmutableDictionary<string, CommandMethodInfo> GetCommandsMap(IServiceProvider provider, CliArgsParserConfig configuration) {
+    private static ImmutableDictionary<string, CommandMethodInfo> GetCommandsMap(IServiceProvider provider, CliArgsParserConfig configuration) {
         Dictionary<string, int> duplicateNameCache = new();
         Dictionary<string, CommandMethodInfo> commands = new();
 
@@ -81,8 +81,7 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
             // Assemble the command dictionary and append numbers to duplicates
             foreach ((string name, CommandMethodInfo info) in enumerable) {
                 string suffix = string.Empty;
-                int count;
-                if (duplicateNameCache.TryGetValue(name, out count)) {
+                if (duplicateNameCache.TryGetValue(name, out int count)) {
                     suffix = count.ToString();
                     duplicateNameCache[name] = count + 1;
                 }
@@ -98,10 +97,7 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
         return commands.ToImmutableDictionary();
     }
     #endregion
-    // -----------------------------------------------------------------------------------------------------------------
-    // Methods
-    // -----------------------------------------------------------------------------------------------------------------
-    
+    #region Command Extraction Logic
     private static bool TryGetCommand(string input, [NotNullWhen(true)] out string? commandName, out Dictionary<string, string> args) {
         commandName = null;
         args = new Dictionary<string, string>();
@@ -127,9 +123,8 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
                     : "True"
             );
     }
-    
-    public async Task ExecuteAsync(string commandString) {
-        if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string>? args))
+    private (CommandMethodInfo, IParameters) CommandMethodInfo(string commandString) {
+        if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string> args))
             throw new ArgumentException("Invalid command structure");
 
         if (!Commands.TryGetValue(commandName, out CommandMethodInfo? commandMethodInfo)) 
@@ -138,7 +133,24 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
         if (!parameterParsers.TryGetValue(commandMethodInfo.ParameterType, out IParameterParser? parser)
             || !parser.TryParse(args, out IParameters? parameters)
         ) throw new ArgumentException("Invalid command parameter type");
+        return (commandMethodInfo, parameters);
+    }
+    #endregion
+    // -----------------------------------------------------------------------------------------------------------------
+    // Methods
+    // -----------------------------------------------------------------------------------------------------------------
+    public void Execute(string commandString) {
+        (CommandMethodInfo? commandMethodInfo, IParameters? parameters) = CommandMethodInfo(commandString);
 
+        if (parameters.GetType() != typeof(NoArgs)) {
+            commandMethodInfo.Delegate.DynamicInvoke(parameters);
+        } else {
+            commandMethodInfo.Delegate.DynamicInvoke();
+        }
+    }
+
+    public async Task ExecuteAsync(string commandString) {
+        (CommandMethodInfo? commandMethodInfo, IParameters? parameters) = CommandMethodInfo(commandString);
 
         switch (commandMethodInfo.Delegate) {
             case Func<Task> func when parameters is null or NoArgs:

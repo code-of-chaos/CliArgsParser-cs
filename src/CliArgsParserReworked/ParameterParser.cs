@@ -28,12 +28,7 @@ public class ParameterParser(Type type, IServiceProvider provider) : IParameterP
                 .Select(tuple => new KeyValuePair<string, PropertyInfo>(tuple.Attribute!.Name, tuple.info))
         ).ToImmutableDictionary();
     }
-
-    // [cmd] --test=alpha --QueryDb
-    // Dict {
-    //      [test] = "alpha"
-    //      [QueryDb] = "";
-    // }
+    
     public bool TryParse(Dictionary<string, string> args, [NotNullWhen(true)] out IParameters? parameters) {
         parameters = null;
         if (provider.GetService(ParamsType) is not IParameters result) return false;

@@ -1,6 +1,7 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
+using CliArgsParserReworked.Contracts;
 using CliArgsParserReworked.Contracts.Types;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,17 +19,18 @@ internal static class Program {
                     overridable: true,
                     generateShortNames: true
                 ))
-                .AddFromType<HelpAtlas>()
                 .AddFromType<HelloAtlas>()
         );
         
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
-        var parser =  provider.GetRequiredService<CliArgsParser>();
+        var parser =  provider.GetRequiredService<IArgsParser>();
 
-        await parser.ExecuteAsync(string.Join(" ", ["hello-args", "--username=Andreas"]));
-        await parser.ExecuteAsync(string.Join(" ", ["help"]));
-        await parser.ExecuteAsync(string.Join(" ", ["help", """--name="hello-args" """]));
-        await parser.ExecuteAsync(string.Join(" ", ["help", "--expand"]));
-        // parser.Execute(["hello-args", "--username=Andreas"]);
+        await parser.ParseAsync("hello-args --username=Andreas");
+        await parser.ParseAsync("help");
+        await parser.ParseAsync("""help --name="hello-args" """);
+        await parser.ParseAsync("help --expand");
+        
+        var cliParser =  provider.GetRequiredService<ICliParser>();
+        await cliParser.StartParsingAsync();
     }
 }

@@ -1,19 +1,18 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParserReworked.Contracts.Types;
-using System.Collections.Immutable;
+using CliArgsParserReworked.Contracts;
+using CliArgsParserReworked.Contracts.Attributes;
 
-namespace CliArgsParserReworked.Contracts;
+namespace CliArgsParserReworked.PreMade;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICliArgsParser {
-    ImmutableDictionary<Type, IParameterParser> parameterParsers { get; }
-    CliArgsParserConfig Config { get; }
-    ImmutableDictionary<string, CommandMethodInfo> Commands { get; }
-    
-    void Execute(string commandString);
-    Task ExecuteAsync(string commandString);
+public class ExitAtlas(ICliParser parser) : ICommandAtlas {
+    [Command("exit")]
+    [Description("Exits the CLI application.")]
+    public void CommandExit() {
+        parser.IsAlive = false;
+    }
 }

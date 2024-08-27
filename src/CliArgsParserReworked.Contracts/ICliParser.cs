@@ -1,15 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-using CliArgsParserReworked.Contracts;
-using CliArgsParserReworked.Contracts.Attributes;
-
-namespace CliArgsParserReworked.Example;
+namespace CliArgsParserReworked.Contracts;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class HelpArgs : IParameters {
-    [ArgValue("name"), Description("The specific command to get help for")] public string Name { get; set; } = string.Empty;
-    [ArgFlag("expand"), Description("Returns a full list of all commands and their arguments")] public bool Expand { get; set; } = false;
+public interface ICliParser {
+    bool IsAlive { get; set; }
+    
+    void StartParsing();
+    Task StartParsingAsync();
 }
