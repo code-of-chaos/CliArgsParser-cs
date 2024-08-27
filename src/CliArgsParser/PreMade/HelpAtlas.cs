@@ -34,11 +34,11 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
     #region Helper Methods
     private void PrintCommandArguments(string commandName) {
         var sb = new StringBuilder();
-        
+
         foreach ((string namedArg, string description) in GetCommandArguments(commandName)) {
             sb.AppendLine($"- {namedArg} : {description}");
         }
-        
+
         Console.WriteLine(sb.ToString());
     }
 
@@ -51,7 +51,7 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
             ;
 
         Dictionary<(MethodInfo, ICommandAtlas), List<(string Key, string Description)>> groupedCommands = new();
-        foreach ((string? key, CommandMethodInfo info ) in enumerable) {
+        foreach ((string? key, CommandMethodInfo info) in enumerable) {
             (MethodInfo methodInfo, ICommandAtlas atlas) commandKey = (info.Info, info.CommandAtlas);
             if (!groupedCommands.TryGetValue(commandKey, out List<(string Key, string Description)>? commandsList)) {
                 commandsList = (List<(string Key, string Description)>) [];
@@ -68,23 +68,23 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
 
         // ReSharper disable once SuggestVarOrType_Elsewhere
         var enumerable = command.Value.ParameterType.GetProperties()
-            .Select(prop => (
-                prop,
-                namedArg: (IAttributeWithName?)prop.GetCustomAttribute<ArgValueAttribute>() ?? prop.GetCustomAttribute<ArgFlagAttribute>() ,
-                description: prop.GetCustomAttribute<DescriptionAttribute>()
-            ))
-            .Where(tuple => tuple.namedArg != null)
-            .Select(tuple => (tuple.namedArg!.Name , tuple.description?.Description ?? string.Empty))
-        ;
+                .Select(prop => (
+                    prop,
+                    namedArg: (IAttributeWithName?)prop.GetCustomAttribute<ArgValueAttribute>() ?? prop.GetCustomAttribute<ArgFlagAttribute>(),
+                    description: prop.GetCustomAttribute<DescriptionAttribute>()
+                ))
+                .Where(tuple => tuple.namedArg != null)
+                .Select(tuple => (tuple.namedArg!.Name, tuple.description?.Description ?? string.Empty))
+            ;
 
         return enumerable;
     }
-    
+
     private void PrintAllCommands() {
         var sb = new StringBuilder();
-        
+
         // ReSharper disable once SuggestVarOrType_Elsewhere
-        var groupedCommands = GetAllCommands(); 
+        var groupedCommands = GetAllCommands();
         int maxKeyCount = groupedCommands.Values
             .Select(list => string.Join(", ", list.OrderByDescending(cmd => cmd.Key.Length).Select(cmd => cmd.Key)).Length)
             .Max() + 1;
@@ -92,39 +92,39 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
         foreach (KeyValuePair<(MethodInfo, ICommandAtlas), List<(string Key, string Description)>> commandGroup in groupedCommands) {
             List<(string Key, string Description)> sortedCommands = commandGroup.Value.OrderByDescending(cmd => cmd.Key.Length).ToList();
             string allCommandNames = string.Join(", ", sortedCommands.Select(cmd => cmd.Key));
-            string description = commandGroup.Value.First().Description; // Use the first description as they should be the same
+            string description = commandGroup.Value.First().Description;// Use the first description as they should be the same
             sb.AppendLine($"{allCommandNames.PadRight(maxKeyCount, ' ')}| {description}");
         }
-        
+
         Console.WriteLine(sb.ToString());
     }
-    
+
     private void PrintAllCommandsExpanded() {
         var sb = new StringBuilder();
-        
+
         // ReSharper disable once SuggestVarOrType_Elsewhere
-        var groupedCommands = GetAllCommands(); 
+        var groupedCommands = GetAllCommands();
         int maxKeyCount = groupedCommands.Values
             .Select(list => string.Join(", ", list.OrderByDescending(cmd => cmd.Key.Length).Select(cmd => cmd.Key)).Length)
             .Max() + 1;
-        
+
         foreach (KeyValuePair<(MethodInfo, ICommandAtlas), List<(string Key, string Description)>> commandGroup in groupedCommands) {
             List<(string Key, string Description)> sortedCommands = commandGroup.Value.OrderByDescending(cmd => cmd.Key.Length).ToList();
             string firstCommand = sortedCommands.First().Key;
             string allCommandNames = string.Join(", ", sortedCommands.Select(cmd => cmd.Key));
-            string description = commandGroup.Value.First().Description; // Use the first description as they should be the same
+            string description = commandGroup.Value.First().Description;// Use the first description as they should be the same
             sb.AppendLine($"{allCommandNames.PadRight(maxKeyCount, ' ')}| {description}");
-            
+
             foreach ((string namedArg, string varDesc) in GetCommandArguments(firstCommand)) {
                 string name = $"    - {namedArg}";
                 sb.AppendLine($"{name.PadRight(maxKeyCount, ' ')}| {varDesc}");
             }
-            
+
             sb.AppendLine();
         }
-        
+
         Console.WriteLine(sb.ToString());
-        
+
     }
     #endregion
 }

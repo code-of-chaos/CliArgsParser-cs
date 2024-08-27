@@ -5,7 +5,6 @@
 namespace CliArgsParser;
 // ReSharper restore CheckNamespace
 
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +16,7 @@ public interface ICliParser {
     /// Used for the keeping alive of the <see cref="StartParsing"/> and <see cref="StartParsingAsync"/> methods
     /// </summary>
     bool IsAlive { get; set; }
-    
+
     /// <summary>
     /// Starts parsing the command line input.
     /// </summary>
@@ -27,7 +26,7 @@ public interface ICliParser {
     /// For each command string, the <see cref="ICliArgsParser.Execute"/> method is called to execute the command.
     /// </remarks>
     void StartParsing();
-    
+
     /// <summary>
     /// Asynchronously starts parsing the command line input.
     /// </summary>

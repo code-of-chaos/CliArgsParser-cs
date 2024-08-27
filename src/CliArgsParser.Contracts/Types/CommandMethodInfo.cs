@@ -6,6 +6,7 @@ using System.Reflection;
 // ReSharper disable CheckNamespace
 namespace CliArgsParser;
 // ReSharper restore CheckNamespace
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ------------------------------------------------------------------------------------------------------------------
@@ -17,9 +18,9 @@ namespace CliArgsParser;
 /// <param name="CommandAtlas">The instance of <see cref="ICommandAtlas"/> that contains the method.</param>
 /// <param name="DescriptionAttribute">An optional <see cref="DescriptionAttribute"/> providing a description of the method.</param>
 public readonly record struct CommandMethodInfo(
-    MethodInfo Info, 
-    CommandAttribute CommandAttribute, 
-    ICommandAtlas CommandAtlas, 
+    MethodInfo Info,
+    CommandAttribute CommandAttribute,
+    ICommandAtlas CommandAtlas,
     DescriptionAttribute? DescriptionAttribute = null
 ) {
     /// <summary>
@@ -31,7 +32,7 @@ public readonly record struct CommandMethodInfo(
     /// Indicates whether the method is asynchronous.
     /// </summary>
     public readonly bool IsAsync = GetIsAsync(Info);
-    
+
     /// <summary>
     /// The delegate associated with the command method, allowing it to be invoked dynamically.
     /// </summary>

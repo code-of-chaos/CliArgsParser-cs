@@ -20,10 +20,10 @@ internal static class Program {
                 })
                 .AddFromType<HelloAtlas>()
         );
-        
+
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
-        var cliParser =  provider.GetRequiredService<ICliParser>();
-        
+        var cliParser = provider.GetRequiredService<ICliParser>();
+
         await cliParser.StartParsingAsync();
     }
 }

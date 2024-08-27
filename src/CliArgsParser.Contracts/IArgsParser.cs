@@ -20,7 +20,7 @@ public interface IArgsParser {
     void Parse(string input);
     /// <inheritdoc cref="Parse(string)"/>
     void Parse(string[] input);
-    
+
     /// <summary>
     /// Asynchronously parses the given input string into commands and executes them.
     /// </summary>
@@ -29,7 +29,7 @@ public interface IArgsParser {
     Task ParseAsyncLinear(string input);
     /// <inheritdoc cref="ParseAsyncLinear(string)"/>
     Task ParseAsyncLinear(string[] input);
-    
+
     /// <summary>
     /// Parses the given input string into commands and executes them in parallel.
     /// </summary>

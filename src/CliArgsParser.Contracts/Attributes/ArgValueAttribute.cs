@@ -4,6 +4,7 @@
 // ReSharper disable CheckNamespace
 namespace CliArgsParser;
 // ReSharper restore CheckNamespace
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,7 +16,7 @@ namespace CliArgsParser;
 public class ArgValueAttribute(string name, string? shortName = null) : Attribute, IAttributeWithName {
     /// <inheritdoc cref="IAttributeWithName.Name"/>
     public string Name { get; } = name;
-    
+
     /// <inheritdoc cref="IAttributeWithName.ShortName"/>
     public string? ShortName { get; } = shortName;
 }

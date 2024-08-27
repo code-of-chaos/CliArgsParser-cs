@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 // ReSharper disable CheckNamespace
 namespace CliArgsParser;
 // ReSharper restore CheckNamespace
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,7 +14,7 @@ namespace CliArgsParser;
 public class CliParser(ICliArgsParser cliArgsParser) : ICliParser {
     /// <inheritdoc cref="ICliParser.IsAlive"/>
     public bool IsAlive { get; set; } = true;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -35,14 +36,14 @@ public class CliParser(ICliArgsParser cliArgsParser) : ICliParser {
             }
         }
     }
-    
+
     /// <inheritdoc cref="ICliParser.StartParsingAsync"/>
     public async Task StartParsingAsync() {
         while (IsAlive) {
             Console.Write(cliArgsParser.Config.CliCursor);
             string? input = Console.ReadLine();
             if (string.IsNullOrEmpty(input)) continue;
-            
+
             foreach (string commandString in RegexLib.SplitCommands.Split(input).Select(c => c.Trim())) {
                 try {
                     await cliArgsParser.ExecuteAsync(commandString);

@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace CliArgsParser;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,15 +16,15 @@ namespace CliArgsParser;
 public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig configuration) : ICliArgsParser {
     /// <inheritdoc cref="ICliArgsParser.Config"/>
     public CliArgsParserConfig Config { get; } = configuration;
-    
+
     /// <inheritdoc cref="ICliArgsParser.ParameterParsers"/>
     public ImmutableDictionary<Type, ICommandParameterParser> ParameterParsers => _parameterParsers ??= GetParameterParsersMap(provider, Config);
     private ImmutableDictionary<Type, ICommandParameterParser>? _parameterParsers;
-    
+
     /// <inheritdoc cref="ICliArgsParser.Commands"/>
     public ImmutableDictionary<string, CommandMethodInfo> Commands => _commands ??= GetCommandsMap(provider, Config);
     private ImmutableDictionary<string, CommandMethodInfo>? _commands;
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------------------------------------------------
@@ -37,9 +36,9 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
     /// <param name="configuration">The configuration of the CLI args parser.</param>
     /// <returns>An immutable dictionary mapping parameter types to their corresponding parsers.</returns>
     private static ImmutableDictionary<Type, ICommandParameterParser> GetParameterParsersMap(IServiceProvider provider, CliArgsParserConfig configuration) {
-        return  new Dictionary<Type,ICommandParameterParser>(
+        return new Dictionary<Type, ICommandParameterParser>(
             configuration.CommandParameterTypes.Select(
-                type => new KeyValuePair<Type, ICommandParameterParser>(type, new CommandParameterParser(type,provider))
+                type => new KeyValuePair<Type, ICommandParameterParser>(type, new CommandParameterParser(type, provider))
             )
         ).ToImmutableDictionary();
     }
@@ -156,7 +155,7 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
         if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string> args))
             throw new ArgumentException("Invalid command structure");
 
-        if (!Commands.TryGetValue(commandName, out CommandMethodInfo commandMethodInfo)) 
+        if (!Commands.TryGetValue(commandName, out CommandMethodInfo commandMethodInfo))
             throw new ArgumentException("Invalid command name");
 
         if (!ParameterParsers.TryGetValue(commandMethodInfo.ParameterType, out ICommandParameterParser? parser)
@@ -174,7 +173,8 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
 
         if (parameters.GetType() != typeof(NoArgs)) {
             commandMethodInfo.Delegate.DynamicInvoke(parameters);
-        } else {
+        }
+        else {
             commandMethodInfo.Delegate.DynamicInvoke();
         }
     }

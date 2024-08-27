@@ -23,6 +23,7 @@ public class CommandAttribute(string? name = null, Type? argsType = null) : Attr
     /// </summary>
     public Type ArgsType { get; } = argsType ?? typeof(NoArgs);
 }
+
 /// <summary>
 /// Represents an attribute that marks a method as a command.
 /// </summary>

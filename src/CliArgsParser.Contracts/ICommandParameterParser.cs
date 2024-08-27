@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable CheckNamespace
 namespace CliArgsParser;
 // ReSharper restore CheckNamespace
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ public interface ICommandParameterParser {
     /// Represents the type of parameters used by the <see cref="ICommandParameterParser"/> class.
     /// </summary>
     Type ParamsType { get; }
-    
+
     /// <summary>
     /// Tries to parse the given arguments and returns a boolean value indicating if the parsing was successful.
     /// If the parsing is successful, it sets the 'parameters' parameter to the parsed parameters object.

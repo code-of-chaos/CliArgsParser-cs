@@ -17,12 +17,14 @@ public static partial class RegexLib {
     /// Matches are used to split a string on CamelCase segments.
     /// </summary>
     public static readonly Regex SplitCamelCase = RegexSplitCamelCase();
+
     [GeneratedRegex("([A-Z]+(?=[A-Z0-9][a-z0-9])|[A-Z0-9][a-z0-9]*)", RegexOptions.Compiled)] private static partial Regex RegexSplitCamelCase();
-    
+
     /// <summary>
     /// Matches command-line options in the format of <c>--option=value</c> or <c>-o value</c>.
     /// </summary>
     public static readonly Regex Args = RegexArgs();
+
     [GeneratedRegex("""(?:--|-)(\w+)(?:=(".*?"|\S+))?""", RegexOptions.Compiled)] private static partial Regex RegexArgs();
 
     /// <summary>
@@ -30,5 +32,6 @@ public static partial class RegexLib {
     /// </summary>
     /// <returns>A regular expression pattern to split the commands.</returns>
     public static readonly Regex SplitCommands = RegexSplitCommands();
+
     [GeneratedRegex("""&&(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)""", RegexOptions.Compiled)] private static partial Regex RegexSplitCommands();
 }

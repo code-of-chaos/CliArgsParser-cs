@@ -4,7 +4,6 @@
 using System.Reflection;
 
 namespace CliArgsParser;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,22 +11,24 @@ namespace CliArgsParser;
 public class CliArgsParserConfiguration : ICliArgsParserConfiguration {
     private CliArgsParserConfig? _config;
     internal CliArgsParserConfig Config => _config ?? new CliArgsParserConfig();
-    
+
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
     /// <inheritdoc cref="ICliArgsParserConfiguration.SetConfig"/>
     public ICliArgsParserConfiguration SetConfig(CliArgsParserConfig config) {
-        foreach (Type type in _config?.CommandAtlasTypes ?? [])
+        foreach (Type type in _config?.CommandAtlasTypes ?? []) {
             config.CommandAtlasTypes.Add(type);
-        
-        foreach (Type type in _config?.CommandParameterTypes ?? [])
+        }
+
+        foreach (Type type in _config?.CommandParameterTypes ?? []) {
             config.CommandParameterTypes.Add(type);
-           
+        }
+
         _config = config;
         return this;
     }
-    
+
     /// <inheritdoc cref="ICliArgsParserConfiguration.AddFromAssembly"/>
     public ICliArgsParserConfiguration AddFromAssembly(Assembly assembly) {
         Type[] types = assembly.GetTypes();
@@ -36,7 +37,7 @@ public class CliArgsParserConfiguration : ICliArgsParserConfiguration {
 
         foreach (Type type in commandAtlasTypes) Config.CommandAtlasTypes.Add(type);
         foreach (Type type in commandParametersTypes) Config.CommandParameterTypes.Add(type);
-        
+
         return this;
     }
 
@@ -44,15 +45,15 @@ public class CliArgsParserConfiguration : ICliArgsParserConfiguration {
     public ICliArgsParserConfiguration AddFromType<T>() where T : ICommandAtlas {
         Type type = typeof(T);
         Config.CommandAtlasTypes.Add(type);
-        
+
         // Extract all the known parameter types
-        IEnumerable<Type> parameterTypes =  type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-            .SelectMany(info => info.GetCustomAttributes<CommandAttribute>(inherit: false))
-            .Select(attribute => attribute.ArgsType )
-        ;
-        
+        IEnumerable<Type> parameterTypes = type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                .SelectMany(info => info.GetCustomAttributes<CommandAttribute>(inherit: false))
+                .Select(attribute => attribute.ArgsType)
+            ;
+
         foreach (Type parameterType in parameterTypes) Config.CommandParameterTypes.Add(parameterType);
-        
+
         return this;
     }
 }

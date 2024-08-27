@@ -19,20 +19,20 @@ public class ArgsParserFixture : IDisposable {
     public ArgsParserFixture() {
         DataOutput = new DataOutput();
         IServiceCollection serviceCollection = new ServiceCollection();
-        
+
         serviceCollection.AddSingleton(DataOutput);
-        
+
         serviceCollection.AddCliArgsParser(configuration =>
             configuration
                 .SetConfig(new CliArgsParserConfig {
                     Overridable = true,
-                    GenerateShortNames = true,
+                    GenerateShortNames = true
                 })
                 .AddFromType<CommandAtlas>()
         );
-        
+
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
-        Parser =  provider.GetRequiredService<IArgsParser>();
+        Parser = provider.GetRequiredService<IArgsParser>();
     }
 
     public void Dispose() {

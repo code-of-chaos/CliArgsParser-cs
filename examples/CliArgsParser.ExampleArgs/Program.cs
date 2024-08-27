@@ -22,15 +22,15 @@ internal static class Program {
                 .AddFromAssembly(typeof(Program).Assembly)
                 .AddFromAssembly(typeof(HelloAtlas).Assembly)
         );
-        
+
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
-        var parser =  provider.GetRequiredService<IArgsParser>();
+        var parser = provider.GetRequiredService<IArgsParser>();
 
         await parser.ParseAsyncLinear("hello-args --username=Andreas");
         await parser.ParseAsyncLinear("help");
         await parser.ParseAsyncLinear("""help --name="hello-args" """);
         await parser.ParseAsyncLinear("help --expand");
-        
+
         await parser.ParseAsyncLinear(args);
     }
 }

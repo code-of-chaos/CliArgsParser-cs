@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 // ReSharper disable CheckNamespace
 namespace CliArgsParser;
 // ReSharper restore CheckNamespace
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -40,7 +41,7 @@ public class ArgsParser(ICliArgsParser cliArgsParser) : IArgsParser {
     public async Task ParseAsyncParallel(string input) {
         IEnumerable<Task> enumerable = RegexLib.SplitCommands.Split(input).Select(c => c.Trim())
             .Select(cliArgsParser.ExecuteAsync);
-        
+
         await Task.WhenAll(
             enumerable
         );
@@ -56,7 +57,7 @@ public class ArgsParser(ICliArgsParser cliArgsParser) : IArgsParser {
         ServiceProvider provider = new ServiceCollection()
             .AddArgsParser(action)
             .BuildServiceProvider();
-        
+
         return provider.GetRequiredService<IArgsParser>();
     }
     #endregion

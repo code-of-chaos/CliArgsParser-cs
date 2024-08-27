@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 // ReSharper disable CheckNamespace
 namespace CliArgsParser;
 // ReSharper restore CheckNamespace
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ public readonly struct CliArgsParserConfig() {
     /// These types are registered in the service provider and used to create command atlas instances dynamically during runtime.
     /// The command atlas types define the behavior and functionality of each command.
     /// </summary>
-    public List<Type> CommandAtlasTypes { get; init; } =  [];
+    public List<Type> CommandAtlasTypes { get; init; } = [];
     /// <summary>
     /// The <see cref="CommandParameterTypes"/> property is a <see cref="HashSet{T}"/> of <see cref="Type"/> that represents the types of command parameter classes.
     /// Command parameter classes are registered in the service provider to be used with the CLI argument parser.
@@ -42,7 +43,7 @@ public readonly struct CliArgsParserConfig() {
     /// Represents the cursor symbol used in the command line interface (CLI).
     /// </summary>
     public string CliCursor { get; init; } = "> : ";
-    
+
     /// <summary>
     /// Gets or sets a value indicating whether the help command atlas is enabled.
     /// </summary>
