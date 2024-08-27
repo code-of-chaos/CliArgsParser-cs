@@ -49,9 +49,10 @@ internal static class Program {
 
         serviceCollection.AddCliArgsParser(configuration =>
             configuration
-                .SetConfig(new CliArgsParserConfig(
-                    generateShortNames: true
-                ))
+                .SetConfig(new CliArgsParserConfig {
+                    Overridable = true,
+                    GenerateShortNames = true
+                })
                 .AddFromType<HelloAtlas>()
         );
         
@@ -92,10 +93,10 @@ internal static class Program {
         ICliParser parser = CliParser.CreateStandalone(
             configuration =>
                 configuration
-                    .SetConfig(new CliArgsParserConfig(
-                        overridable: true,
-                        generateShortNames: true
-                    ))
+                    .SetConfig(new CliArgsParserConfig {
+                        Overridable = true,
+                        GenerateShortNames = true
+                    })
                     .AddFromType<HelloAtlas>()
         );
         await cliParser.StartParsingAsync();

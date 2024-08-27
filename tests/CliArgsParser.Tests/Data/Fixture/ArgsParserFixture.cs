@@ -24,10 +24,10 @@ public class ArgsParserFixture : IDisposable {
         
         serviceCollection.AddCliArgsParser(configuration =>
             configuration
-                .SetConfig(new CliArgsParserConfig(
-                    overridable: true,
-                    generateShortNames: true
-                ))
+                .SetConfig(new CliArgsParserConfig {
+                    Overridable = true,
+                    GenerateShortNames = true,
+                })
                 .AddFromType<CommandAtlas>()
         );
         

@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" />
-      <ProjectReference Include="..\..\src\CliArgsParser\CliArgsParser.csproj" />
-      <ProjectReference Include="..\CliArgsParser.ExampleData\CliArgsParser.ExampleData.csproj" />
+        <ProjectReference Include="..\..\src\CliArgsParser.Contracts\CliArgsParser.Contracts.csproj" />
+        <ProjectReference Include="..\..\src\CliArgsParser\CliArgsParser.csproj" />
+        <ProjectReference Include="..\CliArgsParser.ExampleData\CliArgsParser.ExampleData.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,16 +1,14 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-
 namespace CliArgsParser.Tests.Data.Fixture;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-
 public class DataOutput {
-    public string? SomeData { get; set; } = null;
-    public string? SomeOtherData { get; set; } = null;
+    public string? SomeData { get; set; }
+    public string? SomeOtherData { get; set; }
 
-    public string? ArgsValue { get; set; } = null;
-    public bool? ArgsFlag { get; set; } = null;
+    public string? ArgsValue { get; set; }
+    public bool? ArgsFlag { get; set; }
 }
