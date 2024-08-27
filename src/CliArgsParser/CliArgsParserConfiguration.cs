@@ -11,6 +11,7 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <inheritdoc cref="ICliArgsParserConfiguration"/>
 public class CliArgsParserConfiguration : ICliArgsParserConfiguration {
     private CliArgsParserConfig? _config;
     internal CliArgsParserConfig Config => _config ?? new CliArgsParserConfig();
@@ -18,6 +19,7 @@ public class CliArgsParserConfiguration : ICliArgsParserConfiguration {
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <inheritdoc cref="ICliArgsParserConfiguration.SetConfig"/>
     public ICliArgsParserConfiguration SetConfig(CliArgsParserConfig config) {
         foreach (Type type in _config?.CommandAtlasTypes ?? [])
             config.CommandAtlasTypes.Add(type);
@@ -29,17 +31,19 @@ public class CliArgsParserConfiguration : ICliArgsParserConfiguration {
         return this;
     }
     
+    /// <inheritdoc cref="ICliArgsParserConfiguration.AddFromAssembly"/>
     public ICliArgsParserConfiguration AddFromAssembly(Assembly assembly) {
         Type[] types = assembly.GetTypes();
         IEnumerable<Type> commandAtlasTypes = types.Where(type => typeof(ICommandAtlas).IsAssignableFrom(type));
-        IEnumerable<Type> commandParametersTypes = types.Where(type => typeof(IParameters).IsAssignableFrom(type));
+        IEnumerable<Type> commandParametersTypes = types.Where(type => typeof(ICommandParameters).IsAssignableFrom(type));
 
         foreach (Type type in commandAtlasTypes) Config.CommandAtlasTypes.Add(type);
         foreach (Type type in commandParametersTypes) Config.CommandParameterTypes.Add(type);
         
         return this;
     }
-    
+
+    /// <inheritdoc cref="ICliArgsParserConfiguration.AddFromType{T} "/>
     public ICliArgsParserConfiguration AddFromType<T>() where T : ICommandAtlas {
         Type type = typeof(T);
         Config.CommandAtlasTypes.Add(type);

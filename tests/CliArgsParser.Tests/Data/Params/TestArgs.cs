@@ -5,7 +5,7 @@ namespace CliArgsParser.Tests.Data.Params;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class TestArgs : IParameters {
+public class TestArgs : ICommandParameters {
     [ArgValue("value")] public string? Value { get; set; } = null;
     [ArgFlag("flag")] public bool Flag { get; set; } = false;
 }

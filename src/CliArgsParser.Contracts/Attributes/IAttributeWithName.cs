@@ -1,25 +1,22 @@
 ﻿// ---------------------------------------------------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------------------------------------------------
-namespace CliArgsParser.Contracts;
+namespace CliArgsParser.Contracts.Attributes;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 /// <summary>
-/// Represents a parser that can parse input strings.
+/// All properties defined in a <see cref="ICommandParameters"/> class should have attributes which derive from this interface.
+/// Used for name assignment of an argument of a command.
 /// </summary>
-public interface IParser {
+public interface IAttributeWithName {
     /// <summary>
-    /// Tries to parse the input string.
+    /// Sets the name of the command argument
     /// </summary>
-    /// <param name="input">The input string to parse.</param>
-    public void TryParse(string input);
-    public void TryParse(string[] input);
-
+    string Name { get; }
     /// <summary>
-    /// Asynchronously attempts to parse the given input.
+    /// Sets a pre-determined short name (usually a single letter) for the command argument
     /// </summary>
-    /// <param name="input">The input string to parse.</param>
-    public Task TryParseAsync(string input);
-    public Task TryParseAsync(string[] input);
+    string? ShortName { get; }
 }

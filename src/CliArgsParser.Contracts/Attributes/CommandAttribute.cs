@@ -27,4 +27,4 @@ public class CommandAttribute(string? name = null, Type? argsType = null) : Attr
 /// Represents an attribute that marks a method as a command.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method)]
-public class CommandAttribute<T>(string? name = null) : CommandAttribute(name, typeof(T)) where T : IParameters, new();
+public class CommandAttribute<T>(string? name = null) : CommandAttribute(name, typeof(T)) where T : ICommandParameters, new();

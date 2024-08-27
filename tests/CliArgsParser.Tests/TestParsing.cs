@@ -47,7 +47,7 @@ public class TestParsing(ArgsParserFixture fixture) : IClassFixture<ArgsParserFi
     [InlineData("test-async-params-empty --value=alpha --flag ", "empty-async", "alpha", true)]
     [InlineData("test-async-params-empty --value=alpha-beta --flag ", "empty-async", "alpha-beta", true)]
     public async Task TestAsync(string input, string? expectedSomeData, string? expectedArgsValue, bool? expectedArgsFlag) {
-        await fixture.Parser.ParseAsync(input);
+        await fixture.Parser.ParseAsyncLinear(input);
 
         Assert.Equal(expectedSomeData, fixture.DataOutput.SomeData);
         Assert.Equal(expectedArgsValue, fixture.DataOutput.ArgsValue);
@@ -70,7 +70,7 @@ public class TestParsing(ArgsParserFixture fixture) : IClassFixture<ArgsParserFi
     [InlineData("test-async-params-empty --value=alpha --flag && test-async-other", "empty-async", "something-async", "alpha", true)]
     public async Task TestASyncMultiple(string input, string? expectedSomeData, string? expectedSomeOtherData, string? expectedArgsValue, bool? expectedArgsFlag) {
 
-        await fixture.Parser.ParseAsync(input);
+        await fixture.Parser.ParseAsyncLinear(input);
 
         Assert.Equal(expectedSomeData, fixture.DataOutput.SomeData);
         Assert.Equal(expectedSomeOtherData, fixture.DataOutput.SomeOtherData);

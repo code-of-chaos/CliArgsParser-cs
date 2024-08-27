@@ -6,6 +6,7 @@ namespace CliArgsParser.Contracts;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public interface ICommandAtlas {
-    
-}
+/// <summary>
+/// Class which holds all the methods and their appropriate attributes.
+/// </summary>
+public interface ICommandAtlas;

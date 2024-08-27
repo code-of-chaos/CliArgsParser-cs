@@ -8,6 +8,6 @@ namespace CliArgsParser.ExampleCli;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
-public class ArgsTest : IParameters {
+public class ArgsTest : ICommandParameters {
     [ArgValue("username")] public string Username { get; set; } = "undefined";
 }

@@ -12,7 +12,18 @@ namespace CliArgsParser.PreMade;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// HelpAtlas is a class that provides help text for commands in a command-line application.
+/// </summary>
+/// <remarks>
+/// HelpAtlas implements the ICommandAtlas interface and is meant to be used in conjunction with a command-line argument parser (ICliArgsParser).
+/// It provides a command called "help" that prints help text for all commands or a specific command.
+/// </remarks>
 public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
+    /// <summary>
+    /// Represents a method in the CommandAtlas class that provides help information for commands.
+    /// </summary>
+    /// <param name="args">An instance of the <see cref="HelpArgs"/> class that contains the command name and expand flag.</param>
     [Command<HelpArgs>("help")]
     [Description("Prints this help text")]
     public void CommandHelp(HelpArgs args) {
@@ -20,7 +31,8 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
         else if (string.IsNullOrEmpty(args.Name)) PrintAllCommands();
         else PrintCommandArguments(args.Name);
     }
-    
+
+    #region Helper Methods
     private void PrintCommandArguments(string commandName) {
         var sb = new StringBuilder();
         
@@ -31,6 +43,7 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
         Console.WriteLine(sb.ToString());
     }
 
+
     private Dictionary<(MethodInfo, ICommandAtlas), List<(string Key, string Description)>> GetAllCommands() {
         // ReSharper disable once SuggestVarOrType_Elsewhere
         var enumerable = parser.Commands
@@ -39,16 +52,17 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
             ;
 
         Dictionary<(MethodInfo, ICommandAtlas), List<(string Key, string Description)>> groupedCommands = new();
-        foreach ((string? key, (MethodInfo? methodInfo, CommandAttribute? _, ICommandAtlas? atlas, DescriptionAttribute? descriptionAttribute)) in enumerable) {
-            (MethodInfo methodInfo, ICommandAtlas atlas) commandKey = (methodInfo, atlas);
+        foreach ((string? key, CommandMethodInfo info ) in enumerable) {
+            (MethodInfo methodInfo, ICommandAtlas atlas) commandKey = (info.Info, info.CommandAtlas);
             if (!groupedCommands.TryGetValue(commandKey, out List<(string Key, string Description)>? commandsList)) {
                 commandsList = (List<(string Key, string Description)>) [];
                 groupedCommands[commandKey] = commandsList;
             }
-            commandsList.Add((key, descriptionAttribute?.Description ?? string.Empty));
+            commandsList.Add((key, info.DescriptionAttribute?.Description ?? string.Empty));
         }
         return groupedCommands;
     }
+
     private IEnumerable<(string namedArg, string description)> GetCommandArguments(string commandName) {
         // Find command by name
         KeyValuePair<string, CommandMethodInfo> command = parser.Commands.FirstOrDefault(c => c.Key == commandName);
@@ -85,7 +99,7 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
         
         Console.WriteLine(sb.ToString());
     }
-
+    
     private void PrintAllCommandsExpanded() {
         var sb = new StringBuilder();
         
@@ -113,4 +127,5 @@ public class HelpAtlas(ICliArgsParser parser) : ICommandAtlas {
         Console.WriteLine(sb.ToString());
         
     }
+    #endregion
 }

@@ -16,27 +16,43 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <inheritdoc cref="ICliArgsParser"/>
 public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig configuration) : ICliArgsParser {
+    /// <inheritdoc cref="ICliArgsParser.Config"/>
     public CliArgsParserConfig Config { get; } = configuration;
     
-    private ImmutableDictionary<Type, IParameterParser>? _parameterParsers;
-    public ImmutableDictionary<Type, IParameterParser> parameterParsers => _parameterParsers ??= GetParameterParsersMap(provider, Config);
-
-    private ImmutableDictionary<string, CommandMethodInfo>? _commands;
+    /// <inheritdoc cref="ICliArgsParser.ParameterParsers"/>
+    public ImmutableDictionary<Type, ICommandParameterParser> ParameterParsers => _parameterParsers ??= GetParameterParsersMap(provider, Config);
+    private ImmutableDictionary<Type, ICommandParameterParser>? _parameterParsers;
+    
+    /// <inheritdoc cref="ICliArgsParser.Commands"/>
     public ImmutableDictionary<string, CommandMethodInfo> Commands => _commands ??= GetCommandsMap(provider, Config);
+    private ImmutableDictionary<string, CommandMethodInfo>? _commands;
     
     // -----------------------------------------------------------------------------------------------------------------
     // Private Methods
     // -----------------------------------------------------------------------------------------------------------------
     #region Constructor Logic
-    private static ImmutableDictionary<Type, IParameterParser> GetParameterParsersMap(IServiceProvider provider, CliArgsParserConfig configuration) {
-        return  new Dictionary<Type,IParameterParser>(
+    /// <summary>
+    /// Gets the map of parameter parsers.
+    /// </summary>
+    /// <param name="provider">The service provider.</param>
+    /// <param name="configuration">The configuration of the CLI args parser.</param>
+    /// <returns>An immutable dictionary mapping parameter types to their corresponding parsers.</returns>
+    private static ImmutableDictionary<Type, ICommandParameterParser> GetParameterParsersMap(IServiceProvider provider, CliArgsParserConfig configuration) {
+        return  new Dictionary<Type,ICommandParameterParser>(
             configuration.CommandParameterTypes.Select(
-                type => new KeyValuePair<Type, IParameterParser>(type, new ParameterParser(type,provider))
+                type => new KeyValuePair<Type, ICommandParameterParser>(type, new CommandParameterParser(type,provider))
             )
         ).ToImmutableDictionary();
     }
 
+    /// <summary>
+    /// Retrieves a map of commands available in the CliArgsParser.
+    /// </summary>
+    /// <param name="provider">The service provider used for dependency injection.</param>
+    /// <param name="configuration">The configuration for the CliArgsParser.</param>
+    /// <returns>An immutable dictionary containing the commands available in the CliArgsParser.</returns>
     private static ImmutableDictionary<string, CommandMethodInfo> GetCommandsMap(IServiceProvider provider, CliArgsParserConfig configuration) {
         Dictionary<string, int> duplicateNameCache = new();
         Dictionary<string, CommandMethodInfo> commands = new();
@@ -97,6 +113,13 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
     }
     #endregion
     #region Command Extraction Logic
+    /// <summary>
+    /// Tries to get the command name and arguments from the given input string.
+    /// </summary>
+    /// <param name="input">The input string containing the command name and arguments.</param>
+    /// <param name="commandName">When this method returns, contains the command name if found; otherwise, null.</param>
+    /// <param name="args">When this method returns, contains the arguments if found; otherwise, an empty dictionary.</param>
+    /// <returns>True if the command name is found; otherwise, false.</returns>
     private static bool TryGetCommand(string input, [NotNullWhen(true)] out string? commandName, out Dictionary<string, string> args) {
         commandName = null;
         args = new Dictionary<string, string>();
@@ -110,7 +133,12 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
 
         return true;
     }
-    
+
+    /// <summary>
+    /// Retrieves the arguments from the given input string and returns them as a dictionary.
+    /// </summary>
+    /// <param name="argsInput">The input string containing the arguments.</param>
+    /// <returns>A dictionary containing the arguments.</returns>
     private static Dictionary<string, string> GetArgs(string argsInput) {
         return RegexLib.Args
             .Matches(argsInput)
@@ -122,15 +150,20 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
                     : "True"
             );
     }
-    private (CommandMethodInfo, IParameters) CommandMethodInfo(string commandString) {
+    /// <summary>
+    /// Represents a method that provides the information and parameters of a command.
+    /// </summary>
+    /// <param name="commandString">The string representing the command to execute.</param>
+    /// <returns>A tuple containing the command information and its parameters.</returns>
+    private (CommandMethodInfo, ICommandParameters) CommandMethodInfo(string commandString) {
         if (!TryGetCommand(commandString, out string? commandName, out Dictionary<string, string> args))
             throw new ArgumentException("Invalid command structure");
 
-        if (!Commands.TryGetValue(commandName, out CommandMethodInfo? commandMethodInfo)) 
+        if (!Commands.TryGetValue(commandName, out CommandMethodInfo commandMethodInfo)) 
             throw new ArgumentException("Invalid command name");
 
-        if (!parameterParsers.TryGetValue(commandMethodInfo.ParameterType, out IParameterParser? parser)
-            || !parser.TryParse(args, out IParameters? parameters)
+        if (!ParameterParsers.TryGetValue(commandMethodInfo.ParameterType, out ICommandParameterParser? parser)
+            || !parser.TryParse(args, out ICommandParameters? parameters)
         ) throw new ArgumentException("Invalid command parameter type");
         return (commandMethodInfo, parameters);
     }
@@ -138,8 +171,9 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
     // -----------------------------------------------------------------------------------------------------------------
     // Methods
     // -----------------------------------------------------------------------------------------------------------------
+    /// <inheritdoc cref="ICliArgsParser.Execute"/>
     public void Execute(string commandString) {
-        (CommandMethodInfo? commandMethodInfo, IParameters? parameters) = CommandMethodInfo(commandString);
+        (CommandMethodInfo commandMethodInfo, ICommandParameters? parameters) = CommandMethodInfo(commandString);
 
         if (parameters.GetType() != typeof(NoArgs)) {
             commandMethodInfo.Delegate.DynamicInvoke(parameters);
@@ -148,8 +182,9 @@ public class CliArgsParser(IServiceProvider provider, CliArgsParserConfig config
         }
     }
 
+    /// <inheritdoc cref="ICliArgsParser.ExecuteAsync"/>
     public async Task ExecuteAsync(string commandString) {
-        (CommandMethodInfo? commandMethodInfo, IParameters? parameters) = CommandMethodInfo(commandString);
+        (CommandMethodInfo commandMethodInfo, ICommandParameters? parameters) = CommandMethodInfo(commandString);
 
         switch (commandMethodInfo.Delegate) {
             case Func<Task> func when parameters is null or NoArgs:

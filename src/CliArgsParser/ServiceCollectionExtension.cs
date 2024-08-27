@@ -11,6 +11,9 @@ namespace CliArgsParser;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
+/// <summary>
+/// Extension to an <see cref="IServiceCollection"/> to easily add the required classes and interfaces to the service collection.
+/// </summary>
 public static class ServiceCollectionExtension {
     #region Helper Methods
     private static CliArgsParserConfiguration ProcessActions(Action<ICliArgsParserConfiguration> action) {
@@ -38,7 +41,13 @@ public static class ServiceCollectionExtension {
         return services;
     }
     #endregion
-    
+
+    /// <summary>
+    /// Adds both <see cref="ArgsParser"/> and <see cref="CliParser"/> to the IServiceCollection.
+    /// </summary>
+    /// <param name="services">The IServiceCollection to add the CliArgsParser to.</param>
+    /// <param name="action">The configuration action to apply to the CliArgsParser.</param>
+    /// <returns>The modified IServiceCollection.</returns>
     public static IServiceCollection AddCliArgsParser(this IServiceCollection services, Action<ICliArgsParserConfiguration> action) {
         CliArgsParserConfiguration configuration = ProcessActions(action);
         
@@ -47,7 +56,13 @@ public static class ServiceCollectionExtension {
         
         return ProcessServices(services, configuration);
     }
-    
+
+    /// <summary>
+    /// Adds the <see cref="ArgsParser"/> to the IServiceCollection.
+    /// </summary>
+    /// <param name="services">The IServiceCollection to add the CliArgsParser to.</param>
+    /// <param name="action">The configuration action to apply to the CliArgsParser.</param>
+    /// <returns>The modified IServiceCollection.</returns>
     public static IServiceCollection AddArgsParser(this IServiceCollection services, Action<ICliArgsParserConfiguration> action) {
         CliArgsParserConfiguration configuration = ProcessActions(action);
         
@@ -55,7 +70,13 @@ public static class ServiceCollectionExtension {
         
         return ProcessServices(services, configuration);
     }
-    
+
+    /// <summary>
+    /// Adds the <see cref="CliParser"/> to the IServiceCollection.
+    /// </summary>
+    /// <param name="services">The IServiceCollection to add the CliArgsParser to.</param>
+    /// <param name="action">The configuration action to apply to the CliArgsParser.</param>
+    /// <returns>The modified IServiceCollection.</returns>
     public static IServiceCollection AddCliParser(this IServiceCollection services, Action<ICliArgsParserConfiguration> action) {
         CliArgsParserConfiguration configuration = ProcessActions(action);
         
