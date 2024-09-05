@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using CliArgsParser.ExampleData;
 
-namespace CliArgsParser.Example.ArgsStandalone;
+namespace CliArgsParser.Example.HeadlessAllowArgs;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
@@ -15,14 +15,13 @@ internal static class Program {
                     .SetConfig(new CliArgsParserConfig {
                         Overridable = true,
                         GenerateShortNames = true,
-                        EnableExitAtlas = false // Ensure this is disabled for ArgsParsers.
+                        EnableExitAtlas = false, // Ensure this is disabled for ArgsParsers.
+                        HeadlessMode = HeadlessTypes.AllowInputArguments,
+                        HeadlessModeCommand = "hello-args" // insert full string command, with arguments, it should execute if the `args` is empty
                     })
-                    .AddFromType<HelloAtlas>()
+                    .AddFromAssembly(typeof(Program).Assembly)
+                    .AddFromAssembly(typeof(HelloAtlas).Assembly)
         );
-
-        await parser.ParseAsyncLinear("hello-args --username=Andreas");
-        await parser.ParseAsyncLinear("help");
-        await parser.ParseAsyncLinear("""help --name="hello-args" """);
-        await parser.ParseAsyncLinear("help --expand");
+        await parser.ParseAsyncLinear("--username=\"hello-args\"");
     }
 }

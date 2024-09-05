@@ -3,26 +3,25 @@
 // ---------------------------------------------------------------------------------------------------------------------
 using CliArgsParser.ExampleData;
 
-namespace CliArgsParser.Example.ArgsStandalone;
+namespace CliArgsParser.Example.Headless;
 // ---------------------------------------------------------------------------------------------------------------------
 // Code
 // ---------------------------------------------------------------------------------------------------------------------
 internal static class Program {
-    public async static Task Main(string[] _) {
+    public async static Task Main(string[] args) {
         IArgsParser parser = ArgsParser.CreateStandalone(
             configuration =>
                 configuration
                     .SetConfig(new CliArgsParserConfig {
                         Overridable = true,
                         GenerateShortNames = true,
-                        EnableExitAtlas = false // Ensure this is disabled for ArgsParsers.
+                        EnableExitAtlas = false, // Ensure this is disabled for ArgsParsers.
+                        HeadlessMode = HeadlessTypes.IgnoreInputArguments,
+                        HeadlessModeCommand = "hello" // insert full string command, with arguments, it should execute if the `args` is empty
                     })
-                    .AddFromType<HelloAtlas>()
+                    .AddFromAssembly(typeof(Program).Assembly)
+                    .AddFromAssembly(typeof(HelloAtlas).Assembly)
         );
-
-        await parser.ParseAsyncLinear("hello-args --username=Andreas");
-        await parser.ParseAsyncLinear("help");
-        await parser.ParseAsyncLinear("""help --name="hello-args" """);
-        await parser.ParseAsyncLinear("help --expand");
+        await parser.ParseAsyncLinear(args);
     }
 }

@@ -58,4 +58,16 @@ public readonly struct CliArgsParserConfig() {
     /// <c>true</c> if the atlas is enabled; otherwise, <c>false</c>.
     /// </value>
     public bool EnableExitAtlas { get; init; } = true;
+
+    /// <summary>
+    /// Indicates whether the CLI parser is allowed to run in headless mode, meaning without user interaction.
+    /// When set to true, the parser can execute commands autonomously.
+    /// </summary>
+    public HeadlessTypes HeadlessMode { get; init; } = HeadlessTypes.Disabled;
+    
+    /// <summary>
+    /// Command to be executed if the application is running in a headless environment.
+    /// Ensures an appropriate command is executed for proper functionality in headless mode.
+    /// </summary>
+    public string HeadlessModeCommand { get; init; } = "help";
 }

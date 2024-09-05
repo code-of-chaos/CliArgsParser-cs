@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Example.ArgsS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.ExampleData", "examples\CliArgsParser.ExampleData\CliArgsParser.ExampleData.csproj", "{74421741-0AE9-47B9-ACA6-C58058B94762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Example.HeadlessFull", "examples\CliArgsParser.Example.HeadlessFull\CliArgsParser.Example.HeadlessFull.csproj", "{BAB6E59E-3852-4769-946D-BBA9167257A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliArgsParser.Example.HeadlessAllowArgs", "examples\CliArgsParser.Example.HeadlessAllowArgs\CliArgsParser.Example.HeadlessAllowArgs.csproj", "{BE449F1E-FBF6-478E-BFDF-E95295540D57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{74421741-0AE9-47B9-ACA6-C58058B94762}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74421741-0AE9-47B9-ACA6-C58058B94762}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74421741-0AE9-47B9-ACA6-C58058B94762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAB6E59E-3852-4769-946D-BBA9167257A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAB6E59E-3852-4769-946D-BBA9167257A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAB6E59E-3852-4769-946D-BBA9167257A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAB6E59E-3852-4769-946D-BBA9167257A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE449F1E-FBF6-478E-BFDF-E95295540D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE449F1E-FBF6-478E-BFDF-E95295540D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE449F1E-FBF6-478E-BFDF-E95295540D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE449F1E-FBF6-478E-BFDF-E95295540D57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1E3F0123-5817-4E29-B028-B3E95911F28C} = {366E036C-D096-4DC0-B8CB-A378827CA345}
@@ -73,5 +85,7 @@ Global
 		{F288A90D-5C5D-4415-BF89-9B85D111E510} = {5087E834-B958-444C-A2B3-3B60CCD24535}
 		{A89D22B4-2CD1-487C-8834-FC2457CEF94E} = {5087E834-B958-444C-A2B3-3B60CCD24535}
 		{74421741-0AE9-47B9-ACA6-C58058B94762} = {5087E834-B958-444C-A2B3-3B60CCD24535}
+		{BAB6E59E-3852-4769-946D-BBA9167257A2} = {5087E834-B958-444C-A2B3-3B60CCD24535}
+		{BE449F1E-FBF6-478E-BFDF-E95295540D57} = {5087E834-B958-444C-A2B3-3B60CCD24535}
 	EndGlobalSection
 EndGlobal
