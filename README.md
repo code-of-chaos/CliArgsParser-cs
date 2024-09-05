@@ -7,7 +7,7 @@ This is particularly useful in scenarios where your application requires a large
 with specific arguments.
 
 ```shell
-dotnet add package CliArgsParser --version 2.1.1
+dotnet add package CliArgsParser --version 2.2.3
 ```
 
 ## Features
