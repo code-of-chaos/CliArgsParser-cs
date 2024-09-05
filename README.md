@@ -1,8 +1,8 @@
-# CLIArgsParser
+# CliArgsParser
 ![NuGet Downloads](https://img.shields.io/nuget/dt/CliArgsParser)
 ![NuGet Version](https://img.shields.io/nuget/v/CliArgsParser?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FCliArgsParser)
 
-CLIArgsParser is a library built around Dependency Injection to allow you to create CLI tools with ease.
+CliArgsParser is a library built around Dependency Injection to allow you to create Cli tools with ease.
 This is particularly useful in scenarios where your application requires a large amount of commands,
 with specific arguments.
 
@@ -11,13 +11,13 @@ dotnet add package CliArgsParser --version 2.2.7
 ```
 
 ## Features
-Here are the key features of CLI Args Parser:
+Here are the key features of Cli Args Parser:
 - **Command Declaration and Registration**: Commands are declaratively defined within a class using the `ICommandAtlas` interface. 
 This arrangement provides a well-structured, easy-to-maintain way of defining and locating command handling logic.
-- **Asynchronous Command Execution**: CLIArgsParser allows for asynchronous execution of commands. 
+- **Asynchronous Command Execution**: CliArgsParser allows for asynchronous execution of commands. 
 This can provide major performance benefits, especially when commands involve IO-bound operations.
 The library also exposes the `ArgsParser.ParseAsyncParallel` method for parallel async execution of cli tools.
-- **Argument Mapping**: CLIArgsParser allows property-based argument mapping.
+- **Argument Mapping**: CliArgsParser allows property-based argument mapping.
 Properties of a class implementing the ICommandParameters interface can be used as the target of argument mapping from command line input. 
 Argument mapping is further simplified through the use of the `ArgValue` and `ArgFlag` attributes which takes the argument name as a parameter.
 - **Dependency Injection approach**: The library is built around using DI in your workflow. `ICommandAtlas` classes allow constructors to fully utilize dependency injection.
@@ -31,7 +31,7 @@ Yet you are not required to have a `IServiceCollection`, by using the `CliParser
 > To resolve this, always run the parsers through their async methods.
 
 ## Quick Start
-The following section is a basic example on how to get started with CLIArgsParser.
+The following section is a basic example on how to get started with CliArgsParser.
 For in-code examples, they can be found in the repo under examples : https://github.com/code-of-chaos/CliArgsParser-cs/tree/core/examples
 
 ### Dependency Injected approach
