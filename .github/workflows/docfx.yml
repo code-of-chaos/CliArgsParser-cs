@@ -1,10 +1,10 @@
 # Your GitHub workflow file under .github/workflows/
 # Trigger the action on push to main
 on: 
-  create:
+  push:
     tags:
-      - '*.*.*-docs'
-
+      - '\d+.\d+.\d+-docs' 
+      
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   actions: read
