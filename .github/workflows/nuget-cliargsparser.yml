@@ -1,4 +1,4 @@
-name: nuget-ansi.yml
+name: nuget-cliargsparser.yml
 on:
   push:
     tags:
@@ -21,7 +21,7 @@ jobs:
         run: dotnet build src/CliArgsParser --configuration Release
 
       - name: Create NuGet package
-        run: nuget pack CliArgsParser.nuspec -OutputDirectory ./nupkgs
+        run: nuget pack CliArgsParser.nuspec -OutputDirectory ../../nupkgs
 
       - name: Publish to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
